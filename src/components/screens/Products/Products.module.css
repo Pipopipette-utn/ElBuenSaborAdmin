@@ -1,0 +1,12 @@
+
+
+.buttons {
+  height: 7vh;
+  width: 7vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.buttons span {
+  font-size: 4vh;
+}
