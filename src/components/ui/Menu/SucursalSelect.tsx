@@ -10,14 +10,13 @@ const Select = styled(MuiSelect)(({ theme }) => ({
     padding: "8px",
     "&:hover": {
         backgroundColor: theme.palette.bg.main,
-        outline: "none",
       },
 }));
 
 export const SucursalSelect = () => {
 	const [value, setValue] = useState("1");
 
-	const handleChange = (event: SelectChangeEvent<{ value: string }>) => {
+	const handleChange = (event: SelectChangeEvent<unknown>) => {
 		setValue(event.target.value as string);
 	};
 

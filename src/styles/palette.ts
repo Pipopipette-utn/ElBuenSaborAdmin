@@ -9,7 +9,9 @@ export const primary = {
 	main: "#FF4F33",
 };
 
-export const secondary = {};
+export const secondary = {
+  main: "#FF312E"
+};
 
 export const info = {
   main: "#202224",
