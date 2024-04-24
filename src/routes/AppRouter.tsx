@@ -2,8 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
 import { ProtectedRoutes } from "./ProtectedRoutes";
 import { Login } from "../components/screens/Login/Login";
-import { AppMenu } from "../components/ui/Menu/AppMenu";
-import { Box } from "@mui/material";
 
 // Definición del componente AppRouter
 export const AppRouter = () => {
@@ -13,12 +11,7 @@ export const AppRouter = () => {
 	return (
 		<Routes>
 			{isLogged ? (
-				<>
-					<Box sx={{ width: 240 }}>
-						<AppMenu />
-					</Box>
-					<Route path="/*" element={<ProtectedRoutes />} />
-				</>
+				<Route path="/*" element={<ProtectedRoutes />} />
 			) : (
 				<Route path="/*" element={<Navigate to={"/login"} />} />
 			)}

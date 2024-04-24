@@ -16,6 +16,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { theme } from "../../../styles/theme";
+import { Link } from "react-router-dom";
 
 interface AppMenuListProps {
 	open: boolean;
@@ -50,7 +51,7 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open }) => {
 	const handleClick = (item: MenuItem) => {
 		let updatedList;
 		if (!item.subcategories || !open) {
-			console.log("Seleccioné " + item);
+			console.log("Seleccioné " + item.label);
 		} else if (openedListItems.includes(item)) {
 			updatedList = openedListItems.filter((menuItem) => menuItem !== item);
 		} else {
@@ -63,29 +64,16 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open }) => {
 		<List>
 			{listItems.map((item, index) => (
 				<ListItem key={index} disablePadding sx={{ display: "block" }}>
-					<ListItemButton
-						onClick={() => handleClick(item)}
-						sx={{
-							minHeight: 48,
-							justifyContent: open ? "initial" : "center",
-							px: 2.5,
-							marginX: open ? "16px" : "0px",
-						}}
-					>
-						<ListItemIcon
+					<Link to={`/${item.label.toLowerCase()}`}>
+						<ListItemButton
+							onClick={() => handleClick(item)}
 							sx={{
-								minWidth: 0,
-								mr: open ? 3 : "auto",
-								justifyContent: "center",
+								minHeight: 48,
+								justifyContent: open ? "initial" : "center",
+								px: 2.5,
+								marginX: open ? "16px" : "0px",
 							}}
 						>
-							<SvgIcon
-								component={item.icon}
-								sx={{ color: theme.palette.info.main }}
-							/>
-						</ListItemIcon>
-						<ListItemText primary={item.label} sx={{ opacity: open ? 1 : 0 }} />
-						{item.subcategories && open && (
 							<ListItemIcon
 								sx={{
 									minWidth: 0,
@@ -93,30 +81,50 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open }) => {
 									justifyContent: "center",
 								}}
 							>
-								{openedListItems.includes(item) ? (
-									<KeyboardArrowUpIcon />
-								) : (
-									<KeyboardArrowDownIcon />
-								)}
+								<SvgIcon
+									component={item.icon}
+									sx={{ color: theme.palette.info.main }}
+								/>
 							</ListItemIcon>
-						)}
-					</ListItemButton>
+							<ListItemText
+								primary={item.label}
+								sx={{ opacity: open ? 1 : 0 }}
+							/>
+							{item.subcategories && open && (
+								<ListItemIcon
+									sx={{
+										minWidth: 0,
+										mr: open ? 3 : "auto",
+										justifyContent: "center",
+									}}
+								>
+									{openedListItems.includes(item) ? (
+										<KeyboardArrowUpIcon />
+									) : (
+										<KeyboardArrowDownIcon />
+									)}
+								</ListItemIcon>
+							)}
+						</ListItemButton>
+					</Link>
 					{item.subcategories && open && openedListItems.includes(item) && (
 						<List>
 							{item.subcategories.map((subcategory, subIndex) => (
-								<ListItemButton
-									key={subIndex}
-									sx={{ pl: 4, marginX: "16px" }}
-									onClick={() => handleClick(subcategory)}
-								>
-									{subcategory.icon && (
-										<SvgIcon
-											component={subcategory.icon}
-											sx={{ color: theme.palette.info.main }}
-										/>
-									)}
-									<ListItemText primary={subcategory.label} />
-								</ListItemButton>
+								<Link to={`/${subcategory.label.toLowerCase()}`}>
+									<ListItemButton
+										key={subIndex}
+										sx={{ pl: 4, marginX: "16px" }}
+										onClick={() => handleClick(subcategory)}
+									>
+										{subcategory.icon && (
+											<SvgIcon
+												component={subcategory.icon}
+												sx={{ color: theme.palette.info.main }}
+											/>
+										)}
+										<ListItemText primary={subcategory.label} />
+									</ListItemButton>
+								</Link>
 							))}
 						</List>
 					)}

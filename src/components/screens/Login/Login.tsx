@@ -73,7 +73,6 @@ export const Login = () => {
 				(u: LoginValues) =>
 					u.username === values.username && u.password === values.password
 			);
-			console.log(response);
 			if (userFound) {
 				setError("");
 				dispatch(setLogin(userFound));
