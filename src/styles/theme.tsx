@@ -89,10 +89,24 @@ export const theme = createTheme({
 					},
 				}
 			}
+		},
+		MuiCardHeader: {
+			styleOverrides:{
+				title:{
+					fontVariant: "normal",
+				}
+			}
 		}
 	},
 	typography: {
 		fontFamily: "Roboto, sans-serif",
+		allVariants:{
+			color: info.main,
+		},
+		h1: {
+			fontWeight: "bolder",
+			fontSize: "24px",
+		},
 		h5: {
 			fontWeight: "bolder",
 		},

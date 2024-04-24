@@ -23,6 +23,7 @@ import { AppMenuList } from "./AppMenuList";
 import EmpresaIcon from "./EmpresaIcon";
 import { UserButton } from "./UserButton";
 import { SucursalSelect } from "./SucursalSelect";
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -81,8 +82,9 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Drawer = styled(MuiDrawer, {
-	shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+	shouldForwardProp: (prop) => prop !== "open" && prop !== "show",
+})<{ open: boolean; show: boolean }>(({ theme, open, show }) => ({
+	display: show ? "block" : "none",
 	width: drawerWidth,
 	flexShrink: 0,
 	whiteSpace: "nowrap",
@@ -101,6 +103,8 @@ export const AppMenu = () => {
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 	const [open, setOpen] = useState(isSmallScreen ? false : true);
+	const path = useLocation().pathname;
+	const isEmpresasPage = path === "/";
 
 	useEffect(() => {
 		if (isSmallScreen) setOpen(false);
@@ -118,28 +122,37 @@ export const AppMenu = () => {
 	return (
 		<Box sx={{ display: "flex" }}>
 			<CssBaseline />
-			<AppBar position="fixed" open={open}>
+			<AppBar position="fixed" open={open && !isEmpresasPage}>
 				<Toolbar sx={{ justifyContent: "space-between" }}>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						onClick={handleDrawerOpen}
-						edge="start"
-						sx={{
-							marginRight: 5,
-							...(open && { display: "none" }),
-						}}
+					{!isEmpresasPage && (
+						<IconButton
+							color="inherit"
+							aria-label="open drawer"
+							onClick={handleDrawerOpen}
+							edge="start"
+							sx={{
+								marginRight: 5,
+								...(open && { display: "none" }),
+							}}
+						>
+							<MenuIcon />
+						</IconButton>
+					)}
+					<Typography
+						variant="h6"
+						noWrap
+						component="div"
+						sx={{ color: theme.palette.bg.light }}
 					>
-						<MenuIcon />
-					</IconButton>
-					<Typography variant="h6" noWrap component="div">
-						Mini variant drawer
+						{path.replace(/\//g, " ").trim() === ""
+							? "EMPRESAS"
+							: path.toUpperCase().replace(/\//g, " ")}
 					</Typography>
-					<SucursalSelect />
+					{!isEmpresasPage && <SucursalSelect />}
 					<UserButton />
 				</Toolbar>
 			</AppBar>
-			<Drawer variant="permanent" open={open}>
+			<Drawer variant="permanent" open={open} show={!isEmpresasPage}>
 				<DrawerHeader>
 					<Stack
 						direction="row"

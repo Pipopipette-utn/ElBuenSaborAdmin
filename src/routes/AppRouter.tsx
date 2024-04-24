@@ -5,7 +5,7 @@ import { Login } from "../components/screens/Login/Login";
 
 // Definición del componente AppRouter
 export const AppRouter = () => {
-	const isLogged = useAppSelector((state) => state.auth.isLogged);
+	const isLogged = useAppSelector((state) => state.auth!.isLogged);
 
 	// Devolución del componente Routes que define las rutas de la aplicación
 	return (
