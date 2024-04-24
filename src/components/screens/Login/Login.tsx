@@ -65,7 +65,6 @@ export const Login = () => {
 	const dispatch = useAppDispatch();
 
 	const handleSubmitForm = async (values: LoginValues) => {
-		console.log(values);
 		try {
 			const response = await fetch("/users.json");
 			const usersData = await response.json();

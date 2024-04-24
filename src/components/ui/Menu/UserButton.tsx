@@ -11,17 +11,24 @@ import {
 import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { theme } from "../../../styles/theme";
+import { useAppDispatch } from "../../../redux/hooks";
+import { setLogout } from "../../../redux/slices/Auth";
 
 export const UserButton = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+	const dispatch = useAppDispatch();
 
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
+	};
+
+	const handleLogout = () => {
+		dispatch(setLogout());
 	};
 
 	return (
@@ -42,8 +49,12 @@ export const UserButton = () => {
 					/>
 					{!isSmallScreen && (
 						<Stack sx={{ alignItems: "flex-start" }}>
-							<Typography>users.name</Typography>
-							<Typography sx={{ fontWeight: "lighter" }}>
+							<Typography sx={{ color: theme.palette.bg.light }}>
+								users.name
+							</Typography>
+							<Typography
+								sx={{ fontWeight: "lighter", color: theme.palette.bg.light }}
+							>
 								user@email.com
 							</Typography>
 						</Stack>
@@ -60,7 +71,7 @@ export const UserButton = () => {
 				onClose={handleClose}
 				anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
 			>
-				<MenuItem onClick={handleClose} disableRipple>
+				<MenuItem onClick={handleLogout} disableRipple>
 					Cerrar sesión
 				</MenuItem>
 			</Menu>
