@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import "./App.css";
 import { AppRouter } from "./routes/AppRouter";
 
 export const App = () => {

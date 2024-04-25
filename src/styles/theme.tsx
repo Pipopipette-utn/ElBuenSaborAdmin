@@ -1,6 +1,5 @@
 import { PaletteColor, PaletteColorOptions, createTheme } from "@mui/material";
 import { background, info, primary, secondary } from "./palette";
-import { light } from "@mui/material/styles/createPalette";
 
 declare module "@mui/material/styles" {
 	interface BreakpointOverrides {
@@ -57,7 +56,7 @@ export const theme = createTheme({
 					border: "1px solid",
 					borderRadius: "50px",
 				},
-			}
+			},
 		},
 		MuiListItemButton: {
 			styleOverrides: {
@@ -68,7 +67,9 @@ export const theme = createTheme({
 					borderRadius: "10px",
 					"&:hover": {
 						backgroundColor: background.gray,
-						color: background.light,
+						"& .MuiTypography-root": {
+							color: background.light, 
+						},
 					},
 					"&:active": {
 						backgroundColor: primary.main,
@@ -80,27 +81,27 @@ export const theme = createTheme({
 				},
 			},
 		},
-		MuiLink:{
+		MuiLink: {
 			styleOverrides: {
-				root:{
+				root: {
 					color: background.light,
 					"&:hover, &:active": {
 						color: background.light,
 					},
-				}
-			}
+				},
+			},
 		},
 		MuiCardHeader: {
-			styleOverrides:{
-				title:{
+			styleOverrides: {
+				title: {
 					fontVariant: "normal",
-				}
-			}
-		}
+				},
+			},
+		},
 	},
 	typography: {
 		fontFamily: "Roboto, sans-serif",
-		allVariants:{
+		allVariants: {
 			color: info.main,
 		},
 		h1: {
