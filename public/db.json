@@ -1,0 +1,96 @@
+{
+    "domicilios": [
+        {
+            "id": 1,
+            "baja": false,
+            "nombre": "San Martín",
+            "numero": 123,
+            "cp": 5507,
+            "piso": 2,
+            "nroDpto": 3,
+            "localidad_id": 1
+        }
+    ],
+    "empresas": [
+        {
+            "id": 1,
+            "baja": false,
+            "nombre": "Jebbs",
+            "razonSocial": "Jebbs SRL",
+            "cuil": 30598765432,
+            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDc9BAk0JoAY_5VmmwLODLC1x2B2_VnZhg47eCl1DGg&s"
+        },
+        {
+            "id": 2,
+            "baja": false,
+            "nombre": "Michel",
+            "razonSocial": "Michel Helados SRL",
+            "cuil": 30598765432,
+            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF6a1U6f_BPXg-0_QqXFaT3MHgBQZWsqHZU1uBfb_Mqg&s"
+        }
+    ],
+    "localidades": [
+        {
+            "id": 1,
+            "baja": false,
+            "nombre": "Luján de Cuyo",
+            "provincia_id": 1
+        },
+        {
+            "id": 2,
+            "baja": false,
+            "nombre": "Maipú",
+            "provincia_id": 1
+        }
+    ],
+    "paises": [
+        {
+            "id": 1,
+            "baja": false,
+            "nombre": "Argentina"
+        }
+    ],
+    "provincias": [
+        {
+            "id": 1,
+            "baja": false,
+            "nombre": "Mendoza",
+            "pais_id": 1
+        }
+    ],
+    "sucursales": [
+        {
+            "id": 1,
+            "baja": false,
+            "nombre": "Sucursal Chacras",
+            "horarioApertura": "09:00",
+            "horarioCierre": "18:00",
+            "empresa_id": 1,
+            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvaYKo2uJT-p1isDBM7OxYqxXs847pHoY657WXmBCJBA&s"
+        },
+        {
+            "id": 2,
+            "baja": false,
+            "nombre": "Sucursal Terramalva",
+            "horarioApertura": "09:00",
+            "horarioCierre": "18:00",
+            "empresa_id": 1,
+            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SJfrvi2YnAGifv9sr25OfCJ1PYwNh3AYrl1TD_-urw&s"
+        },
+        {
+            "id": 3,
+            "baja": false,
+            "nombre": "Sucursal Food Market",
+            "horarioApertura": "09:00",
+            "horarioCierre": "18:00",
+            "empresa_id": 2,
+            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsLhctfz5BIbUPSGl3iSfl9bHaNui1-t2BdnOBSYvrBg&s"
+        }
+    ],
+    "users": [
+        {
+            "username": "jazmin",
+            "password": "1234"
+        }
+    ]
+}
