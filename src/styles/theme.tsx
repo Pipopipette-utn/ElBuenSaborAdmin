@@ -40,6 +40,7 @@ export const theme = createTheme({
 				contained: {
 					backgroundColor: primary.main,
 					color: "#ffffff",
+					fontWeight: "400",
 				},
 				text: {
 					fontWeight: "lighter",
@@ -61,14 +62,11 @@ export const theme = createTheme({
 		MuiListItemButton: {
 			styleOverrides: {
 				root: {
-					backgroundColor: background.main,
-					color: info.main,
-					fontWeight: "bold",
 					borderRadius: "10px",
 					"&:hover": {
-						backgroundColor: background.gray,
+						backgroundColor: info.light,
 						"& .MuiTypography-root": {
-							color: background.light, 
+							color: background.light,
 						},
 					},
 					"&:active": {
@@ -88,13 +86,6 @@ export const theme = createTheme({
 					"&:hover, &:active": {
 						color: background.light,
 					},
-				},
-			},
-		},
-		MuiCardHeader: {
-			styleOverrides: {
-				title: {
-					fontVariant: "normal",
 				},
 			},
 		},
