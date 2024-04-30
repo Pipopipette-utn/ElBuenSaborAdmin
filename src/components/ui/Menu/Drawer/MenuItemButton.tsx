@@ -1,19 +1,16 @@
 import {
-	List,
 	ListItem,
 	ListItemButton,
 	ListItemIcon,
-	ListItemText,
 	SvgIcon,
 	Typography,
 } from "@mui/material";
 import { FC } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { theme } from "../../../styles/theme";
 import { useLocation } from "react-router-dom";
 import { MenuItem } from "./AppMenuList";
-import React from "react";
+import { theme } from "../../../../styles/theme";
 
 interface MenuItemButtonProps {
 	open: boolean;
@@ -31,7 +28,6 @@ const MenuItemButton: FC<MenuItemButtonProps> = ({
 	openedListItems,
 }) => {
 	const path = useLocation().pathname.slice(1);
-	console.log(path);
 
 	return (
 		<ListItem key={index} disablePadding sx={{ display: "block" }}>
@@ -67,17 +63,19 @@ const MenuItemButton: FC<MenuItemButtonProps> = ({
 						/>
 					</ListItemIcon>
 				)}
-				<Typography
-					sx={{
-						width: "100%",
-						color:
-							path === item.label.toLowerCase()
-								? theme.palette.bg.light
-								: theme.palette.info.main,
-					}}
-				>
-					{item.label}
-				</Typography>
+				{open && (
+					<Typography
+						sx={{
+							width: "100%",
+							color:
+								path === item.label.toLowerCase()
+									? theme.palette.bg.light
+									: theme.palette.info.main,
+						}}
+					>
+						{item.label}
+					</Typography>
+				)}
 				{item.subcategories && open && (
 					<ListItemIcon
 						sx={{
@@ -99,7 +97,7 @@ const MenuItemButton: FC<MenuItemButtonProps> = ({
 
 export const renderMenuItem = (
 	item: MenuItem,
-	index: string,
+	index: number,
 	open: boolean,
 	openedListItems: MenuItem[],
 	onClick: Function

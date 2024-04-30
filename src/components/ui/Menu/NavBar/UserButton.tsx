@@ -10,10 +10,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { theme } from "../../../styles/theme";
-import { useAppDispatch } from "../../../redux/hooks";
-import { setLogout } from "../../../redux/slices/Auth";
-
+import { useAppDispatch } from "../../../../redux/hooks";
+import { theme } from "../../../../styles/theme";
+import { setLogout } from "../../../../redux/slices/Auth";
 export const UserButton = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);

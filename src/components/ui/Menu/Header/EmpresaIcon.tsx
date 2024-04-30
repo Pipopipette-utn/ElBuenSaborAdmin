@@ -1,23 +1,45 @@
-import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
+import {
+	Avatar,
+	Divider,
+	IconButton,
+	ListItemIcon,
+	Menu,
+	MenuItem,
+	Tooltip,
+} from "@mui/material";
 import { FC, useState } from "react";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { IEmpresa } from "../../../../types/empresa";
+import {
+	setEmpresa,
+} from "../../../../redux/slices/Business";
 
 interface EmpresaIconProps {}
 
 const EmpresaIcon: FC<EmpresaIconProps> = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+	const dispatch = useAppDispatch();
+	const empresas = useAppSelector((state) => state.business.empresas);
+	const empresa = useAppSelector((state) => state.business.empresa);
 
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
 
+	const handleSelect = (empresaSeleccionada: IEmpresa) => {
+		dispatch(setEmpresa(empresaSeleccionada));
+		handleClose();
+	};
+
 	return (
 		<>
-			<Tooltip title="Empresa icon">
+			<Tooltip title="Empresas">
 				<IconButton
 					onClick={handleClick}
 					size="small"
@@ -26,7 +48,7 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 					aria-haspopup="true"
 					aria-expanded={open ? "true" : undefined}
 				>
-					<Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+					<Avatar sx={{ width: 32, height: 32 }} src={empresa?.icon} />
 				</IconButton>
 			</Tooltip>
 			<Menu
@@ -64,12 +86,15 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 				transformOrigin={{ horizontal: "right", vertical: "top" }}
 				anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
 			>
-				<MenuItem onClick={handleClose}>
-					<Avatar /> Empresa 2
-				</MenuItem>
-				<MenuItem onClick={handleClose}>
-					<Avatar /> Empresa 3
-				</MenuItem>
+				{empresas?.map((e, index) => {
+					if (e.id !== empresa?.id) {
+						return (
+							<MenuItem key={index} onClick={() => handleSelect(e)}>
+								<Avatar src={e?.icon} /> {e.nombre}
+							</MenuItem>
+						);
+					}
+				})}
 				<Divider />
 				<MenuItem onClick={handleClose}>
 					<ListItemIcon>

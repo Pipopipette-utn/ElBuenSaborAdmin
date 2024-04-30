@@ -1,4 +1,4 @@
-import { List } from "@mui/material";
+import { List, useMediaQuery } from "@mui/material";
 import { FC, useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import StoreIcon from "@mui/icons-material/Store";
@@ -8,9 +8,11 @@ import PercentIcon from "@mui/icons-material/Percent";
 import PersonIcon from "@mui/icons-material/Person";
 import { Link } from "react-router-dom";
 import { renderMenuItem } from "./MenuItemButton";
+import { theme } from "../../../../styles/theme";
 
 interface AppMenuListProps {
 	open: boolean;
+	setOpen: Function;
 }
 
 export type MenuItem = {
@@ -36,13 +38,15 @@ const listItems: MenuItem[] = [
 	},
 ];
 
-export const AppMenuList: FC<AppMenuListProps> = ({ open }) => {
+export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
 	const [openedListItems, setOpenedListItems] = useState<MenuItem[]>([]);
+	const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
 	const handleClick = (item: MenuItem) => {
 		let updatedList;
 		if (!item.subcategories || !open) {
 			console.log("Seleccioné " + item.label);
+			if (isSmallScreen) setOpen(false);
 		} else if (openedListItems.includes(item)) {
 			updatedList = openedListItems.filter((menuItem) => menuItem !== item);
 		} else {
@@ -54,35 +58,29 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open }) => {
 	return (
 		<List>
 			{listItems.map((item, index) => (
-				<>
+				<div key={index}>
 					{!item.subcategories || !open ? (
-						<Link to={`/${item.label.toLowerCase()}`}>
-							{renderMenuItem(
-								item,
-								`${item.label}${index}`,
-								open,
-								openedListItems,
-								handleClick
-							)}
+						<Link
+							to={`/${item.label.toLowerCase()}`}
+							style={{ textDecoration: "none" }}
+						>
+							{renderMenuItem(item, index, open, openedListItems, handleClick)}
 						</Link>
 					) : (
-						renderMenuItem(
-							item,
-							`${item.label}${index}`,
-							open,
-							openedListItems,
-							handleClick
-						)
+						renderMenuItem(item, index, open, openedListItems, handleClick)
 					)}
 					{item.subcategories && open && openedListItems.includes(item) && (
 						<List>
 							{item.subcategories.map((subcategory, subIndex) => (
-								<>
+								<div key={subIndex}>
 									{!subcategory.subcategories || !open ? (
-										<Link to={`/${subcategory.label.toLowerCase()}`}>
+										<Link
+											to={`/${subcategory.label.toLowerCase()}`}
+											style={{ textDecoration: "none" }}
+										>
 											{renderMenuItem(
 												subcategory,
-												`${subcategory.label}${subIndex}`,
+												subIndex,
 												open,
 												openedListItems,
 												handleClick
@@ -91,17 +89,17 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open }) => {
 									) : (
 										renderMenuItem(
 											subcategory,
-											`${subcategory.label}${subIndex}`,
+											subIndex,
 											open,
 											openedListItems,
 											handleClick
 										)
 									)}
-								</>
+								</div>
 							))}
 						</List>
 					)}
-				</>
+				</div>
 			))}
 		</List>
 	);
