@@ -3,7 +3,6 @@ import {
 	CSSObject,
 	CssBaseline,
 	IconButton,
-	Stack,
 	Theme,
 	Toolbar,
 	Typography,
@@ -14,17 +13,14 @@ import {
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { useEffect, useState } from "react";
-import { background } from "../../../styles/palette";
-import { AppMenuList } from "./AppMenuList";
-import EmpresaIcon from "./EmpresaIcon";
-import { UserButton } from "./UserButton";
-import { SucursalSelect } from "./SucursalSelect";
 import { useLocation } from "react-router-dom";
-
+import { DrawerHeader } from "./Header/DrawerHeader";
+import { AppMenuList } from "./Drawer/AppMenuList";
+import { background } from "../../../styles/palette";
+import { SucursalSelect } from "./NavBar/SucursalSelect";
+import { UserButton } from "./NavBar/UserButton";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -50,15 +46,6 @@ const closedMixin = (theme: Theme): CSSObject => ({
 	},
 });
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "flex-end",
-	padding: theme.spacing(0, 1),
-	// necessary for content to be below app bar
-	...theme.mixins.toolbar,
-}));
-
 interface AppBarProps extends MuiAppBarProps {
 	open?: boolean;
 }
@@ -66,7 +53,7 @@ interface AppBarProps extends MuiAppBarProps {
 const AppBar = styled(MuiAppBar, {
 	shouldForwardProp: (prop) => prop !== "open",
 })<AppBarProps>(({ theme, open }) => ({
-	zIndex: theme.zIndex.drawer + 1,
+	zIndex: 1,
 	transition: theme.transitions.create(["width", "margin"], {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.leavingScreen,
@@ -82,21 +69,37 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const Drawer = styled(MuiDrawer, {
-	shouldForwardProp: (prop) => prop !== "open" && prop !== "show",
-})<{ open: boolean; show: boolean }>(({ theme, open, show }) => ({
-	display: show ? "block" : "none",
-	width: drawerWidth,
-	flexShrink: 0,
-	whiteSpace: "nowrap",
-	boxSizing: "border-box",
-	...(open && {
-		...openedMixin(theme),
-		"& .MuiDrawer-paper": openedMixin(theme),
-	}),
-	...(!open && {
-		...closedMixin(theme),
-		"& .MuiDrawer-paper": closedMixin(theme),
-	}),
+	shouldForwardProp: (prop) =>
+		prop !== "open" && prop !== "show" && prop !== "isSmall",
+})<{ open: boolean; show: boolean; isSmall: boolean }>(
+	({ theme, open, show, isSmall }) => ({
+		display: show ? "block" : "none",
+		position: isSmall && open && show ? "absolute" : "static",
+		zIndex: isSmall && open && show ? 2 : 0,
+		width: drawerWidth,
+		flexShrink: 0,
+		whiteSpace: "",
+		boxSizing: "border-box",
+		...(open && {
+			...openedMixin(theme),
+			"& .MuiDrawer-paper": openedMixin(theme),
+		}),
+		...(!open && {
+			...closedMixin(theme),
+			"& .MuiDrawer-paper": closedMixin(theme),
+		}),
+	})
+);
+
+const Overlay = styled("div")<{ open: boolean }>(({ open }) => ({
+	position: "fixed",
+	top: 0,
+	left: 0,
+	width: "100%",
+	height: "100%",
+	backgroundColor: "rgba(0, 0, 0, 0.6)",
+	zIndex: 1,
+	display: open ? "block" : "none",
 }));
 
 export const AppMenu = () => {
@@ -104,7 +107,7 @@ export const AppMenu = () => {
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 	const [open, setOpen] = useState(isSmallScreen ? false : true);
 	const path = useLocation().pathname;
-	const isEmpresasPage = path === "/";
+	const isEmpresasPage = path === "/" || path === "/empresas" || path === "/empresas/sucursales";
 
 	useEffect(() => {
 		if (isSmallScreen) setOpen(false);
@@ -115,14 +118,14 @@ export const AppMenu = () => {
 		setOpen(true);
 	};
 
-	const handleDrawerClose = () => {
+	const handleOverlayClick = () => {
 		setOpen(false);
-	};
+	  };
 
 	return (
-		<Box sx={{ display: "flex" }}>
+		<Box className="AppMenuContainer" sx={{ display: "flex" }}>
 			<CssBaseline />
-			<AppBar position="fixed" open={open && !isEmpresasPage}>
+			<AppBar position="fixed" open={open && !isEmpresasPage && !isSmallScreen}>
 				<Toolbar sx={{ justifyContent: "space-between" }}>
 					{!isEmpresasPage && (
 						<IconButton
@@ -152,34 +155,16 @@ export const AppMenu = () => {
 					<UserButton />
 				</Toolbar>
 			</AppBar>
-			<Drawer variant="permanent" open={open} show={!isEmpresasPage}>
-				<DrawerHeader>
-					<Stack
-						direction="row"
-						spacing={2}
-						sx={{
-							padding: "16px 24px",
-							alignItems: "center",
-							width: "100%",
-						}}
-					>
-						<EmpresaIcon />
-						<Typography variant="h5" noWrap component="div">
-							Empresa
-						</Typography>
-					</Stack>
-					{isSmallScreen && (
-						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === "rtl" ? (
-								<ChevronRightIcon />
-							) : (
-								<ChevronLeftIcon />
-							)}
-						</IconButton>
-					)}
-				</DrawerHeader>
-				<AppMenuList open={open} />
+			<Drawer
+				variant="permanent"
+				open={open}
+				show={!isEmpresasPage}
+				isSmall={isSmallScreen}
+			>
+				<DrawerHeader setOpen={setOpen} />
+				<AppMenuList open={open} setOpen={setOpen} />
 			</Drawer>
+			<Overlay open={open && isSmallScreen} onClick={handleOverlayClick} />
 		</Box>
 	);
 };
