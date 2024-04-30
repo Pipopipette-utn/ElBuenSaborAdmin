@@ -7,10 +7,16 @@ export const ProtectedRoutes = () => {
 	return (
 		<>
 			<AppMenu />
-			<Box width="100%" height="100%" sx={{ mt: {mobile: "52px", sm: "64px"}}}>
+			<Box
+				className="ContentContainer"
+				height="100%"
+				alignItems="center"
+				sx={{ flexGrow: 1, m: 6, mt: 12 }}
+			>
 				<Routes>
 					<Route path="/" element={<Empresas />} />
-					<Route path="/inicio" element={<Home />} />
+					<Route path="/empresas" element={<Empresas />} />
+					<Route path="/empresas/sucursales" element={<Home />} />
 				</Routes>
 			</Box>
 		</>
