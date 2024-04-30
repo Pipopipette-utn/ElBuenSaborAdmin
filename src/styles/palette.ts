@@ -2,7 +2,6 @@ export const background = {
 	main: "#EEECEC",
   light: "#FCFCFC",
   dark: "#D9D9D9",
-  gray: "#979797"
 };
 
 export const primary = {
@@ -15,6 +14,7 @@ export const secondary = {
 
 export const info = {
   main: "#202224",
+  light: "#979797"
 };
 
 export const danger = {};
