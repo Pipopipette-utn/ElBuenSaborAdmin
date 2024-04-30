@@ -1,49 +1,41 @@
 import { FC } from "react";
 import { IEmpresa } from "../../../types/empresa";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppDispatch } from "../../../redux/hooks";
+import { setEmpresa } from "../../../redux/slices/Business";
 import {
 	Card,
 	CardActions,
-	CardContent,
 	CardHeader,
 	CardMedia,
 	IconButton,
-	Typography,
-} from "@mui/material";
-import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { theme } from "../../../styles/theme";
+} from "../../ui/styled/StyledCard";
+import { useNavigate } from "react-router-dom";
 
 interface EmpresaCardProps {
 	empresa: IEmpresa;
 }
 
 const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
+	// Obtención del despachador de acciones de Redux
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+
+	const handleClick = () => {
+		dispatch(setEmpresa(empresa));
+		navigate("/empresas/sucursales")
+	};
+
 	return (
-		<Card
-			sx={{
-				width: 250,
-				backgroundColor: theme.palette.bg.main,
-				mx: "16px",
-				mb: "30px",
-			}}
-		>
-			<CardHeader title={empresa.nombre} subheader="Subtitulo" />
-			<CardMedia
-				component="img"
-				height="194"
-				image="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-				alt="Paella dish"
-			/>
-			<CardContent>
-				<Typography variant="body2" color="text.secondary">
-					{empresa.icon}
-				</Typography>
-			</CardContent>
-			<CardActions disableSpacing>
-				<IconButton aria-label="add to favorites">
+		<Card onClick={handleClick}>
+			<CardHeader title={empresa.nombre} subheader={empresa.razonSocial} />
+			<CardMedia component="img" image={empresa.icon} />
+			<CardActions>
+				<IconButton>
 					<ModeEditIcon />
 				</IconButton>
-				<IconButton aria-label="share">
+				<IconButton>
 					<DeleteIcon />
 				</IconButton>
 			</CardActions>

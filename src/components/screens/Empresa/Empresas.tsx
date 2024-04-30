@@ -1,31 +1,39 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { IEmpresa } from "../../../types/empresa";
+import { Stack, Typography } from "@mui/material";
 import EmpresaCard from "./EmpresaCard";
+import AddIcon from "@mui/icons-material/Add";
+import { theme } from "../../../styles/theme";
+import { AddCard, AddCardActions, AddIconButton, CardHeader } from "../../ui/styled/StyledCard";
+import { useAppSelector } from "../../../redux/hooks";
 
 export const Empresas = () => {
-	const [empresas, setEmpresas] = useState<IEmpresa[]>([]);
-
-	useEffect(() => {
-		const traerEmpresas = async () => {
-			const response = await fetch("/empresas.json");
-			const empresasData = await response.json();
-			setEmpresas(empresasData.empresas as IEmpresa[]);
-		};
-		traerEmpresas();
-	}, []);
+	const empresas = useAppSelector((state) => state.business.empresas);
 
 	return (
-		<Box sx={{ alignItems: "center", paddingY: "32px" }}>
-			<Typography variant="h1">¿Qué empresa querés ver?</Typography>
+		<>
+			<Typography variant="h1" textAlign="center">
+				¿Qué empresa querés usar?
+			</Typography>
 			<Stack
 				direction="row"
-				sx={{ width:"100%", justifyContent: "center", mt: "32px", flexWrap: "wrap" }}
+				sx={{
+					justifyContent: "center",
+					mt: "32px",
+					flexWrap: "wrap",
+				}}
 			>
-				{empresas.map((empresa) => (
-					<EmpresaCard empresa={empresa} />
-				))}
+				{empresas &&
+					empresas.map((empresa, index) => (
+						<EmpresaCard key={index} empresa={empresa} />
+					))}
+				<AddCard sx={{ border: `2px dashed ${theme.palette.info.light}` }}>
+					<CardHeader title="Agregar" subheader="Nueva empresa" />
+					<AddCardActions>
+						<AddIconButton>
+							<AddIcon fontSize="large" />
+						</AddIconButton>
+					</AddCardActions>
+				</AddCard>
 			</Stack>
-		</Box>
+		</>
 	);
 };
