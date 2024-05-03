@@ -34,6 +34,7 @@ export const CardMedia = styled(MuiCardMedia)<{ component: string }>(() => ({
 	borderRadius: "10px",
 	margin: "auto",
 	width: "60%", 
+	height: "42%", 
 	maxHeight: "42%", 
 }));
 

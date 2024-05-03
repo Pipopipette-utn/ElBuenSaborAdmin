@@ -24,7 +24,11 @@ export type MenuItem = {
 const listItems: MenuItem[] = [
 	{ label: "Inicio", icon: HomeIcon },
 	{ label: "Sucursales", icon: StoreIcon },
-	{ label: "Productos", icon: LocalMallIcon },
+	{
+		label: "Articulos",
+		icon: LocalMallIcon,
+		subcategories: [{ label: "Insumos" }, { label: "Manufacturados" }],
+	},
 	{ label: "Categorias", icon: SellIcon },
 	{ label: "Promociones", icon: PercentIcon },
 	{
@@ -45,7 +49,6 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
 	const handleClick = (item: MenuItem) => {
 		let updatedList;
 		if (!item.subcategories || !open) {
-			console.log("Seleccioné " + item.label);
 			if (isSmallScreen) setOpen(false);
 		} else if (openedListItems.includes(item)) {
 			updatedList = openedListItems.filter((menuItem) => menuItem !== item);
@@ -75,7 +78,7 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
 								<div key={subIndex}>
 									{!subcategory.subcategories || !open ? (
 										<Link
-											to={`/${subcategory.label.toLowerCase()}`}
+											to={`${item.label.toLowerCase()}/${subcategory.label.toLowerCase()}`}
 											style={{ textDecoration: "none" }}
 										>
 											{renderMenuItem(

@@ -3,7 +3,6 @@ import { IEmpresa } from "../../../types/empresa";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch } from "../../../redux/hooks";
-import { setEmpresa } from "../../../redux/slices/Business";
 import {
 	Card,
 	CardActions,
@@ -12,6 +11,7 @@ import {
 	IconButton,
 } from "../../ui/styled/StyledCard";
 import { useNavigate } from "react-router-dom";
+import { setEmpresa } from "../../../redux/slices/SelectedData";
 
 interface EmpresaCardProps {
 	empresa: IEmpresa;

@@ -4,14 +4,20 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../redux/hooks";
-import { Card, CardActions, CardHeader, CardMedia, IconButton } from "../../ui/styled/StyledCard";
+
+import { CardActions, CardContent, CardMedia } from "@mui/material";
+import {
+	SucursalCard,
+	SucursalCardHeader,
+	SucursalIconButton,
+} from "../styled/StyledSucursalCard";
 import { setSucursal } from "../../../redux/slices/SelectedData";
 
 interface SucursalCardProps {
 	sucursal: ISucursal;
 }
 
-const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
+const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	const navigate = useNavigate();
 	// Obtención del despachador de acciones de Redux
 	const dispatch = useAppDispatch();
@@ -22,22 +28,20 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	return (
-		<Card onClick={handleClick}>
-			<CardHeader
-				title={sucursal.nombre}
-				subheader={`${sucursal.horarioApertura}-${sucursal.horarioCierre}`}
-			/>
-			<CardMedia component="img" image={sucursal.icon} />
+		<SucursalCard onClick={handleClick}>
+			<CardMedia component="img" image={sucursal.icon} sx={{maxHeight: "160px"}} />
+			<SucursalCardHeader title={sucursal.nombre} />
+			<CardContent>{sucursal.horarioApertura}</CardContent>
 			<CardActions>
-				<IconButton>
+				<SucursalIconButton>
 					<ModeEditIcon />
-				</IconButton>
-				<IconButton>
+				</SucursalIconButton>
+				<SucursalIconButton>
 					<DeleteIcon />
-				</IconButton>
+				</SucursalIconButton>
 			</CardActions>
-		</Card>
+		</SucursalCard>
 	);
 };
 
-export default SucursalCard;
+export default SucursalCardDetails;

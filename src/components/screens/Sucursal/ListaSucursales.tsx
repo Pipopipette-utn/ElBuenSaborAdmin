@@ -10,12 +10,13 @@ import {
 import SucursalCard from "../../ui/cards/SucursalCard";
 
 export const ListaSucursales = () => {
-	const sucursales = useAppSelector((state) => state.business.sucursalesEmpresa);
+	const sucursales = useAppSelector((state) => state.selectedData.sucursalesEmpresa);
 
 	return (
 		<Stack
 			className="SucursalesContainer"
-			sx={{ alignItems: "center", pt: "40px" }}
+			height="100%" justifyContent="center"
+			sx={{ alignItems: "center" }}
 		>
 			<Typography variant="h1" textAlign="center">
 				¿Qué sucursal querés ver?

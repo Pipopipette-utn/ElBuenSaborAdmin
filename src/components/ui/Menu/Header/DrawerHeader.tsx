@@ -16,7 +16,7 @@ const Header = styled("div")(({ theme }) => ({
 
 export const DrawerHeader = ({setOpen}: {setOpen:Function}) => {
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
-    const empresa = useAppSelector((state) => state.business.empresa);
+    const empresa = useAppSelector((state) => state.selectedData.empresa);
 
 	const handleDrawerClose = () => {
 		setOpen(false);

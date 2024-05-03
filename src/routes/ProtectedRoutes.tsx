@@ -2,21 +2,30 @@ import { Route, Routes } from "react-router-dom";
 import { Home } from "../components/screens/Home/Home";
 import { AppMenu } from "../components/ui/Menu/AppMenu";
 import { Box } from "@mui/material";
-import { Empresas } from "../components/screens/Empresa/Empresas";
+import { ListaEmpresas } from "../components/screens/Empresa/ListaEmpresas";
+import { ListaSucursales } from "../components/screens/Sucursal/ListaSucursales";
+import { Sucursales } from "../components/screens/Sucursal/Sucursales";
+import { Categorias } from "../components/screens/Categoria/Categorias";
+import { ArticulosInsumos } from "../components/screens/Articulos/ArticulosInsumos";
+import { ArticulosManufacturados } from "../components/screens/Articulos/ArticulosManufacturados";
 export const ProtectedRoutes = () => {
 	return (
 		<>
 			<AppMenu />
 			<Box
 				className="ContentContainer"
-				height="100%"
 				alignItems="center"
-				sx={{ flexGrow: 1, m: 6, mt: 12 }}
+				sx={{ flexGrow: 1, mt: 8 }}
 			>
 				<Routes>
-					<Route path="/" element={<Empresas />} />
-					<Route path="/empresas" element={<Empresas />} />
-					<Route path="/empresas/sucursales" element={<Home />} />
+					<Route path="/" element={<ListaEmpresas />} />
+					<Route path="/empresas" element={<ListaEmpresas />} />
+					<Route path="/empresas/sucursales" element={<ListaSucursales />} />
+					<Route path="/inicio" element={<Home />} />
+					<Route path="/sucursales" element={<Sucursales />} />
+					<Route path="/categorias" element={<Categorias />} />
+					<Route path="/articulos/insumos" element={<ArticulosInsumos />} />
+					<Route path="/articulos/manufacturados" element={<ArticulosManufacturados />} />
 				</Routes>
 			</Box>
 		</>

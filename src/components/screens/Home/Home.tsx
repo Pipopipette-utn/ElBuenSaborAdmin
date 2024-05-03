@@ -1,10 +1,7 @@
-import { Box } from "@mui/material";
-
+import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 export const Home = () => {
-	return (
-		<>
-			<Box sx={{ backgroundColor: "red" }}>holaaaa</Box>
-			<Box sx={{ backgroundColor: "blue" }}>holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</Box>
-		</>
-	);
+	return <GenericDoubleStack>
+		<>a</>
+		<>a</>
+	</GenericDoubleStack>;
 };

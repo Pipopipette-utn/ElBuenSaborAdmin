@@ -11,9 +11,8 @@ import { FC, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { IEmpresa } from "../../../../types/empresa";
-import {
-	setEmpresa,
-} from "../../../../redux/slices/Business";
+import { setEmpresa } from "../../../../redux/slices/SelectedData";
+
 
 interface EmpresaIconProps {}
 
@@ -21,7 +20,7 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const dispatch = useAppDispatch();
 	const empresas = useAppSelector((state) => state.business.empresas);
-	const empresa = useAppSelector((state) => state.business.empresa);
+	const empresa = useAppSelector((state) => state.selectedData.empresa);
 
 	const open = Boolean(anchorEl);
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {

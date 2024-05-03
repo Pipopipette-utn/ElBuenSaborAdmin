@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MuiSelect from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { ISucursal } from "../../../../types/empresa";
-import { setSucursal } from "../../../../redux/slices/Business";
+import { setSucursal } from "../../../../redux/slices/SelectedData";
 
 const Select = styled(MuiSelect)(({ theme }) => ({
 	height: "42px",
@@ -18,8 +18,8 @@ const Select = styled(MuiSelect)(({ theme }) => ({
 
 export const SucursalSelect = () => {
 	const dispatch = useAppDispatch();
-	const sucursal = useAppSelector((state) => state.business.sucursal);
-	const sucursales = useAppSelector((state) => state.business.sucursalesEmpresa);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
+	const sucursales = useAppSelector((state) => state.selectedData.sucursalesEmpresa);
 	const [sucursalSeleccionada, setSucursalSeleccionada] =
 		useState<ISucursal | null>(sucursal);
 
