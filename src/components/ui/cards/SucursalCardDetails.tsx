@@ -27,7 +27,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 				<CardMedia
 					component="img"
 					image={sucursal.icon}
-					sx={{ maxHeight: "160px" }}
+					sx={{ height: "160px" }}
 				/>
 				<SucursalCardHeader title={sucursal.nombre} />
 				<CardContent>{sucursal.horarioApertura}</CardContent>

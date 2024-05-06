@@ -28,13 +28,38 @@ export class CategoriaService extends BackendClient<ICategoria> {
 		const categoriasSucursales = await categoriaSucursalService.getAll();
 		const categoriasFiltradas: ICategoria[] = [];
 
-		categoriasSucursales.forEach((categoriaSucursal) => {
-			if (sucursalId == categoriaSucursal.sucursalId) {
-				const categoria = categorias.find((c) => c.id == categoriaSucursal.categoriaId);
-				if (categoria) categoriasFiltradas.push(categoria);
-			}
+		const categoriasSucursal = categoriasSucursales.filter(
+			(cs) => cs.sucursalId == sucursalId
+		);
+
+		categoriasSucursal.forEach((categoriaSucursal) => {
+			console.log(categoriaSucursal.categoriaId);
+			const categoria = categorias.find(
+				(c) => c.id == categoriaSucursal.categoriaId
+			);
+			if (categoria) categoriasFiltradas.push(categoria);
 		});
 
 		return categoriasFiltradas;
 	};
 }
+
+/*
+categoriasSucursal.forEach((categoriaSucursal) => {
+			console.log(categoriaSucursal.categoriaId);
+			let categoria = categorias.find(
+				(c: ICategoria) => c.id == categoriaSucursal.categoriaId
+			);
+			if (categoria) {
+				categoria = { ...categoria, subcategorias: [] };
+				categoria = {
+					...categoria,
+					subcategorias: categorias.filter((c) => {
+						return c.categoriaPadreId == categoria!.id;
+					}),
+				};
+				console.log(categoria);
+				categoriasFiltradas.push(categoria);
+			}
+		});
+		*/
