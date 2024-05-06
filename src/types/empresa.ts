@@ -62,3 +62,8 @@ export interface IUnidadMedida extends BaseEntity {
 export interface IImagen extends BaseEntity {
 	denominacion: string;
 }
+
+export interface IUsuario extends BaseEntity {
+	username: string;
+	password: string;
+}

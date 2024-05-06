@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setLogin } from "../../../redux/slices/Auth";
 import {
 	Box,
@@ -49,6 +49,8 @@ interface LoginValues {
 }
 
 export const Login = () => {
+	const usuarios = useAppSelector((state) => state.business.usuarios);
+
 	const [error, setError] = useState("");
 	const initialValues = {
 		username: "",
@@ -66,9 +68,7 @@ export const Login = () => {
 
 	const handleSubmitForm = async (values: LoginValues) => {
 		try {
-			const response = await fetch("/users.json");
-			const usersData = await response.json();
-			const userFound = usersData.users.find(
+			const userFound = usuarios!.find(
 				(u: LoginValues) =>
 					u.username === values.username && u.password === values.password
 			);
@@ -79,7 +79,9 @@ export const Login = () => {
 			} else {
 				setError("Usuario o contraseña no encontrados.");
 			}
-		} catch (ex) { alert(ex);}
+		} catch (ex) {
+			alert(ex);
+		}
 	};
 
 	return (
@@ -102,7 +104,13 @@ export const Login = () => {
 					pb: "3%",
 				}}
 			>
-				<StoreIcon sx={{ width: "160px", height: "160px" }} />
+				<StoreIcon
+					sx={{
+						width: "160px",
+						height: "160px",
+						color: theme.palette.bg.light,
+					}}
+				/>
 				<Formik
 					initialValues={initialValues}
 					validationSchema={loginSchema}
@@ -156,7 +164,11 @@ export const Login = () => {
 								}}
 							/>
 							{errors.password && touched.password && errors.password}
-							{error && <Typography variant="body1">{error}</Typography>}
+							{error && (
+								<Typography variant="body1" color={theme.palette.bg.light}>
+									{error}
+								</Typography>
+							)}
 							<Button
 								fullWidth
 								type="submit"

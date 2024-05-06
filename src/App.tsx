@@ -3,9 +3,12 @@ import { AppRouter } from "./routes/AppRouter";
 import { FC, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import {
+	setArticulosInsumos,
+	setArticulosManufacturados,
 	setCategorias,
 	setEmpresas,
 	setSucursales,
+	setUsuarios,
 } from "./redux/slices/Business";
 import { EmpresaService } from "./services/EmpresaService";
 import { SucursalService } from "./services/SucursalService";
@@ -15,14 +18,20 @@ import {
 	setSucursalesEmpresa,
 } from "./redux/slices/SelectedData";
 import { CategoriaService } from "./services/CategoriaService";
+import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
+import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
+import { UsuarioService } from "./services/UsuarioService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
 export const App: FC = () => {
 	const dispatch = useAppDispatch();
+	const usuarioService = new UsuarioService("/users");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
 	const categoriaService = new CategoriaService("/categorias");
+	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
+	const articuloManufacturadoService = new ArticuloManufacturadoService("/articulosManufacturados");
 
 	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const categorias = useAppSelector((state) => state.business.categorias);
@@ -32,6 +41,9 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
+			const usuarios = await usuarioService.getAll();
+			dispatch(setUsuarios(usuarios));
+
 			const empresasData = await empresaService.getAll();
 			dispatch(setEmpresas(empresasData));
 
@@ -45,6 +57,12 @@ export const App: FC = () => {
 				empresasData
 			);
 			dispatch(setSucursales(sucursalesMapeadas));
+
+			const articulosInsumos = await articuloInsumoService.getAll();
+			dispatch(setArticulosInsumos(articulosInsumos));
+
+			const articulosManufacturados = await articuloManufacturadoService.getAll();
+			dispatch(setArticulosManufacturados(articulosManufacturados));
 		};
 
 		traerEmpresas();
