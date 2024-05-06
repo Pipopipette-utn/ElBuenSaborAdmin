@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { theme } from "../../../styles/theme";
 import {
@@ -8,10 +8,17 @@ import {
 	CardHeader,
 } from "../../ui/styled/StyledCard";
 import { useAppSelector } from "../../../redux/hooks";
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import EmpresaCard from "../../ui/cards/EmpresaCard";
+import { useState } from "react";
+import GenericModal from "../../ui/shared/GenericModal";
 
 export const ListaEmpresas = () => {
 	const empresas = useAppSelector((state) => state.business.empresas);
+	const [showModal, setShowModal] = useState(false);
+
+	const onOpenModal = () => setShowModal(true);
+	const onCloseModal = () => setShowModal(false);
 
 	return (
 		<Stack className="EmpresasContainer" height="100%" justifyContent="center">
@@ -30,7 +37,10 @@ export const ListaEmpresas = () => {
 					empresas.map((empresa, index) => (
 						<EmpresaCard key={index} empresa={empresa} />
 					))}
-				<AddCard sx={{ border: `2px dashed ${theme.palette.info.light}` }}>
+				<AddCard
+					onClick={onOpenModal}
+					sx={{ border: `2px dashed ${theme.palette.info.light}` }}
+				>
 					<CardHeader title="Agregar" subheader="Nueva empresa" />
 					<AddCardActions>
 						<AddIconButton>
@@ -38,6 +48,14 @@ export const ListaEmpresas = () => {
 						</AddIconButton>
 					</AddCardActions>
 				</AddCard>
+				<GenericModal
+					title={"Crear empresa"}
+					icon={<AddBusinessIcon fontSize="large" />}
+					open={showModal}
+					handleClose={onCloseModal}
+				>
+					<>Formulario empresa</>
+				</GenericModal>
 			</Stack>
 		</Stack>
 	);
