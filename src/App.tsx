@@ -24,6 +24,7 @@ import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoSe
 import { UsuarioService } from "./services/UsuarioService";
 import { ArticuloService } from "./services/ArticuloService";
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
+import { IArticuloInsumo, IArticuloManufacturado } from "./types/empresa";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
@@ -71,18 +72,29 @@ export const App: FC = () => {
 			const articulos = await articuloService.getAll();
 
 			const articulosInsumos = await articuloInsumoService.getAll();
-			const articulosInsumosMapeados =
-				articuloInsumoService.mapArticulosInsumos(
-					articulosInsumos,
-					articulos,
-					unidadMedidas,
-					categoriasData
-				);
-			dispatch(setArticulosInsumos(articulosInsumosMapeados));
+			const articulosInsumosMapeados = articuloService.mapArticulos(
+				articulosInsumos,
+				articulos,
+				unidadMedidas,
+				categoriasData
+			);
+			dispatch(
+				setArticulosInsumos(articulosInsumosMapeados as IArticuloInsumo[])
+			);
 
 			const articulosManufacturados =
 				await articuloManufacturadoService.getAll();
-			dispatch(setArticulosManufacturados(articulosManufacturados));
+			const articulosManufacturadosMapeados = articuloService.mapArticulos(
+				articulosManufacturados,
+				articulos,
+				unidadMedidas,
+				categoriasData
+			);
+			dispatch(
+				setArticulosManufacturados(
+					articulosManufacturadosMapeados as IArticuloManufacturado[]
+				)
+			);
 		};
 
 		traerEmpresas();
