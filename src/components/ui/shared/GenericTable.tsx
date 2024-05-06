@@ -6,29 +6,44 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
+import { theme } from "../../../styles/theme";
 
-// Definimos la interfaz para cada columna de la tabla
-interface ITableColumn<T> {
-	label: string; // Etiqueta de la columna
-	key: string; // Clave que corresponde a la propiedad del objeto en los datos
-	render?: (item: T) => React.ReactNode; // Función opcional para personalizar la renderización del contenido de la celda
+export interface TableColumn {
+	label: string;
+	key: string;
 }
 
-export interface ITableProps<T> {
-	columns: ITableColumn<T>[]; // Definición de las columnas de la tabla
-	handleDelete: (id: number) => void; // Función para manejar la eliminación de un elemento
-	setOpenModal: (state: boolean) => void;
+export interface TableProps<T> {
+	data: T[];
+	columns: TableColumn[];
 }
 
-export const TableGeneric = <T extends { id: any }>({
-	columns,
-	handleDelete,
-	setOpenModal,
-}: ITableProps<T>) => {
-	
+export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(7);
+
+	const handleChangePage = (_: unknown, newPage: number) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setRowsPerPage(+event.target.value);
+		setPage(0);
+	};
+
+	const [rows, setRows] = useState<T[]>([]);
+
+	// Actualizar las filas cuando cambien los datos de la tabla
+	useEffect(() => {
+		setRows(data);
+	}, [data]);
+
 	return (
-		<Stack
+		<div
 			style={{
 				width: "100%",
 				display: "flex",
@@ -36,34 +51,53 @@ export const TableGeneric = <T extends { id: any }>({
 				alignItems: "center",
 			}}
 		>
-			{/* Contenedor del componente Paper */}
-			<Paper sx={{ width: "90%", overflow: "hidden" }}>
-				{/* Contenedor de la tabla */}
+			<Paper sx={{ width: "100%", borderRadius: "8px" }}>
 				<TableContainer sx={{ maxHeight: "80vh" }}>
-					{/* Tabla */}
-					<Table stickyHeader aria-label="sticky table">
-						{/* Encabezado de la tabla */}
+					<Table stickyHeader>
 						<TableHead>
 							<TableRow>
-								{columns.map((column, i: number) => (
-									<TableCell key={i} align={"center"}>
+								{columns.map((column: any, i: number) => (
+									<TableCell
+										key={i}
+										align={"center"}
+										sx={{
+											backgroundColor: theme.palette.bg.dark,
+										}}
+									>
 										{column.label}
 									</TableCell>
 								))}
 							</TableRow>
 						</TableHead>
-						{/* Cuerpo de la tabla */}
 						<TableBody>
 							{rows
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((row, index: number) => {
+								.map((row: any, index: number) => {
 									return (
-										<TableRow hover role="checkbox" tabIndex={-1} key={index}>
-											{/* Celdas de la fila */}
-											{columns.map((column, i: number) => {
+										<TableRow
+											role="checkbox"
+											tabIndex={-1}
+											key={index}
+											sx={{
+												backgroundColor: theme.palette.bg.dark,
+												"&:hover": { backgroundColor: theme.palette.bg.main },
+											}}
+										>
+											{columns.map((column: any, i: number) => {
+												console.log(column.key);
+												console.log(row[column.key]);
+												const cellValue = row[column.key];
 												return (
 													<TableCell key={i} align={"center"}>
-														
+														{column.label === "Acciones" ? (
+															<Stack
+																direction="row"
+																spacing={2}
+																justifyContent="center"
+															></Stack>
+														) : (
+															cellValue
+														)}
 													</TableCell>
 												);
 											})}
@@ -73,8 +107,8 @@ export const TableGeneric = <T extends { id: any }>({
 						</TableBody>
 					</Table>
 				</TableContainer>
-				{/* Paginación de la tabla */}
 				<TablePagination
+					sx={{ backgroundColor: theme.palette.bg.dark }}
 					rowsPerPageOptions={[10, 25, 100]}
 					component="div"
 					count={rows.length}
@@ -84,6 +118,6 @@ export const TableGeneric = <T extends { id: any }>({
 					onRowsPerPageChange={handleChangeRowsPerPage}
 				/>
 			</Paper>
-		</Stack>
+		</div>
 	);
 };

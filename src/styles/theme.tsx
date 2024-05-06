@@ -54,8 +54,7 @@ export const theme = createTheme({
 		MuiTextField: {
 			styleOverrides: {
 				root: {
-					border: "1px solid",
-					borderRadius: "50px",
+					borderRadius: "20px",
 				},
 			},
 		},
@@ -98,6 +97,10 @@ export const theme = createTheme({
 		h1: {
 			fontWeight: "bolder",
 			fontSize: "24px",
+		},
+		h4: {
+			fontSize: "24px",
+			fontWeight: "bolder",
 		},
 		h5: {
 			fontWeight: "bolder",

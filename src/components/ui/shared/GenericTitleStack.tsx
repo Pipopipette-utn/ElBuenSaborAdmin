@@ -8,6 +8,7 @@ interface GenericHeaderStackProps {
 	quantity: number;
 	activeEntities: string;
 	buttonText: string;
+	onClick: any;
 }
 
 export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
@@ -15,6 +16,7 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 	quantity,
 	activeEntities,
 	buttonText,
+	onClick
 }) => {
 	return (
 		<Stack
@@ -47,6 +49,7 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 				</Stack>
 			</Stack>
 			<Button
+				onClick={onClick}
 				variant="contained"
 				sx={{ borderRadius: "50px", p: "12px 20px" }}
 				startIcon={<AddIcon />}
