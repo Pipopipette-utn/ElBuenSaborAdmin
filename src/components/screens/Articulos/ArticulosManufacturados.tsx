@@ -6,9 +6,13 @@ import { useAppSelector } from "../../../redux/hooks";
 import { GenericTable } from "../../ui/shared/GenericTable";
 import { useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
-import LocalMallIcon from '@mui/icons-material/LocalMall';
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import { ArticuloManufacturadoService } from "../../../services/ArticuloManufacturadoService";
 
 export const ArticulosManufacturados = () => {
+	const articuloManufacturadoService = new ArticuloManufacturadoService(
+		"/articulosInsumos"
+	);
 	const articulosManufacturados = useAppSelector(
 		(state) => state.business.articulosManufacturados
 	);
@@ -42,15 +46,18 @@ export const ArticulosManufacturados = () => {
 					<Stack direction="row" sx={{ flexWrap: "wrap", overflowY: "auto" }}>
 						{articulosManufacturados && (
 							<GenericTable
-								data={articulosManufacturados}
+								data={articuloManufacturadoService.articulosManufacturadosToDTO(
+									articulosManufacturados
+								)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
+									{ label: "Unidad de medida", key: "unidadMedida" },
 									{ label: "Precio", key: "precioVenta" },
 									{ label: "Descripcion", key: "descripcion" },
 									{ label: "Tiempo (mins)", key: "tiempoEstimadoMinutos" },
 									{ label: "Preparacion", key: "preparacion" },
 									{ label: "Categoria", key: "categoria" },
-									{ label: "Unidad", key: `unidadMedida['denominacion']` },
+									{ label: "Acciones", key: "acciones" },
 								]}
 							/>
 						)}

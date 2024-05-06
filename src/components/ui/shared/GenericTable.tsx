@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
 import { theme } from "../../../styles/theme";
+import ButtonGroup from "./GenericTableButtonGroup";
 
 export interface TableColumn {
 	label: string;
@@ -49,10 +50,11 @@ export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
 				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
+				paddingRight: 8,
 			}}
 		>
 			<Paper sx={{ width: "100%", borderRadius: "8px" }}>
-				<TableContainer sx={{ maxHeight: "80vh" }}>
+				<TableContainer>
 					<Table stickyHeader>
 						<TableHead>
 							<TableRow>
@@ -88,11 +90,7 @@ export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
 												return (
 													<TableCell key={i} align={"center"}>
 														{column.label === "Acciones" ? (
-															<Stack
-																direction="row"
-																spacing={2}
-																justifyContent="center"
-															></Stack>
+															<ButtonGroup />
 														) : (
 															cellValue
 														)}

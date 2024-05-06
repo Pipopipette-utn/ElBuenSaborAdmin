@@ -7,8 +7,10 @@ import { GenericTable } from "../../ui/shared/GenericTable";
 import { useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 
 export const ArticulosInsumos = () => {
+	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
 	const articulosInsumos = useAppSelector(
 		(state) => state.business.articulosInsumos
 	);
@@ -41,15 +43,20 @@ export const ArticulosInsumos = () => {
 					<Stack direction="row" sx={{ flexWrap: "wrap", overflowY: "auto" }}>
 						{articulosInsumos && (
 							<GenericTable
-								data={articulosInsumos}
+								data={articuloInsumoService.articulosInsumosToDTO(
+									articulosInsumos
+								)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
-									{ label: "Unidad de medida", key: "unidadMedida['denominacion']" },
+									{ label: "Precio compra", key: "precioCompra" },
+									{ label: "Precio venta", key: "precioVenta" },
+									{ label: "Unidad de medida", key: "unidadMedida" },
 									{ label: "Stock actual", key: "stockActual" },
 									{ label: "Stock minimo", key: "stockMinimo" },
 									{ label: "Stock máximo", key: "stockMaximo" },
-									{ label: "Es para elaborar", key: "esParaElaborar" },
-									{ label: "Categoría", key: `categoria['denominacion']` },
+									{ label: "Para elaborar", key: "esParaElaborar" },
+									{ label: "Categoria", key: "categoria" },
+									{ label: "Acciones", key: "acciones" },
 								]}
 							/>
 						)}
