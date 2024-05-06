@@ -8,6 +8,7 @@ import {
 	setCategorias,
 	setEmpresas,
 	setSucursales,
+	setUnidadMedidas,
 	setUsuarios,
 } from "./redux/slices/Business";
 import { EmpresaService } from "./services/EmpresaService";
@@ -21,17 +22,23 @@ import { CategoriaService } from "./services/CategoriaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
 import { UsuarioService } from "./services/UsuarioService";
+import { ArticuloService } from "./services/ArticuloService";
+import { UnidadMedidaService } from "./services/UnidadMedidaService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
 export const App: FC = () => {
 	const dispatch = useAppDispatch();
 	const usuarioService = new UsuarioService("/users");
+	const unidadMedidaService = new UnidadMedidaService("/unidadMedidas");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
 	const categoriaService = new CategoriaService("/categorias");
+	const articuloService = new ArticuloService("/articulos");
 	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
-	const articuloManufacturadoService = new ArticuloManufacturadoService("/articulosManufacturados");
+	const articuloManufacturadoService = new ArticuloManufacturadoService(
+		"/articulosManufacturados"
+	);
 
 	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const categorias = useAppSelector((state) => state.business.categorias);
@@ -43,6 +50,9 @@ export const App: FC = () => {
 		const traerEmpresas = async () => {
 			const usuarios = await usuarioService.getAll();
 			dispatch(setUsuarios(usuarios));
+
+			const unidadMedidas = await unidadMedidaService.getAll();
+			dispatch(setUnidadMedidas(unidadMedidas));
 
 			const empresasData = await empresaService.getAll();
 			dispatch(setEmpresas(empresasData));
@@ -58,10 +68,20 @@ export const App: FC = () => {
 			);
 			dispatch(setSucursales(sucursalesMapeadas));
 
-			const articulosInsumos = await articuloInsumoService.getAll();
-			dispatch(setArticulosInsumos(articulosInsumos));
+			const articulos = await articuloService.getAll();
 
-			const articulosManufacturados = await articuloManufacturadoService.getAll();
+			const articulosInsumos = await articuloInsumoService.getAll();
+			const articulosInsumosMapeados =
+				articuloInsumoService.mapArticulosInsumos(
+					articulosInsumos,
+					articulos,
+					unidadMedidas,
+					categoriasData
+				);
+			dispatch(setArticulosInsumos(articulosInsumosMapeados));
+
+			const articulosManufacturados =
+				await articuloManufacturadoService.getAll();
 			dispatch(setArticulosManufacturados(articulosManufacturados));
 		};
 
@@ -69,9 +89,10 @@ export const App: FC = () => {
 	}, []);
 
 	useEffect(() => {
-		const sucursalesFiltradas = empresa
-			? sucursalService.filterByEmpresaId(sucursales ?? [], empresa.id)
-			: [];
+		const sucursalesFiltradas =
+			empresa && empresa.id
+				? sucursalService.filterByEmpresaId(sucursales ?? [], empresa.id)
+				: [];
 
 		dispatch(setSucursalesEmpresa(sucursalesFiltradas));
 		dispatch(setSucursal(sucursalesFiltradas[0] ?? null));

@@ -5,11 +5,13 @@ import {
 	ICategoria,
 	IEmpresa,
 	ISucursal,
+	IUnidadMedida,
 	IUsuario,
 } from "../../types/empresa";
 
 interface IInitialState {
 	usuarios: IUsuario[] | null;
+	unidadMedidas: IUnidadMedida[] | null;
 	empresas: IEmpresa[] | null;
 	sucursales: ISucursal[] | null;
 	categorias: ICategoria[] | null;
@@ -19,6 +21,7 @@ interface IInitialState {
 
 const initialState: IInitialState = {
 	usuarios: null,
+	unidadMedidas: null,
 	empresas: null,
 	sucursales: null,
 	categorias: null,
@@ -33,6 +36,12 @@ const BusinessSlice = createSlice({
 	reducers: {
 		setUsuarios: (state, action: PayloadAction<IUsuario[] | null>) => {
 			state.usuarios = action.payload;
+		},
+		setUnidadMedidas: (
+			state,
+			action: PayloadAction<IUnidadMedida[] | null>
+		) => {
+			state.unidadMedidas = action.payload;
 		},
 		setEmpresas: (state, action: PayloadAction<IEmpresa[] | null>) => {
 			state.empresas = action.payload;
@@ -60,6 +69,7 @@ const BusinessSlice = createSlice({
 
 export const {
 	setUsuarios,
+	setUnidadMedidas,
 	setEmpresas,
 	setSucursales,
 	setCategorias,

@@ -84,8 +84,6 @@ export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
 											}}
 										>
 											{columns.map((column: any, i: number) => {
-												console.log(column.key);
-												console.log(row[column.key]);
 												const cellValue = row[column.key];
 												return (
 													<TableCell key={i} align={"center"}>

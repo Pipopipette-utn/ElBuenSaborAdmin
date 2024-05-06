@@ -32,7 +32,9 @@ export interface IArticulo extends BaseEntity {
 	precioVenta: number;
 	imagenes?: IImagen[];
 	categoria?: ICategoria;
-	unidadMedida: IUnidadMedida;
+	categoriaId?: number;
+	unidadMedida?: IUnidadMedida;
+	unidadMedidaId?: number;
 }
 
 export interface IArticuloInsumo extends IArticulo{
