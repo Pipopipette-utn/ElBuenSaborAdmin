@@ -12,16 +12,24 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import EmpresaCard from "../../ui/cards/EmpresaCard";
 import { useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
+import { EmpresaForm } from "../../ui/forms/EmpresaForm";
+import { emptyEmpresa } from "../../../types/emptyEntities";
 
 export const ListaEmpresas = () => {
 	const empresas = useAppSelector((state) => state.business.empresas);
 	const [showModal, setShowModal] = useState(false);
 
-	const onOpenModal = () => setShowModal(true);
-	const onCloseModal = () => setShowModal(false);
+	const handleOpenModal = () => setShowModal(true);
+	const handleCloseModal = () => setShowModal(false);
 
 	return (
-		<Stack className="EmpresasContainer" height="100%" justifyContent="center">
+		<Stack
+			className="EmpresasContainer"
+			height="100%"
+			mt="4%"
+			justifyContent="center"
+			sx={{ overflowY: "scroll" }}
+		>
 			<Typography variant="h1" textAlign="center">
 				¿Qué empresa querés usar?
 			</Typography>
@@ -38,7 +46,7 @@ export const ListaEmpresas = () => {
 						<EmpresaCard key={index} empresa={empresa} />
 					))}
 				<AddCard
-					onClick={onOpenModal}
+					onClick={handleOpenModal}
 					sx={{ border: `2px dashed ${theme.palette.info.light}` }}
 				>
 					<CardHeader title="Agregar" subheader="Nueva empresa" />
@@ -52,9 +60,9 @@ export const ListaEmpresas = () => {
 					title={"Crear empresa"}
 					icon={<AddBusinessIcon fontSize="large" />}
 					open={showModal}
-					handleClose={onCloseModal}
+					handleClose={handleCloseModal}
 				>
-					<>Formulario empresa</>
+					<EmpresaForm empresa={emptyEmpresa} onClose={handleCloseModal} />
 				</GenericModal>
 			</Stack>
 		</Stack>

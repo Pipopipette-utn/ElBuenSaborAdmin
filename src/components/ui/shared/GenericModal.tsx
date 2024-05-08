@@ -14,10 +14,11 @@ interface GenericModalProps {
 const style = {
 	position: "absolute",
 	borderRadius: "20px",
-	top: "30%",
+	top: "48%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	minWidth: 800,
+	width: {mobile: "90%", sm: "80%", lg: "70%", xl: "60%"},
+	maxHeight: 560,
 	bgcolor: "background.paper",
 	boxShadow: 24,
 	p: "2px",
@@ -34,10 +35,14 @@ const GenericModal: FC<GenericModalProps> = ({
 		<Modal open={open} onClose={handleClose}>
 			<Box sx={style} flexDirection="row">
 				<Stack
+					spacing={3}
 					sx={{
 						border: `solid 2px ${theme.palette.bg.dark}`,
-						p: 3,
+						px: 3,
+						py: 5,
 						borderRadius: "20px",
+						maxHeight: 600,
+						overflowY:"auto",
 					}}
 				>
 					<Stack
