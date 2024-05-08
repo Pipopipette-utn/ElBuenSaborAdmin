@@ -4,7 +4,7 @@ export interface Domicilio extends BaseEntity{
     cp: number,
     piso: number,
     nroDpto: number,
-    localidad: Localidad,
+    localidad?: Localidad,
 }
 
 export interface Localidad extends BaseEntity{

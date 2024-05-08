@@ -4,6 +4,6 @@ export interface IDomicilio extends BaseEntity {
     cp: number,
     piso: number,
     nroDpto: number,
-    localidad: string,
+    localidad?: string,
     localidadId?: number
 }

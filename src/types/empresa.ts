@@ -11,7 +11,7 @@ export interface IEmpresa extends BaseEntity {
 export interface ISucursal extends BaseEntity {
 	nombre: string;
 	horarioApertura: string;
-	horarioCierre: number;
+	horarioCierre: string;
 	icon: string;
 	empresa?: IEmpresa;
 	empresaId?: number;

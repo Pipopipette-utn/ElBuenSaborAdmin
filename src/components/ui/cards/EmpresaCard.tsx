@@ -14,11 +14,11 @@ import { useNavigate } from "react-router-dom";
 import { setEmpresa } from "../../../redux/slices/SelectedData";
 import GenericModal from "../shared/GenericModal";
 import StoreIcon from "@mui/icons-material/Store";
-import { EmpresaForm } from "../forms/EmpresaForm";
 import { Tooltip } from "@mui/material";
 import { AlertDialog } from "../shared/DialogAlert";
 import { EmpresaService } from "../../../services/EmpresaService";
 import { setEmpresas } from "../../../redux/slices/Business";
+import { EmpresaForm } from "../forms/EmpresaForm";
 
 interface EmpresaCardProps {
 	empresa: IEmpresa;

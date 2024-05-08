@@ -18,7 +18,7 @@ const style = {
 	left: "50%",
 	transform: "translate(-50%, -50%)",
 	width: {mobile: "90%", sm: "80%", lg: "70%", xl: "60%"},
-	maxHeight: 560,
+	maxHeight: 600,
 	bgcolor: "background.paper",
 	boxShadow: 24,
 	p: "2px",

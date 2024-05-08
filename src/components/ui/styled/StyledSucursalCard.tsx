@@ -1,9 +1,7 @@
 import { styled } from "@mui/material";
 import MuiCard from "@mui/material/Card";
-import MuiCardMedia from "@mui/material/CardMedia";
 import MuiCardHeader from "@mui/material/CardHeader";
 import MuiIconButton from "@mui/material/IconButton";
-import MuiCardActions from "@mui/material/CardActions";
 
 export const SucursalCard = styled(MuiCard)(({ theme }) => ({
 	display: "flex",
@@ -19,6 +17,7 @@ export const SucursalCard = styled(MuiCard)(({ theme }) => ({
 }));
 
 export const SucursalCardHeader = styled(MuiCardHeader)(() => ({
+	paddingBottom: 0,
 	"& .MuiCardHeader-title": {
 		fontWeight: "bold",
 		fontSize: 18,
@@ -28,6 +27,7 @@ export const SucursalCardHeader = styled(MuiCardHeader)(() => ({
 
 export const SucursalIconButton = styled(MuiIconButton)(({ theme }) => ({
 	color: theme.palette.info.light,
+	marginRight: -3,
 	"&:hover": {
 		backgroundColor: theme.palette.info.light,
 		color: theme.palette.bg.dark,

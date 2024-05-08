@@ -11,7 +11,8 @@ import SucursalCard from "../../ui/cards/SucursalCard";
 import GenericModal from "../../ui/shared/GenericModal";
 import StoreIcon from "@mui/icons-material/Store";
 import { useState } from "react";
-
+import { SucursalForm } from "../../ui/forms/SucursalForm";
+import { emptySucursal } from "../../../types/emptyEntities";
 
 export const ListaSucursales = () => {
 	const sucursales = useAppSelector(
@@ -19,13 +20,14 @@ export const ListaSucursales = () => {
 	);
 	const [showModal, setShowModal] = useState(false);
 
-	const onOpenModal = () => setShowModal(true);
-	const onCloseModal = () => setShowModal(false);
+	const handleOpenModal = () => setShowModal(true);
+	const handleCloseModal = () => setShowModal(false);
 
 	return (
 		<Stack
 			className="SucursalesContainer"
 			height="100%"
+			mt="4%"
 			justifyContent="center"
 			sx={{ alignItems: "center" }}
 		>
@@ -45,7 +47,7 @@ export const ListaSucursales = () => {
 					sucursales.map((sucursal, index) => (
 						<SucursalCard key={index} sucursal={sucursal} />
 					))}
-				<AddCard onClick={onOpenModal}>
+				<AddCard onClick={handleOpenModal}>
 					<CardHeader title="Agregar" subheader="Nueva sucursal" />
 					<AddCardActions>
 						<AddIconButton>
@@ -57,9 +59,9 @@ export const ListaSucursales = () => {
 					title={"Crear sucursal"}
 					icon={<StoreIcon fontSize="large" />}
 					open={showModal}
-					handleClose={onCloseModal}
+					handleClose={handleCloseModal}
 				>
-					<>Formulario sucursal</>
+					<SucursalForm sucursal={emptySucursal} onClose={handleCloseModal} />
 				</GenericModal>
 			</Stack>
 		</Stack>
