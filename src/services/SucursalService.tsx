@@ -1,19 +1,23 @@
 // Importamos el tipo de dato IEmpresa y la clase BackendClient
 import { IEmpresa, ISucursal } from "../types/empresa";
+import { IDomicilio } from "../types/ubicaciones";
 import { BackendClient } from "./BakendClient";
 
 // Clase SucursalService que extiende BackendClient para interactuar con la API de personas
 export class SucursalService extends BackendClient<ISucursal> {
 	mapSucursales = (
 		sucursales: ISucursal[],
-		empresas: IEmpresa[]
+		empresas: IEmpresa[],
+		domicilios: IDomicilio[]
 	): ISucursal[] => {
 		const sucursalesMapeadas: ISucursal[] = sucursales.map(
 			(sucursal: ISucursal) => {
 				const empresa = empresas?.find((e) => e.id == sucursal.empresaId);
+				const domicilio = domicilios?.find((d) => d.id == sucursal.domicilioId);
 				return {
 					...sucursal,
-					empresa: empresa,
+					empresa,
+					domicilio,
 				};
 			}
 		);

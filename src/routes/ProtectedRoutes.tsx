@@ -15,7 +15,11 @@ export const ProtectedRoutes = () => {
 			<Box
 				className="ContentContainer"
 				alignItems="center"
-				sx={{ flexGrow: 1, mt: 8 }}
+				display="flex"
+				flexDirection="column"
+				flexGrow={1}
+				height="100%"
+				mt={8}
 			>
 				<Routes>
 					<Route path="/" element={<ListaEmpresas />} />
@@ -25,7 +29,10 @@ export const ProtectedRoutes = () => {
 					<Route path="/sucursales" element={<Sucursales />} />
 					<Route path="/categorias" element={<Categorias />} />
 					<Route path="/articulos/insumos" element={<ArticulosInsumos />} />
-					<Route path="/articulos/manufacturados" element={<ArticulosManufacturados />} />
+					<Route
+						path="/articulos/manufacturados"
+						element={<ArticulosManufacturados />}
+					/>
 				</Routes>
 			</Box>
 		</>

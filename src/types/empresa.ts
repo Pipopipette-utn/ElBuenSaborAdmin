@@ -1,9 +1,11 @@
+import { IDomicilio } from "./ubicaciones";
+
 export interface IEmpresa extends BaseEntity {
 	nombre: string;
 	razonSocial: string;
 	cuil: number;
 	icon: string;
-	sucursales: ISucursal[];
+	sucursales?: ISucursal[];
 }
 
 export interface ISucursal extends BaseEntity {
@@ -13,6 +15,8 @@ export interface ISucursal extends BaseEntity {
 	icon: string;
 	empresa?: IEmpresa;
 	empresaId?: number;
+	domicilio?: IDomicilio;
+	domicilioId?: number;
 	categorias?: ICategoria[];
 }
 

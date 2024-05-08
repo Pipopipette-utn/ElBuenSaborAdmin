@@ -40,7 +40,7 @@ export const ArticulosInsumos = () => {
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los insumos
 					</Typography>
-					<Stack direction="row" sx={{ flexWrap: "wrap", overflowY: "auto" }}>
+					<Stack direction="row">
 						{articulosInsumos && (
 							<GenericTable
 								data={articuloInsumoService.articulosInsumosToDTO(

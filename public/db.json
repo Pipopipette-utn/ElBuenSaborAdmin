@@ -1,1314 +1,1393 @@
 {
-    "articulos": [
-        {
-            "id": 1,
-            "baja": false,
-            "denominacion": "Limonada",
-            "precioVenta": 2.50,
-            "categoriaId": 2,
-            "unidadMedidaId": 2
-        },
-        {
-            "id": 2,
-            "baja": false,
-            "denominacion": "Agua mineral",
-            "precioVenta": 1.00,
-            "categoriaId": 2,
-            "unidadMedidaId": 2
-        },
-        {
-            "id": 3,
-            "baja": false,
-            "denominacion": "Cerveza artesanal",
-            "precioVenta": 5.00,
-            "categoriaId": 4,
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 4,
-            "baja": false,
-            "denominacion": "Vino tinto reserva",
-            "precioVenta": 25.00,
-            "categoriaId": 4,
-            "unidadMedidaId": 2
-        },
-        {
-            "id": 5,
-            "baja": false,
-            "denominacion": "Jugo de naranja natural",
-            "precioVenta": 3.00,
-            "categoriaId": 3,
-            "unidadMedidaId": 2
-        },
-        {
-            "id": 6,
-            "baja": false,
-            "denominacion": "Ensalada César",
-            "precioVenta": 8.50,
-            "categoriaId": 6,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 7,
-            "baja": false,
-            "denominacion": "Bruschetta de tomate y albahaca",
-            "precioVenta": 6.00,
-            "categoriaId": 6,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 8,
-            "baja": false,
-            "denominacion": "Ceviche de camarón",
-            "precioVenta": 12.00,
-            "categoriaId": 3,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 9,
-            "baja": false,
-            "denominacion": "Lomo saltado",
-            "precioVenta": 15.00,
-            "categoriaId": 3,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 10,
-            "baja": false,
-            "denominacion": "Pizza Margarita",
-            "precioVenta": 10.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 11,
-            "baja": false,
-            "denominacion": "Tiramisú",
-            "precioVenta": 6.50,
-            "categoriaId": 7,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 12,
-            "baja": false,
-            "denominacion": "Cheesecake de frutos rojos",
-            "precioVenta": 7.50,
-            "categoriaId": 9,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 13,
-            "baja": false,
-            "denominacion": "Pollo al curry",
-            "precioVenta": 14.00,
-            "categoriaId": 3,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 14,
-            "baja": false,
-            "denominacion": "Sopa de verduras",
-            "precioVenta": 6.00,
-            "categoriaId": 6,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 15,
-            "baja": false,
-            "denominacion": "Filete de salmón a la parrilla",
-            "precioVenta": 18.00,
-            "categoriaId": 3,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 16,
-            "baja": false,
-            "denominacion": "Hamburguesa clásica",
-            "precioVenta": 9.00,
-            "categoriaId": 10,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 17,
-            "baja": false,
-            "denominacion": "Mousse de chocolate",
-            "precioVenta": 5.50,
-            "categoriaId": 7,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 18,
-            "baja": false,
-            "denominacion": "Sushi variado",
-            "precioVenta": 20.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 19,
-            "baja": false,
-            "denominacion": "Paella mixta",
-            "precioVenta": 22.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 20,
-            "baja": false,
-            "denominacion": "Spaghetti carbonara",
-            "precioVenta": 12.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 21,
-            "baja": false,
-            "denominacion": "Crema catalana",
-            "precioVenta": 6.00,
-            "categoriaId": 7,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 22,
-            "baja": false,
-            "denominacion": "Sándwich de pollo a la parrilla",
-            "precioVenta": 8.00,
-            "categoriaId": 10,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 23,
-            "baja": false,
-            "denominacion": "Tacos al pastor",
-            "precioVenta": 10.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 24,
-            "baja": false,
-            "denominacion": "Risotto de champiñones",
-            "precioVenta": 14.50,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 25,
-            "baja": false,
-            "denominacion": "Lasagna boloñesa",
-            "precioVenta": 13.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 26,
-            "baja": false,
-            "denominacion": "Sopa de tomate",
-            "precioVenta": 5.50,
-            "categoriaId": 6,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 27,
-            "baja": false,
-            "denominacion": "Parrillada mixta",
-            "precioVenta": 30.00,
-            "categoriaId": 6,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 28,
-            "baja": false,
-            "denominacion": "Fajitas de pollo",
-            "precioVenta": 12.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 29,
-            "baja": false,
-            "denominacion": "Papas fritas",
-            "precioVenta": 4.00,
-            "categoriaId": 2,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 30,
-            "baja": false,
-            "denominacion": "Enchiladas verdes",
-            "precioVenta": 11.00,
-            "categoriaId": 5,
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 31,
-            "baja": false,
-            "denominacion": "Limones",
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 32,
-            "baja": false,
-            "denominacion": "Agua",
-            "unidadMedidaId": 2
-        },
-        {
-            "id": 33,
-            "baja": false,
-            "denominacion": "Cebada",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 34,
-            "baja": false,
-            "denominacion": "Uvas",
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 35,
-            "baja": false,
-            "denominacion": "Naranjas",
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 36,
-            "baja": false,
-            "denominacion": "Lechuga",
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 37,
-            "baja": false,
-            "denominacion": "Tomates",
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 38,
-            "baja": false,
-            "denominacion": "Camarones",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 39,
-            "baja": false,
-            "denominacion": "Lomo de res",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 40,
-            "baja": false,
-            "denominacion": "Masa de pizza",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 41,
-            "baja": false,
-            "denominacion": "Huevos",
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 42,
-            "baja": false,
-            "denominacion": "Queso crema",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 43,
-            "baja": false,
-            "denominacion": "Chocolate",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 44,
-            "baja": false,
-            "denominacion": "Arroz",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 45,
-            "baja": false,
-            "denominacion": "Salmón",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 46,
-            "baja": false,
-            "denominacion": "Carne de res",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 47,
-            "baja": false,
-            "denominacion": "Lechuga",
-            "unidadMedidaId": 3
-        },
-        {
-            "id": 48,
-            "baja": false,
-            "denominacion": "Pollo",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 49,
-            "baja": false,
-            "denominacion": "Pasta",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 50,
-            "baja": false,
-            "denominacion": "Crema",
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 51,
-            "baja": false,
-            "denominacion": "Carne de res",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 52,
-            "baja": false,
-            "denominacion": "Salmón",
-            "unidadMedidaId": 1
-        },
-        {
-            "id": 53,
-            "baja": false,
-            "denominacion": "Papas",
-            "unidadMedidaId": 4
-        },
-        {
-            "id": 54,
-            "baja": false,
-            "denominacion": "Tortillas de maíz",
-            "unidadMedidaId": 4
-        }
-    ],
-    "articulosInsumos": [
-        {
-            "id": 2,
-            "precioCompra": 0.50,
-            "stockActual": 100,
-            "stockMaximo": 500,
-            "stockMinimo": 20,
-            "esParaElaborar": false
-        },
-        {
-            "id": 3,
-            "precioCompra": 0.50,
-            "stockActual": 100,
-            "stockMaximo": 500,
-            "stockMinimo": 20,
-            "esParaElaborar": false
-        },
-        {
-            "id": 4,
-            "precioCompra": 0.50,
-            "stockActual": 100,
-            "stockMaximo": 500,
-            "stockMinimo": 20,
-            "esParaElaborar": false
-        },
-        {
-            "id": 31,
-            "precioCompra": 0.50,
-            "stockActual": 100,
-            "stockMaximo": 500,
-            "stockMinimo": 20,
-            "esParaElaborar": true
-        },
-        {
-            "id": 32,
-            "precioCompra": 0.10,
-            "stockActual": 200,
-            "stockMaximo": 1000,
-            "stockMinimo": 50,
-            "esParaElaborar": true
-        },
-        {
-            "id": 33,
-            "precioCompra": 1.20,
-            "stockActual": 50,
-            "stockMaximo": 200,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 34,
-            "precioCompra": 2.00,
-            "stockActual": 80,
-            "stockMaximo": 300,
-            "stockMinimo": 30,
-            "esParaElaborar": true
-        },
-        {
-            "id": 35,
-            "precioCompra": 0.30,
-            "stockActual": 120,
-            "stockMaximo": 500,
-            "stockMinimo": 20,
-            "esParaElaborar": true
-        },
-        {
-            "id": 36,
-            "precioCompra": 0.80,
-            "stockActual": 60,
-            "stockMaximo": 200,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 37,
-            "precioCompra": 0.50,
-            "stockActual": 70,
-            "stockMaximo": 300,
-            "stockMinimo": 20,
-            "esParaElaborar": true
-        },
-        {
-            "id": 38,
-            "precioCompra": 4.50,
-            "stockActual": 40,
-            "stockMaximo": 150,
-            "stockMinimo": 5,
-            "esParaElaborar": true
-        },
-        {
-            "id": 39,
-            "precioCompra": 6.00,
-            "stockActual": 30,
-            "stockMaximo": 100,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 40,
-            "precioCompra": 2.50,
-            "stockActual": 25,
-            "stockMaximo": 80,
-            "stockMinimo": 5,
-            "esParaElaborar": true
-        },
-        {
-            "id": 41,
-            "precioCompra": 0.20,
-            "stockActual": 150,
-            "stockMaximo": 500,
-            "stockMinimo": 30,
-            "esParaElaborar": true
-        },
-        {
-            "id": 42,
-            "precioCompra": 3.00,
-            "stockActual": 40,
-            "stockMaximo": 200,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 43,
-            "precioCompra": 1.50,
-            "stockActual": 60,
-            "stockMaximo": 300,
-            "stockMinimo": 20,
-            "esParaElaborar": true
-        },
-        {
-            "id": 44,
-            "precioCompra": 1.00,
-            "stockActual": 100,
-            "stockMaximo": 400,
-            "stockMinimo": 50,
-            "esParaElaborar": true
-        },
-        {
-            "id": 45,
-            "precioCompra": 8.00,
-            "stockActual": 20,
-            "stockMaximo": 100,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 46,
-            "precioCompra": 7.00,
-            "stockActual": 25,
-            "stockMaximo": 80,
-            "stockMinimo": 5,
-            "esParaElaborar": true
-        },
-        {
-            "id": 47,
-            "precioCompra": 0.60,
-            "stockActual": 60,
-            "stockMaximo": 200,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 48,
-            "precioCompra": 5.00,
-            "stockActual": 30,
-            "stockMaximo": 100,
-            "stockMinimo": 20,
-            "esParaElaborar": true
-        },
-        {
-            "id": 49,
-            "precioCompra": 2.00,
-            "stockActual": 40,
-            "stockMaximo": 150,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 50,
-            "precioCompra": 1.50,
-            "stockActual": 70,
-            "stockMaximo": 300,
-            "stockMinimo": 20,
-            "esParaElaborar": true
-        },
-        {
-            "id": 51,
-            "precioCompra": 6.50,
-            "stockActual": 35,
-            "stockMaximo": 100,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        },
-        {
-            "id": 52,
-            "precioCompra": 9.00,
-            "stockActual": 18,
-            "stockMaximo": 50,
-            "stockMinimo": 5,
-            "esParaElaborar": true
-        },
-        {
-            "id": 53,
-            "precioCompra": 0.40,
-            "stockActual": 100,
-            "stockMaximo": 300,
-            "stockMinimo": 50,
-            "esParaElaborar": true
-        },
-        {
-            "id": 54,
-            "precioCompra": 0.30,
-            "stockActual": 80,
-            "stockMaximo": 200,
-            "stockMinimo": 10,
-            "esParaElaborar": true
-        }
-    ],
-    "articulosManufacturados": [
-        {
-            "id": 1,
-            "descripcion": "Refresco de limón",
-            "tiempoEstimadoMinutos": 2,
-            "preparacion": "Servir en vaso con hielo y una rodaja de limón."
-        },
-        {
-            "id": 5,
-            "descripcion": "Jugo de naranja natural",
-            "tiempoEstimadoMinutos": 5,
-            "preparacion": "Exprimir naranjas y servir en vaso."
-        },
-        {
-            "id": 6,
-            "descripcion": "Ensalada César",
-            "tiempoEstimadoMinutos": 10,
-            "preparacion": "Mezclar lechuga, crutones, aderezo y queso parmesano."
-        },
-        {
-            "id": 7,
-            "descripcion": "Bruschetta de tomate y albahaca",
-            "tiempoEstimadoMinutos": 5,
-            "preparacion": "Tostar pan, untar con tomate y albahaca picados."
-        },
-        {
-            "id": 8,
-            "descripcion": "Ceviche de camarón",
-            "tiempoEstimadoMinutos": 15,
-            "preparacion": "Marinar camarones en jugo de limón y especias."
-        },
-        {
-            "id": 9,
-            "descripcion": "Lomo saltado",
-            "tiempoEstimadoMinutos": 20,
-            "preparacion": "Saltear lomo con cebolla, tomate y servir con papas fritas."
-        },
-        {
-            "id": 10,
-            "descripcion": "Pizza Margarita",
-            "tiempoEstimadoMinutos": 25,
-            "preparacion": "Hornear masa con salsa de tomate, mozzarella y albahaca."
-        },
-        {
-            "id": 11,
-            "descripcion": "Tiramisú",
-            "tiempoEstimadoMinutos": 30,
-            "preparacion": "Capas alternas de bizcochos, café y crema mascarpone."
-        },
-        {
-            "id": 12,
-            "descripcion": "Cheesecake de frutos rojos",
-            "tiempoEstimadoMinutos": 45,
-            "preparacion": "Hornear base de galleta y crema de queso, decorar con frutos rojos."
-        },
-        {
-            "id": 13,
-            "descripcion": "Pollo al curry",
-            "tiempoEstimadoMinutos": 30,
-            "preparacion": "Cocinar pollo con salsa de curry y verduras."
-        },
-        {
-            "id": 14,
-            "descripcion": "Sopa de verduras",
-            "tiempoEstimadoMinutos": 20,
-            "preparacion": "Cocinar vegetales en caldo y servir caliente."
-        },
-        {
-            "id": 15,
-            "descripcion": "Filete de salmón a la parrilla",
-            "tiempoEstimadoMinutos": 15,
-            "preparacion": "Asar el salmón en la parrilla con especias."
-        },
-        {
-            "id": 16,
-            "descripcion": "Hamburguesa clásica",
-            "tiempoEstimadoMinutos": 15,
-            "preparacion": "Asar la carne, armar con pan y acompañamientos."
-        },
-        {
-            "id": 17,
-            "descripcion": "Mousse de chocolate",
-            "tiempoEstimadoMinutos": 45,
-            "preparacion": "Fundir chocolate, batir con crema y refrigerar."
-        },
-        {
-            "id": 18,
-            "descripcion": "Sushi variado",
-            "tiempoEstimadoMinutos": 40,
-            "preparacion": "Preparar arroz, cortar pescado y enrollar con alga nori."
-        },
-        {
-            "id": 19,
-            "descripcion": "Paella mixta",
-            "tiempoEstimadoMinutos": 45,
-            "preparacion": "Cocinar arroz con mariscos, pollo y verduras."
-        },
-        {
-            "id": 20,
-            "descripcion": "Spaghetti carbonara",
-            "tiempoEstimadoMinutos": 25,
-            "preparacion": "Cocinar pasta, mezclar con huevo, panceta y queso."
-        },
-        {
-            "id": 21,
-            "descripcion": "Crema catalana",
-            "tiempoEstimadoMinutos": 30,
-            "preparacion": "Cocinar leche, azúcar y yemas, caramelizar la superficie."
-        },
-        {
-            "id": 22,
-            "descripcion": "Sándwich de pollo a la parrilla",
-            "tiempoEstimadoMinutos": 10,
-            "preparacion": "Asar pechuga de pollo, armar con pan y vegetales."
-        },
-        {
-            "id": 23,
-            "descripcion": "Tacos al pastor",
-            "tiempoEstimadoMinutos": 20,
-            "preparacion": "Asar carne de cerdo marinada, servir en tortillas con cebolla y piña."
-        },
-        {
-            "id": 24,
-            "descripcion": "Risotto de champiñones",
-            "tiempoEstimadoMinutos": 30,
-            "preparacion": "Cocinar arroz con caldo y champiñones, servir cremoso."
-        },
-        {
-            "id": 25,
-            "descripcion": "Lasagna boloñesa",
-            "tiempoEstimadoMinutos": 60,
-            "preparacion": "Preparar salsa boloñesa, cocinar pasta, armar capas y hornear."
-        },
-        {
-            "id": 26,
-            "descripcion": "Sopa de tomate",
-            "tiempoEstimadoMinutos": 20,
-            "preparacion": "Cocinar tomates con cebolla y caldo, triturar y servir caliente."
-        },
-        {
-            "id": 27,
-            "descripcion": "Parrillada mixta",
-            "tiempoEstimadoMinutos": 30,
-            "preparacion": "Asar variedad de carnes y acompañamientos en parrilla."
-        },
-        {
-            "id": 28,
-            "descripcion": "Fajitas de pollo",
-            "tiempoEstimadoMinutos": 20,
-            "preparacion": "Saltear pollo con pimientos y cebolla, servir con tortillas."
-        },
-        {
-            "id": 29,
-            "descripcion": "Papas fritas",
-            "tiempoEstimadoMinutos": 15,
-            "preparacion": "Cortar papas, freír en aceite caliente y sazonar."
-        },
-        {
-            "id": 30,
-            "descripcion": "Enchiladas verdes",
-            "tiempoEstimadoMinutos": 30,
-            "preparacion": "Rellenar tortillas con pollo, bañar en salsa verde y gratinar."
-        }
-    ],
-    "articulosManufacturadosDetalles": [
-        {
-            "id": 5,
-            "cantidad": 20,
-            "articuloInsumoId": 31,
-            "articuloManufacturadoId": 1
-        },
-        {
-            "id": 6,
-            "cantidad": 15,
-            "articuloInsumoId": 32,
-            "articuloManufacturadoId": 2
-        },
-        {
-            "id": 7,
-            "cantidad": 25,
-            "articuloInsumoId": 33,
-            "articuloManufacturadoId": 3
-        },
-        {
-            "id": 8,
-            "cantidad": 10,
-            "articuloInsumoId": 34,
-            "articuloManufacturadoId": 4
-        },
-        {
-            "id": 9,
-            "cantidad": 30,
-            "articuloInsumoId": 35,
-            "articuloManufacturadoId": 5
-        },
-        {
-            "id": 10,
-            "cantidad": 18,
-            "articuloInsumoId": 36,
-            "articuloManufacturadoId": 6
-        },
-        {
-            "id": 11,
-            "cantidad": 22,
-            "articuloInsumoId": 37,
-            "articuloManufacturadoId": 7
-        },
-        {
-            "id": 12,
-            "cantidad": 12,
-            "articuloInsumoId": 38,
-            "articuloManufacturadoId": 8
-        },
-        {
-            "id": 13,
-            "cantidad": 16,
-            "articuloInsumoId": 39,
-            "articuloManufacturadoId": 9
-        },
-        {
-            "id": 14,
-            "cantidad": 28,
-            "articuloInsumoId": 40,
-            "articuloManufacturadoId": 10
-        },
-        {
-            "id": 15,
-            "cantidad": 20,
-            "articuloInsumoId": 41,
-            "articuloManufacturadoId": 11
-        },
-        {
-            "id": 16,
-            "cantidad": 25,
-            "articuloInsumoId": 42,
-            "articuloManufacturadoId": 12
-        },
-        {
-            "id": 17,
-            "cantidad": 18,
-            "articuloInsumoId": 43,
-            "articuloManufacturadoId": 13
-        },
-        {
-            "id": 18,
-            "cantidad": 35,
-            "articuloInsumoId": 44,
-            "articuloManufacturadoId": 14
-        },
-        {
-            "id": 19,
-            "cantidad": 22,
-            "articuloInsumoId": 45,
-            "articuloManufacturadoId": 15
-        },
-        {
-            "id": 20,
-            "cantidad": 30,
-            "articuloInsumoId": 46,
-            "articuloManufacturadoId": 16
-        },
-        {
-            "id": 21,
-            "cantidad": 15,
-            "articuloInsumoId": 47,
-            "articuloManufacturadoId": 17
-        },
-        {
-            "id": 22,
-            "cantidad": 20,
-            "articuloInsumoId": 48,
-            "articuloManufacturadoId": 18
-        },
-        {
-            "id": 23,
-            "cantidad": 25,
-            "articuloInsumoId": 49,
-            "articuloManufacturadoId": 19
-        },
-        {
-            "id": 24,
-            "cantidad": 10,
-            "articuloInsumoId": 50,
-            "articuloManufacturadoId": 20
-        },
-        {
-            "id": 25,
-            "cantidad": 18,
-            "articuloInsumoId": 51,
-            "articuloManufacturadoId": 21
-        },
-        {
-            "id": 26,
-            "cantidad": 28,
-            "articuloInsumoId": 52,
-            "articuloManufacturadoId": 22
-        },
-        {
-            "id": 27,
-            "cantidad": 15,
-            "articuloInsumoId": 53,
-            "articuloManufacturadoId": 23
-        },
-        {
-            "id": 28,
-            "cantidad": 20,
-            "articuloInsumoId": 54,
-            "articuloManufacturadoId": 24
-        },
-        {
-            "id": 29,
-            "cantidad": 10,
-            "articuloInsumoId": 31,
-            "articuloManufacturadoId": 25
-        },
-        {
-            "id": 30,
-            "cantidad": 5,
-            "articuloInsumoId": 32,
-            "articuloManufacturadoId": 26
-        }
-    ],
-    "categorias": [
-        {
-            "id": 1,
-            "baja": false,
-            "denominacion": "Bebidas"
-        },
-        {
-            "id": 2,
-            "baja": false,
-            "denominacion": "Gaseosas",
-            "categoriaPadreId": 1
-        },
-        {
-            "id": 3,
-            "baja": false,
-            "denominacion": "Jugos",
-            "categoriaPadreId": 1
-        },
-        {
-            "id": 4,
-            "baja": false,
-            "denominacion": "Cervezas",
-            "categoriaPadreId": 1
-        },
-        {
-            "id": 5,
-            "baja": false,
-            "denominacion": "Pizzas"
-        },
-        {
-            "id": 6,
-            "baja": false,
-            "denominacion": "Ensaladas"
-        },
-        {
-            "id": 7,
-            "baja": false,
-            "denominacion": "Postres"
-        },
-        {
-            "id": 8,
-            "baja": false,
-            "denominacion": "Helados",
-            "categoriaPadreId": 7
-        },
-        {
-            "id": 9,
-            "baja": false,
-            "denominacion": "Tortas",
-            "categoriaPadreId": 7
-        },
-        {
-            "id": 10,
-            "baja": false,
-            "denominacion": "Hamburguesas"
-        },
-        {
-            "id": 11,
-            "baja": false,
-            "denominacion": "Naturales",
-            "categoriaPadreId": 3
-        },
-        {
-            "id": 12,
-            "baja": false,
-            "denominacion": "Licuados",
-            "categoriaPadreId": 3
-        }
-    ],
-    "categoriasSucursales": [
-        {
-            "sucursalId": 1,
-            "categoriaId": 1
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 2
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 3
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 4
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 5
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 6
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 7
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 8
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 9
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 10
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 11
-        },
-        {
-            "sucursalId": 1,
-            "categoriaId": 12
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 1
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 2
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 3
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 4
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 5
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 6
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 7
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 8
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 9
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 10
-        },
-        {
-            "sucursalId": 2,
-            "categoriaId": 11
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 1
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 2
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 3
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 4
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 5
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 6
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 7
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 8
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 9
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 10
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 11
-        },
-        {
-            "sucursalId": 3,
-            "categoriaId": 12
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 1
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 2
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 3
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 4
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 5
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 6
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 7
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 8
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 9
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 10
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 11
-        },
-        {
-            "sucursalId": 4,
-            "categoriaId": 12
-        }
-    ],
-    "domicilios": [
-        {
-            "id": 1,
-            "baja": false,
-            "nombre": "San Martín",
-            "numero": 123,
-            "cp": 5507,
-            "piso": 2,
-            "nroDpto": 3,
-            "localidad_id": 1
-        }
-    ],
-    "empresas": [
-        {
-            "id": 1,
-            "baja": false,
-            "nombre": "Jebbs",
-            "razonSocial": "Jebbs SRL",
-            "cuil": 30598765432,
-            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDc9BAk0JoAY_5VmmwLODLC1x2B2_VnZhg47eCl1DGg&s"
-        },
-        {
-            "id": 2,
-            "baja": false,
-            "nombre": "Michel",
-            "razonSocial": "Michel Helados SRL",
-            "cuil": 30598765432,
-            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF6a1U6f_BPXg-0_QqXFaT3MHgBQZWsqHZU1uBfb_Mqg&s"
-        }
-    ],
-    "localidades": [
-        {
-            "id": 1,
-            "baja": false,
-            "nombre": "Luján de Cuyo",
-            "provincia_id": 1
-        },
-        {
-            "id": 2,
-            "baja": false,
-            "nombre": "Maipú",
-            "provincia_id": 1
-        }
-    ],
-    "paises": [
-        {
-            "id": 1,
-            "baja": false,
-            "nombre": "Argentina"
-        }
-    ],
-    "provincias": [
-        {
-            "id": 1,
-            "baja": false,
-            "nombre": "Mendoza",
-            "pais_id": 1
-        }
-    ],
-    "sucursales": [
-        {
-            "id": 1,
-            "baja": false,
-            "nombre": "Sucursal Chacras",
-            "horarioApertura": "09:00",
-            "horarioCierre": "18:00",
-            "empresaId": 1,
-            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvaYKo2uJT-p1isDBM7OxYqxXs847pHoY657WXmBCJBA&s"
-        },
-        {
-            "id": 2,
-            "baja": false,
-            "nombre": "Sucursal Terramalva",
-            "horarioApertura": "09:00",
-            "horarioCierre": "18:00",
-            "empresaId": 1,
-            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SJfrvi2YnAGifv9sr25OfCJ1PYwNh3AYrl1TD_-urw&s"
-        },
-        {
-            "id": 3,
-            "baja": false,
-            "nombre": "Sucursal Food Market",
-            "horarioApertura": "09:00",
-            "horarioCierre": "18:00",
-            "empresaId": 2,
-            "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsLhctfz5BIbUPSGl3iSfl9bHaNui1-t2BdnOBSYvrBg&s"
-        },
-        {
-            "id": 4,
-            "baja": false,
-            "nombre": "Fábrica",
-            "horarioApertura": "08:00",
-            "horarioCierre": "20:00",
-            "empresaId": 2,
-            "icon": "https://lujan365.com.ar/download/multimedia.normal.b053cf2ede8e95e5.4d494348454c5f6e6f726d616c2e6a7067.jpg"
-        }
-    ],
-    "unidadMedidas": [
-        {
-            "id": 1,
-            "baja": false,
-            "denominacion": "Kilos"
-        },
-        {
-            "id": 2,
-            "baja": false,
-            "denominacion": "Litros"
-        },
-        {
-            "id": 3,
-            "baja": false,
-            "denominacion": "Porciones"
-        },
-        {
-            "id": 4,
-            "baja": false,
-            "denominacion": "Unidades"
-        }
-    ],
-    "users": [
-        {
-            "id": 1,
-            "baja": false,
-            "username": "jazmin",
-            "password": "1234"
-        }
-    ]
+  "articulos": [
+    {
+      "id": "1",
+      "baja": false,
+      "denominacion": "Limonada",
+      "precioVenta": 2.5,
+      "categoriaId": 2,
+      "unidadMedidaId": 2
+    },
+    {
+      "id": "2",
+      "baja": false,
+      "denominacion": "Agua mineral",
+      "precioVenta": 1,
+      "categoriaId": 2,
+      "unidadMedidaId": 2
+    },
+    {
+      "id": "3",
+      "baja": false,
+      "denominacion": "Cerveza artesanal",
+      "precioVenta": 5,
+      "categoriaId": 4,
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "4",
+      "baja": false,
+      "denominacion": "Vino tinto reserva",
+      "precioVenta": 25,
+      "categoriaId": 4,
+      "unidadMedidaId": 2
+    },
+    {
+      "id": "5",
+      "baja": false,
+      "denominacion": "Jugo de naranja natural",
+      "precioVenta": 3,
+      "categoriaId": 3,
+      "unidadMedidaId": 2
+    },
+    {
+      "id": "6",
+      "baja": false,
+      "denominacion": "Ensalada César",
+      "precioVenta": 8.5,
+      "categoriaId": 6,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "7",
+      "baja": false,
+      "denominacion": "Bruschetta de tomate y albahaca",
+      "precioVenta": 6,
+      "categoriaId": 6,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "8",
+      "baja": false,
+      "denominacion": "Ceviche de camarón",
+      "precioVenta": 12,
+      "categoriaId": 3,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "9",
+      "baja": false,
+      "denominacion": "Lomo saltado",
+      "precioVenta": 15,
+      "categoriaId": 3,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "10",
+      "baja": false,
+      "denominacion": "Pizza Margarita",
+      "precioVenta": 10,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "11",
+      "baja": false,
+      "denominacion": "Tiramisú",
+      "precioVenta": 6.5,
+      "categoriaId": 7,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "12",
+      "baja": false,
+      "denominacion": "Cheesecake de frutos rojos",
+      "precioVenta": 7.5,
+      "categoriaId": 9,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "13",
+      "baja": false,
+      "denominacion": "Pollo al curry",
+      "precioVenta": 14,
+      "categoriaId": 3,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "14",
+      "baja": false,
+      "denominacion": "Sopa de verduras",
+      "precioVenta": 6,
+      "categoriaId": 6,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "15",
+      "baja": false,
+      "denominacion": "Filete de salmón a la parrilla",
+      "precioVenta": 18,
+      "categoriaId": 3,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "16",
+      "baja": false,
+      "denominacion": "Hamburguesa clásica",
+      "precioVenta": 9,
+      "categoriaId": 10,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "17",
+      "baja": false,
+      "denominacion": "Mousse de chocolate",
+      "precioVenta": 5.5,
+      "categoriaId": 7,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "18",
+      "baja": false,
+      "denominacion": "Sushi variado",
+      "precioVenta": 20,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "19",
+      "baja": false,
+      "denominacion": "Paella mixta",
+      "precioVenta": 22,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "20",
+      "baja": false,
+      "denominacion": "Spaghetti carbonara",
+      "precioVenta": 12,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "21",
+      "baja": false,
+      "denominacion": "Crema catalana",
+      "precioVenta": 6,
+      "categoriaId": 7,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "22",
+      "baja": false,
+      "denominacion": "Sándwich de pollo a la parrilla",
+      "precioVenta": 8,
+      "categoriaId": 10,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "23",
+      "baja": false,
+      "denominacion": "Tacos al pastor",
+      "precioVenta": 10,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "24",
+      "baja": false,
+      "denominacion": "Risotto de champiñones",
+      "precioVenta": 14.5,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "25",
+      "baja": false,
+      "denominacion": "Lasagna boloñesa",
+      "precioVenta": 13,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "26",
+      "baja": false,
+      "denominacion": "Sopa de tomate",
+      "precioVenta": 5.5,
+      "categoriaId": 6,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "27",
+      "baja": false,
+      "denominacion": "Parrillada mixta",
+      "precioVenta": 30,
+      "categoriaId": 6,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "28",
+      "baja": false,
+      "denominacion": "Fajitas de pollo",
+      "precioVenta": 12,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "29",
+      "baja": false,
+      "denominacion": "Papas fritas",
+      "precioVenta": 4,
+      "categoriaId": 2,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "30",
+      "baja": false,
+      "denominacion": "Enchiladas verdes",
+      "precioVenta": 11,
+      "categoriaId": 5,
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "31",
+      "baja": false,
+      "denominacion": "Limones",
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "32",
+      "baja": false,
+      "denominacion": "Agua",
+      "unidadMedidaId": 2
+    },
+    {
+      "id": "33",
+      "baja": false,
+      "denominacion": "Cebada",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "34",
+      "baja": false,
+      "denominacion": "Uvas",
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "35",
+      "baja": false,
+      "denominacion": "Naranjas",
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "36",
+      "baja": false,
+      "denominacion": "Lechuga",
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "37",
+      "baja": false,
+      "denominacion": "Tomates",
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "38",
+      "baja": false,
+      "denominacion": "Camarones",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "39",
+      "baja": false,
+      "denominacion": "Lomo de res",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "40",
+      "baja": false,
+      "denominacion": "Masa de pizza",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "41",
+      "baja": false,
+      "denominacion": "Huevos",
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "42",
+      "baja": false,
+      "denominacion": "Queso crema",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "43",
+      "baja": false,
+      "denominacion": "Chocolate",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "44",
+      "baja": false,
+      "denominacion": "Arroz",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "45",
+      "baja": false,
+      "denominacion": "Salmón",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "46",
+      "baja": false,
+      "denominacion": "Carne de res",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "47",
+      "baja": false,
+      "denominacion": "Lechuga",
+      "unidadMedidaId": 3
+    },
+    {
+      "id": "48",
+      "baja": false,
+      "denominacion": "Pollo",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "49",
+      "baja": false,
+      "denominacion": "Pasta",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "50",
+      "baja": false,
+      "denominacion": "Crema",
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "51",
+      "baja": false,
+      "denominacion": "Carne de res",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "52",
+      "baja": false,
+      "denominacion": "Salmón",
+      "unidadMedidaId": 1
+    },
+    {
+      "id": "53",
+      "baja": false,
+      "denominacion": "Papas",
+      "unidadMedidaId": 4
+    },
+    {
+      "id": "54",
+      "baja": false,
+      "denominacion": "Tortillas de maíz",
+      "unidadMedidaId": 4
+    }
+  ],
+  "articulosInsumos": [
+    {
+      "id": "2",
+      "precioCompra": 0.5,
+      "stockActual": 100,
+      "stockMaximo": 500,
+      "stockMinimo": 20,
+      "esParaElaborar": false
+    },
+    {
+      "id": "3",
+      "precioCompra": 0.5,
+      "stockActual": 100,
+      "stockMaximo": 500,
+      "stockMinimo": 20,
+      "esParaElaborar": false
+    },
+    {
+      "id": "4",
+      "precioCompra": 0.5,
+      "stockActual": 100,
+      "stockMaximo": 500,
+      "stockMinimo": 20,
+      "esParaElaborar": false
+    },
+    {
+      "id": "31",
+      "precioCompra": 0.5,
+      "stockActual": 100,
+      "stockMaximo": 500,
+      "stockMinimo": 20,
+      "esParaElaborar": true
+    },
+    {
+      "id": "32",
+      "precioCompra": 0.1,
+      "stockActual": 200,
+      "stockMaximo": 1000,
+      "stockMinimo": 50,
+      "esParaElaborar": true
+    },
+    {
+      "id": "33",
+      "precioCompra": 1.2,
+      "stockActual": 50,
+      "stockMaximo": 200,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "34",
+      "precioCompra": 2,
+      "stockActual": 80,
+      "stockMaximo": 300,
+      "stockMinimo": 30,
+      "esParaElaborar": true
+    },
+    {
+      "id": "35",
+      "precioCompra": 0.3,
+      "stockActual": 120,
+      "stockMaximo": 500,
+      "stockMinimo": 20,
+      "esParaElaborar": true
+    },
+    {
+      "id": "36",
+      "precioCompra": 0.8,
+      "stockActual": 60,
+      "stockMaximo": 200,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "37",
+      "precioCompra": 0.5,
+      "stockActual": 70,
+      "stockMaximo": 300,
+      "stockMinimo": 20,
+      "esParaElaborar": true
+    },
+    {
+      "id": "38",
+      "precioCompra": 4.5,
+      "stockActual": 40,
+      "stockMaximo": 150,
+      "stockMinimo": 5,
+      "esParaElaborar": true
+    },
+    {
+      "id": "39",
+      "precioCompra": 6,
+      "stockActual": 30,
+      "stockMaximo": 100,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "40",
+      "precioCompra": 2.5,
+      "stockActual": 25,
+      "stockMaximo": 80,
+      "stockMinimo": 5,
+      "esParaElaborar": true
+    },
+    {
+      "id": "41",
+      "precioCompra": 0.2,
+      "stockActual": 150,
+      "stockMaximo": 500,
+      "stockMinimo": 30,
+      "esParaElaborar": true
+    },
+    {
+      "id": "42",
+      "precioCompra": 3,
+      "stockActual": 40,
+      "stockMaximo": 200,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "43",
+      "precioCompra": 1.5,
+      "stockActual": 60,
+      "stockMaximo": 300,
+      "stockMinimo": 20,
+      "esParaElaborar": true
+    },
+    {
+      "id": "44",
+      "precioCompra": 1,
+      "stockActual": 100,
+      "stockMaximo": 400,
+      "stockMinimo": 50,
+      "esParaElaborar": true
+    },
+    {
+      "id": "45",
+      "precioCompra": 8,
+      "stockActual": 20,
+      "stockMaximo": 100,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "46",
+      "precioCompra": 7,
+      "stockActual": 25,
+      "stockMaximo": 80,
+      "stockMinimo": 5,
+      "esParaElaborar": true
+    },
+    {
+      "id": "47",
+      "precioCompra": 0.6,
+      "stockActual": 60,
+      "stockMaximo": 200,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "48",
+      "precioCompra": 5,
+      "stockActual": 30,
+      "stockMaximo": 100,
+      "stockMinimo": 20,
+      "esParaElaborar": true
+    },
+    {
+      "id": "49",
+      "precioCompra": 2,
+      "stockActual": 40,
+      "stockMaximo": 150,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "50",
+      "precioCompra": 1.5,
+      "stockActual": 70,
+      "stockMaximo": 300,
+      "stockMinimo": 20,
+      "esParaElaborar": true
+    },
+    {
+      "id": "51",
+      "precioCompra": 6.5,
+      "stockActual": 35,
+      "stockMaximo": 100,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    },
+    {
+      "id": "52",
+      "precioCompra": 9,
+      "stockActual": 18,
+      "stockMaximo": 50,
+      "stockMinimo": 5,
+      "esParaElaborar": true
+    },
+    {
+      "id": "53",
+      "precioCompra": 0.4,
+      "stockActual": 100,
+      "stockMaximo": 300,
+      "stockMinimo": 50,
+      "esParaElaborar": true
+    },
+    {
+      "id": "54",
+      "precioCompra": 0.3,
+      "stockActual": 80,
+      "stockMaximo": 200,
+      "stockMinimo": 10,
+      "esParaElaborar": true
+    }
+  ],
+  "articulosManufacturados": [
+    {
+      "id": "1",
+      "descripcion": "Refresco de limón",
+      "tiempoEstimadoMinutos": 2,
+      "preparacion": "Servir en vaso con hielo y una rodaja de limón."
+    },
+    {
+      "id": "5",
+      "descripcion": "Jugo de naranja natural",
+      "tiempoEstimadoMinutos": 5,
+      "preparacion": "Exprimir naranjas y servir en vaso."
+    },
+    {
+      "id": "6",
+      "descripcion": "Ensalada César",
+      "tiempoEstimadoMinutos": 10,
+      "preparacion": "Mezclar lechuga, crutones, aderezo y queso parmesano."
+    },
+    {
+      "id": "7",
+      "descripcion": "Bruschetta de tomate y albahaca",
+      "tiempoEstimadoMinutos": 5,
+      "preparacion": "Tostar pan, untar con tomate y albahaca picados."
+    },
+    {
+      "id": "8",
+      "descripcion": "Ceviche de camarón",
+      "tiempoEstimadoMinutos": 15,
+      "preparacion": "Marinar camarones en jugo de limón y especias."
+    },
+    {
+      "id": "9",
+      "descripcion": "Lomo saltado",
+      "tiempoEstimadoMinutos": 20,
+      "preparacion": "Saltear lomo con cebolla, tomate y servir con papas fritas."
+    },
+    {
+      "id": "10",
+      "descripcion": "Pizza Margarita",
+      "tiempoEstimadoMinutos": 25,
+      "preparacion": "Hornear masa con salsa de tomate, mozzarella y albahaca."
+    },
+    {
+      "id": "11",
+      "descripcion": "Tiramisú",
+      "tiempoEstimadoMinutos": 30,
+      "preparacion": "Capas alternas de bizcochos, café y crema mascarpone."
+    },
+    {
+      "id": "12",
+      "descripcion": "Cheesecake de frutos rojos",
+      "tiempoEstimadoMinutos": 45,
+      "preparacion": "Hornear base de galleta y crema de queso, decorar con frutos rojos."
+    },
+    {
+      "id": "13",
+      "descripcion": "Pollo al curry",
+      "tiempoEstimadoMinutos": 30,
+      "preparacion": "Cocinar pollo con salsa de curry y verduras."
+    },
+    {
+      "id": "14",
+      "descripcion": "Sopa de verduras",
+      "tiempoEstimadoMinutos": 20,
+      "preparacion": "Cocinar vegetales en caldo y servir caliente."
+    },
+    {
+      "id": "15",
+      "descripcion": "Filete de salmón a la parrilla",
+      "tiempoEstimadoMinutos": 15,
+      "preparacion": "Asar el salmón en la parrilla con especias."
+    },
+    {
+      "id": "16",
+      "descripcion": "Hamburguesa clásica",
+      "tiempoEstimadoMinutos": 15,
+      "preparacion": "Asar la carne, armar con pan y acompañamientos."
+    },
+    {
+      "id": "17",
+      "descripcion": "Mousse de chocolate",
+      "tiempoEstimadoMinutos": 45,
+      "preparacion": "Fundir chocolate, batir con crema y refrigerar."
+    },
+    {
+      "id": "18",
+      "descripcion": "Sushi variado",
+      "tiempoEstimadoMinutos": 40,
+      "preparacion": "Preparar arroz, cortar pescado y enrollar con alga nori."
+    },
+    {
+      "id": "19",
+      "descripcion": "Paella mixta",
+      "tiempoEstimadoMinutos": 45,
+      "preparacion": "Cocinar arroz con mariscos, pollo y verduras."
+    },
+    {
+      "id": "20",
+      "descripcion": "Spaghetti carbonara",
+      "tiempoEstimadoMinutos": 25,
+      "preparacion": "Cocinar pasta, mezclar con huevo, panceta y queso."
+    },
+    {
+      "id": "21",
+      "descripcion": "Crema catalana",
+      "tiempoEstimadoMinutos": 30,
+      "preparacion": "Cocinar leche, azúcar y yemas, caramelizar la superficie."
+    },
+    {
+      "id": "22",
+      "descripcion": "Sándwich de pollo a la parrilla",
+      "tiempoEstimadoMinutos": 10,
+      "preparacion": "Asar pechuga de pollo, armar con pan y vegetales."
+    },
+    {
+      "id": "23",
+      "descripcion": "Tacos al pastor",
+      "tiempoEstimadoMinutos": 20,
+      "preparacion": "Asar carne de cerdo marinada, servir en tortillas con cebolla y piña."
+    },
+    {
+      "id": "24",
+      "descripcion": "Risotto de champiñones",
+      "tiempoEstimadoMinutos": 30,
+      "preparacion": "Cocinar arroz con caldo y champiñones, servir cremoso."
+    },
+    {
+      "id": "25",
+      "descripcion": "Lasagna boloñesa",
+      "tiempoEstimadoMinutos": 60,
+      "preparacion": "Preparar salsa boloñesa, cocinar pasta, armar capas y hornear."
+    },
+    {
+      "id": "26",
+      "descripcion": "Sopa de tomate",
+      "tiempoEstimadoMinutos": 20,
+      "preparacion": "Cocinar tomates con cebolla y caldo, triturar y servir caliente."
+    },
+    {
+      "id": "27",
+      "descripcion": "Parrillada mixta",
+      "tiempoEstimadoMinutos": 30,
+      "preparacion": "Asar variedad de carnes y acompañamientos en parrilla."
+    },
+    {
+      "id": "28",
+      "descripcion": "Fajitas de pollo",
+      "tiempoEstimadoMinutos": 20,
+      "preparacion": "Saltear pollo con pimientos y cebolla, servir con tortillas."
+    },
+    {
+      "id": "29",
+      "descripcion": "Papas fritas",
+      "tiempoEstimadoMinutos": 15,
+      "preparacion": "Cortar papas, freír en aceite caliente y sazonar."
+    },
+    {
+      "id": "30",
+      "descripcion": "Enchiladas verdes",
+      "tiempoEstimadoMinutos": 30,
+      "preparacion": "Rellenar tortillas con pollo, bañar en salsa verde y gratinar."
+    }
+  ],
+  "articulosManufacturadosDetalles": [
+    {
+      "id": "5",
+      "cantidad": 20,
+      "articuloInsumoId": 31,
+      "articuloManufacturadoId": 1
+    },
+    {
+      "id": "6",
+      "cantidad": 15,
+      "articuloInsumoId": 32,
+      "articuloManufacturadoId": 2
+    },
+    {
+      "id": "7",
+      "cantidad": 25,
+      "articuloInsumoId": 33,
+      "articuloManufacturadoId": 3
+    },
+    {
+      "id": "8",
+      "cantidad": 10,
+      "articuloInsumoId": 34,
+      "articuloManufacturadoId": 4
+    },
+    {
+      "id": "9",
+      "cantidad": 30,
+      "articuloInsumoId": 35,
+      "articuloManufacturadoId": 5
+    },
+    {
+      "id": "10",
+      "cantidad": 18,
+      "articuloInsumoId": 36,
+      "articuloManufacturadoId": 6
+    },
+    {
+      "id": "11",
+      "cantidad": 22,
+      "articuloInsumoId": 37,
+      "articuloManufacturadoId": 7
+    },
+    {
+      "id": "12",
+      "cantidad": 12,
+      "articuloInsumoId": 38,
+      "articuloManufacturadoId": 8
+    },
+    {
+      "id": "13",
+      "cantidad": 16,
+      "articuloInsumoId": 39,
+      "articuloManufacturadoId": 9
+    },
+    {
+      "id": "14",
+      "cantidad": 28,
+      "articuloInsumoId": 40,
+      "articuloManufacturadoId": 10
+    },
+    {
+      "id": "15",
+      "cantidad": 20,
+      "articuloInsumoId": 41,
+      "articuloManufacturadoId": 11
+    },
+    {
+      "id": "16",
+      "cantidad": 25,
+      "articuloInsumoId": 42,
+      "articuloManufacturadoId": 12
+    },
+    {
+      "id": "17",
+      "cantidad": 18,
+      "articuloInsumoId": 43,
+      "articuloManufacturadoId": 13
+    },
+    {
+      "id": "18",
+      "cantidad": 35,
+      "articuloInsumoId": 44,
+      "articuloManufacturadoId": 14
+    },
+    {
+      "id": "19",
+      "cantidad": 22,
+      "articuloInsumoId": 45,
+      "articuloManufacturadoId": 15
+    },
+    {
+      "id": "20",
+      "cantidad": 30,
+      "articuloInsumoId": 46,
+      "articuloManufacturadoId": 16
+    },
+    {
+      "id": "21",
+      "cantidad": 15,
+      "articuloInsumoId": 47,
+      "articuloManufacturadoId": 17
+    },
+    {
+      "id": "22",
+      "cantidad": 20,
+      "articuloInsumoId": 48,
+      "articuloManufacturadoId": 18
+    },
+    {
+      "id": "23",
+      "cantidad": 25,
+      "articuloInsumoId": 49,
+      "articuloManufacturadoId": 19
+    },
+    {
+      "id": "24",
+      "cantidad": 10,
+      "articuloInsumoId": 50,
+      "articuloManufacturadoId": 20
+    },
+    {
+      "id": "25",
+      "cantidad": 18,
+      "articuloInsumoId": 51,
+      "articuloManufacturadoId": 21
+    },
+    {
+      "id": "26",
+      "cantidad": 28,
+      "articuloInsumoId": 52,
+      "articuloManufacturadoId": 22
+    },
+    {
+      "id": "27",
+      "cantidad": 15,
+      "articuloInsumoId": 53,
+      "articuloManufacturadoId": 23
+    },
+    {
+      "id": "28",
+      "cantidad": 20,
+      "articuloInsumoId": 54,
+      "articuloManufacturadoId": 24
+    },
+    {
+      "id": "29",
+      "cantidad": 10,
+      "articuloInsumoId": 31,
+      "articuloManufacturadoId": 25
+    },
+    {
+      "id": "30",
+      "cantidad": 5,
+      "articuloInsumoId": 32,
+      "articuloManufacturadoId": 26
+    }
+  ],
+  "categorias": [
+    {
+      "id": "1",
+      "baja": false,
+      "denominacion": "Bebidas"
+    },
+    {
+      "id": "2",
+      "baja": false,
+      "denominacion": "Gaseosas",
+      "categoriaPadreId": 1
+    },
+    {
+      "id": "3",
+      "baja": false,
+      "denominacion": "Jugos",
+      "categoriaPadreId": 1
+    },
+    {
+      "id": "4",
+      "baja": false,
+      "denominacion": "Cervezas",
+      "categoriaPadreId": 1
+    },
+    {
+      "id": "5",
+      "baja": false,
+      "denominacion": "Pizzas"
+    },
+    {
+      "id": "6",
+      "baja": false,
+      "denominacion": "Ensaladas"
+    },
+    {
+      "id": "7",
+      "baja": false,
+      "denominacion": "Postres"
+    },
+    {
+      "id": "8",
+      "baja": false,
+      "denominacion": "Helados",
+      "categoriaPadreId": 7
+    },
+    {
+      "id": "9",
+      "baja": false,
+      "denominacion": "Tortas",
+      "categoriaPadreId": 7
+    },
+    {
+      "id": "10",
+      "baja": false,
+      "denominacion": "Hamburguesas"
+    },
+    {
+      "id": "11",
+      "baja": false,
+      "denominacion": "Naturales",
+      "categoriaPadreId": 3
+    },
+    {
+      "id": "12",
+      "baja": false,
+      "denominacion": "Licuados",
+      "categoriaPadreId": 3
+    }
+  ],
+  "categoriasSucursales": [
+    {
+      "sucursalId": 1,
+      "categoriaId": 1,
+      "id": "11c4"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 2,
+      "id": "6908"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 3,
+      "id": "d167"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 4,
+      "id": "c66f"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 5,
+      "id": "f75f"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 6,
+      "id": "d722"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 7,
+      "id": "e861"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 8,
+      "id": "6e1d"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 9,
+      "id": "94ac"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 10,
+      "id": "9ed9"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 11,
+      "id": "443a"
+    },
+    {
+      "sucursalId": 1,
+      "categoriaId": 12,
+      "id": "65de"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 1,
+      "id": "b5da"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 2,
+      "id": "36c3"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 3,
+      "id": "c203"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 4,
+      "id": "c430"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 5,
+      "id": "8bc2"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 6,
+      "id": "48e9"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 7,
+      "id": "f518"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 8,
+      "id": "641f"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 9,
+      "id": "fba5"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 10,
+      "id": "f874"
+    },
+    {
+      "sucursalId": 2,
+      "categoriaId": 11,
+      "id": "cf6c"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 1,
+      "id": "1278"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 2,
+      "id": "f321"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 3,
+      "id": "e7dc"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 4,
+      "id": "5b79"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 5,
+      "id": "61d7"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 6,
+      "id": "2304"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 7,
+      "id": "f7fb"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 8,
+      "id": "626e"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 9,
+      "id": "7b98"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 10,
+      "id": "bddb"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 11,
+      "id": "08fc"
+    },
+    {
+      "sucursalId": 3,
+      "categoriaId": 12,
+      "id": "0494"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 1,
+      "id": "dfe5"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 2,
+      "id": "9752"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 3,
+      "id": "ab7c"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 4,
+      "id": "a961"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 5,
+      "id": "8c89"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 6,
+      "id": "f70d"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 7,
+      "id": "7fc2"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 8,
+      "id": "9b70"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 9,
+      "id": "d1eb"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 10,
+      "id": "e0d3"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 11,
+      "id": "024f"
+    },
+    {
+      "sucursalId": 4,
+      "categoriaId": 12,
+      "id": "6e6a"
+    }
+  ],
+  "domicilios": [
+    {
+      "id": "1",
+      "baja": false,
+      "calle": "Mitre",
+      "numero": 1256,
+      "cp": 5506,
+      "localidadId": 1
+    },
+    {
+      "id": "2",
+      "baja": false,
+      "calle": "Saenz Peña",
+      "numero": 6422,
+      "cp": 5507,
+      "localidadId": 2
+    },
+    {
+      "id": "3",
+      "baja": false,
+      "calle": "Guardia Vieja",
+      "numero": 123,
+      "cp": 5507,
+      "localidadId": 3
+    },
+    {
+      "id": "4",
+      "baja": false,
+      "calle": "Guiñazú",
+      "numero": 1335,
+      "cp": 5508,
+      "localidadId": 2
+    }
+  ],
+  "empresas": [
+    {
+      "baja": false,
+      "nombre": "Jebbs",
+      "razonSocial": "Jebbs SRL",
+      "cuil": 30598765432,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDc9BAk0JoAY_5VmmwLODLC1x2B2_VnZhg47eCl1DGg&s",
+      "id": "1"
+    },
+    {
+      "baja": false,
+      "nombre": "Michel",
+      "razonSocial": "Michel Helados SRL",
+      "cuil": 30598765432,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF6a1U6f_BPXg-0_QqXFaT3MHgBQZWsqHZU1uBfb_Mqg&s",
+      "id": "2"
+    }
+  ],
+  "localidades": [
+    {
+      "id": "1",
+      "baja": false,
+      "nombre": "Chacras, Luján de Cuyo",
+      "provincia_id": 1
+    },
+    {
+      "id": "2",
+      "baja": false,
+      "nombre": "Luján de Cuyo",
+      "provincia_id": 1
+    },
+    {
+      "id": "3",
+      "baja": false,
+      "nombre": "Vistalba, Luján de Cuyo",
+      "provincia_id": 1
+    }
+  ],
+  "paises": [
+    {
+      "id": "1",
+      "baja": false,
+      "nombre": "Argentina"
+    }
+  ],
+  "provincias": [
+    {
+      "id": "1",
+      "baja": false,
+      "nombre": "Mendoza",
+      "pais_id": 1
+    }
+  ],
+  "sucursales": [
+    {
+      "id": "1",
+      "baja": false,
+      "nombre": "Sucursal Chacras",
+      "horarioApertura": "09:00",
+      "horarioCierre": "18:00",
+      "empresaId": 1,
+      "domicilioId": 1,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvaYKo2uJT-p1isDBM7OxYqxXs847pHoY657WXmBCJBA&s"
+    },
+    {
+      "id": "2",
+      "baja": false,
+      "nombre": "Sucursal Terramalva",
+      "horarioApertura": "09:00",
+      "horarioCierre": "18:00",
+      "empresaId": 1,
+      "domicilioId": 2,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SJfrvi2YnAGifv9sr25OfCJ1PYwNh3AYrl1TD_-urw&s"
+    },
+    {
+      "id": "3",
+      "baja": false,
+      "nombre": "Sucursal Food Market",
+      "horarioApertura": "09:00",
+      "horarioCierre": "18:00",
+      "empresaId": 2,
+      "domicilioId": 3,
+      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsLhctfz5BIbUPSGl3iSfl9bHaNui1-t2BdnOBSYvrBg&s"
+    },
+    {
+      "id": "4",
+      "baja": false,
+      "nombre": "Fábrica",
+      "horarioApertura": "08:00",
+      "horarioCierre": "20:00",
+      "empresaId": 2,
+      "domicilioId": 4,
+      "icon": "https://lujan365.com.ar/download/multimedia.normal.b053cf2ede8e95e5.4d494348454c5f6e6f726d616c2e6a7067.jpg"
+    }
+  ],
+  "unidadMedidas": [
+    {
+      "id": "1",
+      "baja": false,
+      "denominacion": "Kilos"
+    },
+    {
+      "id": "2",
+      "baja": false,
+      "denominacion": "Litros"
+    },
+    {
+      "id": "3",
+      "baja": false,
+      "denominacion": "Porciones"
+    },
+    {
+      "id": "4",
+      "baja": false,
+      "denominacion": "Unidades"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "baja": false,
+      "username": "jazmin",
+      "password": "1234"
+    }
+  ]
 }

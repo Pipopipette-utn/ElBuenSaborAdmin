@@ -19,7 +19,6 @@ export const Sucursales = () => {
 	const onCloseModal = () => setShowModal(false);
 
 	const handleClick = () => onOpenModal();
-	console.log(showModal);
 	return (
 		<>
 			<GenericDoubleStack>

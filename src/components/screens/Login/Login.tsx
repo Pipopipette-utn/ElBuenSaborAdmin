@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setLogin } from "../../../redux/slices/Auth";
+import MuiTextField from "@mui/material/TextField";
 import {
 	Box,
 	InputAdornment,
 	Link,
 	Stack,
-	TextField,
 	Typography,
 	styled,
 } from "@mui/material";
@@ -17,9 +17,24 @@ import StoreIcon from "@mui/icons-material/Store";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import HttpsOutlinedIcon from "@mui/icons-material/HttpsOutlined";
 import GoogleIcon from "@mui/icons-material/Google";
-import "./Login.css";
 import MuiButton from "@mui/material/Button";
 import { useState } from "react";
+
+const TextFieldStyled = styled(MuiTextField)(({ theme }) => ({
+	borderRadius: "50px",
+	backgroundColor: "transparent",
+	border: `1px solid ${theme.palette.bg.light}`,
+	"& input": {
+		color: theme.palette.bg.light,
+		backgroundColor: "transparent",
+		borderRadius: "50px",
+	},
+	"& input:-webkit-autofill": {
+		backgroundColor: "transparent",
+		borderRadius: "50px",
+		color: "red",
+	},
+}));
 
 const Button = styled(MuiButton)(({ theme }) => ({
 	borderRadius: "50px",
@@ -127,7 +142,7 @@ export const Login = () => {
 						/* and other goodies */
 					}) => (
 						<>
-							<TextField
+							<TextFieldStyled
 								fullWidth
 								placeholder="NOMBRE DE USUARIO"
 								name="username"
@@ -145,7 +160,7 @@ export const Login = () => {
 								}}
 							/>
 							{errors.username && touched.username && errors.username}
-							<TextField
+							<TextFieldStyled
 								fullWidth
 								placeholder="CONTRASEÑA"
 								type="password"

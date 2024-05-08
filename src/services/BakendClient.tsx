@@ -1,7 +1,7 @@
 import { IGenericFetch } from "./IGenericFetch";
 
 export abstract class BackendClient<T> implements IGenericFetch<T> {
-	private baseUrl: string = import.meta.env.VITE_API_URL || "";
+	protected baseUrl: string = import.meta.env.VITE_API_URL || "";
 
 	constructor(baseUrl: string) {
 		this.baseUrl += baseUrl;
@@ -65,6 +65,7 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 			});
 
 			if (!response.ok) {
+				console.log(response);
 				throw Error(response.statusText);
 			}
 			return response.json(); // Retorna los datos en formato JSON

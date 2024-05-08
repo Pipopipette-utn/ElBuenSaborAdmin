@@ -54,7 +54,8 @@ export const theme = createTheme({
 		MuiTextField: {
 			styleOverrides: {
 				root: {
-					borderRadius: "20px",
+					color: background.main,
+					backgroundColor: background.dark,
 				},
 			},
 		},
@@ -87,7 +88,7 @@ export const theme = createTheme({
 					},
 				},
 			},
-		}
+		},
 	},
 	typography: {
 		fontFamily: "Roboto, sans-serif",

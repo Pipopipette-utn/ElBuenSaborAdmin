@@ -25,6 +25,7 @@ import { UsuarioService } from "./services/UsuarioService";
 import { ArticuloService } from "./services/ArticuloService";
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
 import { IArticuloInsumo, IArticuloManufacturado } from "./types/empresa";
+import { DomicilioService } from "./services/DomicilioService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
@@ -32,6 +33,7 @@ export const App: FC = () => {
 	const dispatch = useAppDispatch();
 	const usuarioService = new UsuarioService("/users");
 	const unidadMedidaService = new UnidadMedidaService("/unidadMedidas");
+	const domicilioService = new DomicilioService("/domicilios");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
 	const categoriaService = new CategoriaService("/categorias");
@@ -49,6 +51,8 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
+			const domicilios = await domicilioService.getAll();
+
 			const usuarios = await usuarioService.getAll();
 			dispatch(setUsuarios(usuarios));
 
@@ -65,7 +69,8 @@ export const App: FC = () => {
 			const sucursales = await sucursalService.getAll();
 			const sucursalesMapeadas = sucursalService.mapSucursales(
 				sucursales,
-				empresasData
+				empresasData,
+				domicilios
 			);
 			dispatch(setSucursales(sucursalesMapeadas));
 
