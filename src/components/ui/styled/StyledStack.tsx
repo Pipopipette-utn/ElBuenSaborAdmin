@@ -2,6 +2,7 @@ import { styled } from "@mui/material";
 import MuiStack from "@mui/material/Stack"
 
 export const ContainerStack = styled(MuiStack)(() => ({
+    width: "94%",
     margin: "16px 32px",
 }));
 
