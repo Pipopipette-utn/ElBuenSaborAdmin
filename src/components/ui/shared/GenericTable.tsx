@@ -7,7 +7,6 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
-import { Stack } from "@mui/material";
 import { theme } from "../../../styles/theme";
 import ButtonGroup from "./GenericTableButtonGroup";
 
@@ -23,7 +22,7 @@ export interface TableProps<T> {
 
 export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
 	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(7);
+	const [rowsPerPage, setRowsPerPage] = useState(8);
 
 	const handleChangePage = (_: unknown, newPage: number) => {
 		setPage(newPage);
@@ -54,7 +53,7 @@ export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
 			}}
 		>
 			<Paper sx={{ width: "100%", borderRadius: "8px" }}>
-				<TableContainer>
+				<TableContainer sx={{ maxHeight: 300 }}>
 					<Table stickyHeader>
 						<TableHead>
 							<TableRow>

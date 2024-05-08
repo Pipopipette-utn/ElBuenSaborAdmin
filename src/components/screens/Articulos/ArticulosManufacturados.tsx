@@ -43,7 +43,7 @@ export const ArticulosManufacturados = () => {
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los productos manufacturados
 					</Typography>
-					<Stack direction="row" sx={{ flexWrap: "wrap", overflowY: "auto" }}>
+					<Stack direction="row">
 						{articulosManufacturados && (
 							<GenericTable
 								data={articuloManufacturadoService.articulosManufacturadosToDTO(
