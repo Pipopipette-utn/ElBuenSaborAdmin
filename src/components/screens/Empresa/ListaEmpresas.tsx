@@ -14,6 +14,7 @@ import { useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import { EmpresaForm } from "../../ui/forms/EmpresaForm";
 import { emptyEmpresa } from "../../../types/emptyEntities";
+import { Loader } from "../../ui/shared/Loader";
 
 export const ListaEmpresas = () => {
 	const empresas = useAppSelector((state) => state.business.empresas);
@@ -56,6 +57,7 @@ export const ListaEmpresas = () => {
 						</AddIconButton>
 					</AddCardActions>
 				</AddCard>
+				{!empresas && <Loader />}
 				<GenericModal
 					title={"Crear empresa"}
 					icon={<AddBusinessIcon fontSize="large" />}
