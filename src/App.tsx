@@ -26,11 +26,18 @@ import { ArticuloService } from "./services/ArticuloService";
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
 import { IArticuloInsumo, IArticuloManufacturado } from "./types/empresa";
 import { DomicilioService } from "./services/DomicilioService";
+import { PaisService } from "./services/PaisService";
+import { ProvinciaService } from "./services/ProvinciaService";
+import { LocalidadService } from "./services/LocalidadService";
+import { setDomicilios, setLocalidades, setPaises, setProvincias } from "./redux/slices/Location";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
 export const App: FC = () => {
 	const dispatch = useAppDispatch();
+	const paisService = new PaisService("/paises");
+	const provinciaService = new ProvinciaService("/provincias");
+	const localidadService = new LocalidadService("/localidades");
 	const usuarioService = new UsuarioService("/users");
 	const unidadMedidaService = new UnidadMedidaService("/unidadMedidas");
 	const domicilioService = new DomicilioService("/domicilios");
@@ -51,7 +58,14 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
+			const paises = await paisService.getAll();
+			const provincias = await provinciaService.getAll();
+			const localidades = await localidadService.getAll();
 			const domicilios = await domicilioService.getAll();
+			dispatch(setPaises(paises));
+			dispatch(setProvincias(provincias));
+			dispatch(setLocalidades(localidades));
+			dispatch(setDomicilios(domicilios));
 
 			const usuarios = await usuarioService.getAll();
 			dispatch(setUsuarios(usuarios));

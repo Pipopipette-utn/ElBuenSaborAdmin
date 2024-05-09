@@ -1,22 +1,23 @@
-export interface Domicilio extends BaseEntity{
-    nombre: string,
-    numero: number,
-    cp: number,
-    piso: number,
-    nroDpto: number,
-    localidad?: Localidad,
+export interface IDomicilio extends BaseEntity {
+	calle: string;
+	numero: number;
+	cp: number;
+	piso: number;
+	nroDpto: number;
+	localidad?: string;
+	localidadId?: number;
 }
 
-export interface Localidad extends BaseEntity{
-    nombre: string,
-    provincia: Provincia,
+export interface ILocalidad extends BaseEntity {
+	nombre: string;
+	provincia: IProvincia;
 }
 
-export interface Provincia extends BaseEntity{
-    nombre: string,
-    pais: Pais,
+export interface IProvincia extends BaseEntity {
+	nombre: string;
+	pais: IPais;
 }
 
-export interface Pais extends BaseEntity{
-    nombre: string,
+export interface IPais extends BaseEntity {
+	nombre: string;
 }

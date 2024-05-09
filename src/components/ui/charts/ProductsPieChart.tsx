@@ -1,5 +1,5 @@
 import { PieChart } from "@mui/x-charts/PieChart";
-
+/*
 const data2 = [
 	{ label: "Bebidas", value: 400 },
 	{ label: "Hamburguesas", value: 300 },
@@ -7,6 +7,7 @@ const data2 = [
 	{ label: "Postres", value: 200 },
 	{ label: "Entradas", value: 200 },
 ];
+*/
 
 const data1 = [
 	{ label: "Burger simple", value: 100, color: "#3035c9" },
@@ -18,6 +19,7 @@ const data1 = [
 	{ label: "Cerveza Quilmes", value: 150, color: "#ff7e70" },
 	{ label: "Papas fritas", value: 100, color: "#ffc2b3" },
 ];
+/*
 const series = [
 	{
 		innerRadius: 0,
@@ -31,11 +33,12 @@ const series = [
 		id: "series-2",
 		data: data2,
 	},
-];
+];*/
 
 const ProductsPieChart = () => {
 	return (
 		<PieChart
+			sx={{ m: -2 }}
 			series={[
 				{
 					data: data1,
@@ -45,7 +48,7 @@ const ProductsPieChart = () => {
 					cornerRadius: 5,
 					startAngle: -90,
 					endAngle: 180,
-					cx: 150,
+					cx: 200,
 					cy: 150,
 				},
 			]}

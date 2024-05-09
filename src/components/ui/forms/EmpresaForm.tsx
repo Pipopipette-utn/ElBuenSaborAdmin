@@ -59,10 +59,20 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 
 	const fields = [
 		[
-			{ label: "Nombre", name: "nombre", icon: <AssignmentIndIcon /> },
-			{ label: "Razón social", name: "razonSocial", icon: <FingerprintIcon /> },
+			{
+				label: "Nombre",
+				name: "nombre",
+				icon: <AssignmentIndIcon />,
+				required: true
+			},
+			{
+				label: "Razón social",
+				name: "razonSocial",
+				icon: <FingerprintIcon />,
+				required: true
+			},
 		],
-		[{ label: "CUIL", name: "cuil", icon: <BadgeIcon /> }],
+		[{ label: "CUIL", name: "cuil", icon: <BadgeIcon />, required: true }],
 		[{ label: "Logo", name: "icon", icon: <FaceIcon /> }],
 	];
 

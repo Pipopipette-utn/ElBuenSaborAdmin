@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import { FC, ReactElement, useState } from "react";
 import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
-import { theme } from "../../../styles/theme";
 
 interface FieldProps {
 	label: string;
 	name: string;
 	icon: ReactElement;
+	required?: boolean;
 }
 
 interface FormProps {
@@ -45,7 +45,7 @@ export const GenericForm: FC<FormProps> = ({
 			<Formik
 				initialValues={initialValues}
 				validationSchema={validationSchema}
-				onSubmit={async (values, actions) => {
+				onSubmit={async (values, _actions) => {
 					try {
 						await onSubmit(values);
 					} catch (ex: any) {
@@ -68,7 +68,10 @@ export const GenericForm: FC<FormProps> = ({
 								<Stack direction="row" width="100%" spacing={2} key={index}>
 									{field.map((f) => (
 										<TextFieldStack key={f.name} spacing={1}>
-											<Typography>{f.label}:</Typography>
+											<Typography>
+												{f.label}:
+												{f.required && <span style={{color: "red"}}> *</span>}
+											</Typography>
 											<TextField
 												fullWidth
 												placeholder={f.label.toUpperCase()}
@@ -85,7 +88,9 @@ export const GenericForm: FC<FormProps> = ({
 												}}
 											/>
 											{touched[f.name] && errors[f.name] && (
-												<ErrorTypography>{errors[f.name]}</ErrorTypography>
+												<ErrorTypography>
+													{String(errors[f.name])}
+												</ErrorTypography>
 											)}
 										</TextFieldStack>
 									))}

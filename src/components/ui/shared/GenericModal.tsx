@@ -17,7 +17,7 @@ const style = {
 	top: "48%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: {mobile: "90%", sm: "80%", lg: "70%", xl: "60%"},
+	width: { mobile: "90%", sm: "80%", lg: "70%", xl: "60%" },
 	maxHeight: 600,
 	bgcolor: "background.paper",
 	boxShadow: 24,
@@ -38,11 +38,10 @@ const GenericModal: FC<GenericModalProps> = ({
 					spacing={3}
 					sx={{
 						border: `solid 2px ${theme.palette.bg.dark}`,
-						px: 3,
 						py: 5,
+						px: 2,
 						borderRadius: "20px",
 						maxHeight: 600,
-						overflowY:"auto",
 					}}
 				>
 					<Stack
@@ -62,7 +61,7 @@ const GenericModal: FC<GenericModalProps> = ({
 							<CloseIcon />
 						</IconButton>
 					</Stack>
-					{children}
+					<Stack sx={{ overflowY: "auto", px: 2 }}>{children}</Stack>
 				</Stack>
 			</Box>
 		</Modal>

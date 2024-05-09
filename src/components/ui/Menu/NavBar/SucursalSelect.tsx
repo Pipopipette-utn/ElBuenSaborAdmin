@@ -25,7 +25,7 @@ export const SucursalSelect = () => {
 
 	const handleChange = (event: SelectChangeEvent<unknown>) => {
 		const s = sucursales?.find(
-			(suc) => suc.id.toString() === (event.target.value as string)
+			(suc) => suc.id!.toString() === (event.target.value as string)
 		)!;
 		dispatch(setSucursal(s));
 		setSucursalSeleccionada(s || null);
@@ -38,7 +38,7 @@ export const SucursalSelect = () => {
 	return (
 		<Select value={sucursalSeleccionada?.id || ""} onChange={handleChange}>
 			{sucursales?.map((s, index) => (
-				<MenuItem value={s.id.toString()} key={index}>
+				<MenuItem value={s.id!.toString()} key={index}>
 					{s.nombre}
 				</MenuItem>
 			))}

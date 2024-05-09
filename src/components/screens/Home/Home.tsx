@@ -20,7 +20,7 @@ export const Home = () => {
 	const [month, setMonth] = useState<string | null>("may");
 
 	const handleMonth = (
-		event: React.MouseEvent<HTMLElement>,
+		_event: React.MouseEvent<HTMLElement>,
 		newMonth: string | null
 	) => {
 		setMonth(newMonth);

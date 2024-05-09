@@ -11,7 +11,7 @@ import LocationCityIcon from '@mui/icons-material/LocationCity';
 import TagIcon from '@mui/icons-material/Tag';
 
 import { GenericForm } from "../shared/GenericForm";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch } from "../../../redux/hooks";
 import { ISucursal } from "../../../types/empresa";
 import { SucursalService } from "../../../services/SucursalService";
 import { setSucursales } from "../../../redux/slices/Business";
@@ -23,7 +23,7 @@ interface SucursalFormProps {
 
 export const SucursalForm: FC<SucursalFormProps> = ({ sucursal, onClose }) => {
 	const dispatch = useAppDispatch();
-	const empresa = useAppSelector((state) => state.selectedData.empresa);
+	//const empresa = useAppSelector((state) => state.selectedData.empresa);
 
 	const initialValues = {
 		...sucursal,
@@ -86,25 +86,27 @@ export const SucursalForm: FC<SucursalFormProps> = ({ sucursal, onClose }) => {
 
 	const fields = [
 		[
-			{ label: "Nombre", name: "nombre", icon: <StoreIcon /> },
+			{ label: "Nombre", name: "nombre", icon: <StoreIcon />, required: true },
 			{
 				label: "Horario de apertura",
 				name: "horarioApertura",
 				icon: <AccessTimeIcon />,
+				required: true
 			},
 			{
 				label: "Horario de cierre",
 				name: "horarioCierre",
 				icon: <WatchLaterIcon/>,
+				required: true
 			},
 		],
 		[{ label: "Logo", name: "icon", icon: <FaceIcon /> }],
 		[
-			{ label: "Calle", name: "calle", icon: <AddRoadIcon /> },
-			{ label: "Numero", name: "numero", icon: <SignpostIcon /> },
+			{ label: "Calle", name: "calle", icon: <AddRoadIcon />, required: true },
+			{ label: "Numero", name: "numero", icon: <SignpostIcon />, required: true },
 		],
 		[
-			{ label: "Código postal", name: "cp", icon: <TagIcon /> },
+			{ label: "Código postal", name: "cp", icon: <TagIcon />, required: true },
 			{ label: "Piso", name: "piso", icon: <LocationCityIcon /> },
 			{ label: "Numero de departamento", name: "nroDpto", icon: <TagIcon /> },
 		],

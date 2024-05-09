@@ -11,11 +11,11 @@ export const Card = styled(MuiCard)(({ theme }) => ({
 	width: 224,
 	height: 320,
 	alignItems: "center",
-	backgroundColor: theme.palette.bg.main,
+	backgroundColor: theme.palette.bg.dark,
 	margin: "0px 18px 30px 18px",
 	justifyContent: "center",
 	"&:hover": {
-		backgroundColor: theme.palette.bg.dark,
+		backgroundColor: theme.palette.bg.main,
 		cursor: "pointer",
 	},
 }));
