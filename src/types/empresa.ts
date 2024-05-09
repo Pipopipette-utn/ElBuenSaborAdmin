@@ -1,4 +1,4 @@
-import { IDomicilio } from "./ubicaciones";
+import { IDomicilio } from "./ubicacion";
 
 export interface IEmpresa extends BaseEntity {
 	nombre: string;

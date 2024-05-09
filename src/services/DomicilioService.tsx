@@ -1,5 +1,5 @@
 // Importamos el tipo de dato IDomicilio y la clase BackendClient
-import { IDomicilio } from "../types/ubicaciones";
+import { IDomicilio } from "../types/ubicacion";
 import { BackendClient } from "./BakendClient";
 
 // Clase DomicilioService que extiende BackendClient para interactuar con la API de domiilios

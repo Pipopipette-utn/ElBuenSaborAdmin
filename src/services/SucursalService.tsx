@@ -1,6 +1,6 @@
 // Importamos el tipo de dato IEmpresa y la clase BackendClient
 import { IEmpresa, ISucursal } from "../types/empresa";
-import { IDomicilio } from "../types/ubicaciones";
+import { IDomicilio } from "../types/ubicacion";
 import { BackendClient } from "./BakendClient";
 
 // Clase SucursalService que extiende BackendClient para interactuar con la API de personas
