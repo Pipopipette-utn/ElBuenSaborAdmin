@@ -37,6 +37,13 @@ export const theme = createTheme({
 				root: {
 					textTransform: "none",
 				},
+				outlined: {
+					border: `2px solid ${primary.main}`,
+					"&:hover": {
+						border: `2px solid ${primary.main}`,
+						backgroundColor: primary.light,
+					},
+				},
 				contained: {
 					backgroundColor: primary.main,
 					color: "#ffffff",
@@ -55,6 +62,14 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: {
 					color: background.main,
+					backgroundColor: background.dark,
+				},
+			},
+		},
+		MuiSelect: {
+			styleOverrides: {
+				root: {
+					color: info.main,
 					backgroundColor: background.dark,
 				},
 			},

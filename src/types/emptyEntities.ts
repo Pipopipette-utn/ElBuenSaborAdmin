@@ -1,4 +1,5 @@
 import { ICategoria, IEmpresa, ISucursal } from "./empresa";
+import { ILocalidad, IProvincia } from "./ubicacion";
 
 export const emptyEmpresa: IEmpresa = {
 	baja: false,
@@ -11,8 +12,8 @@ export const emptyEmpresa: IEmpresa = {
 export const emptySucursal: ISucursal = {
 	baja: false,
 	nombre: "",
-	horarioApertura: "",
-	horarioCierre: "",
+	horarioApertura: "00:00:00",
+	horarioCierre: "00:00:00",
 	icon: ""
 }
 
@@ -20,4 +21,14 @@ export const emptyCategoria: ICategoria =  {
     baja: false,
 	denominacion: "",
 	subcategorias: [],
+}
+
+export const emptyProvincia: IProvincia = {
+	baja: false,
+	nombre: "",
+}
+
+export const emptyLocalidad: ILocalidad = {
+	baja: false,
+	nombre: "",
 }

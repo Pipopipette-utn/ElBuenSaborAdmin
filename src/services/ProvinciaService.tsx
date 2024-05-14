@@ -1,6 +1,21 @@
-// Importamos el tipo de dato IEmpresa y la clase BackendClient
-import { IProvincia } from "../types/ubicacion";
+import { IPais, IProvincia } from "../types/ubicacion";
 import { BackendClient } from "./BakendClient";
 
-// Clase EmpresaService que extiende BackendClient para interactuar con la API de personas
-export class ProvinciaService extends BackendClient<IProvincia> {}
+export class ProvinciaService extends BackendClient<IProvincia> {
+	async getAllMapped(paises: IPais[]):Promise<IProvincia[]> {
+		try {
+			const provincias = await this.getAll();
+			
+			const provinciasMapeadas = provincias.map((provincia) => {
+				const pais = paises.find(
+					(pais: any) => pais.id == provincia.pais_id
+				);
+				return { ...provincia, pais };
+			});
+            
+			return provinciasMapeadas;
+		} catch (error) {
+			return Promise.reject(error); 
+		}
+	}
+}

@@ -10,6 +10,7 @@ import { GenericForm } from "../shared/GenericForm";
 import { EmpresaService } from "../../../services/EmpresaService";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setEmpresas } from "../../../redux/slices/Business";
+import { IField } from "../../../types/business";
 
 interface EmpresaFormProps {
 	empresa: IEmpresa;
@@ -57,23 +58,34 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 		}
 	};
 
-	const fields = [
+	const fields: IField[][] = [
 		[
 			{
 				label: "Nombre",
 				name: "nombre",
+				type: "text",
 				icon: <AssignmentIndIcon />,
-				required: true
+				required: true,
 			},
 			{
 				label: "Razón social",
 				name: "razonSocial",
+				type: "text",
 				icon: <FingerprintIcon />,
-				required: true
+				required: true,
 			},
 		],
-		[{ label: "CUIL", name: "cuil", icon: <BadgeIcon />, required: true }],
-		[{ label: "Logo", name: "icon", icon: <FaceIcon /> }],
+		[
+			{
+				label: "CUIL",
+				name: "cuil",
+				type: "text",
+				icon: <BadgeIcon />,
+				required: true,
+			},
+		],
+
+		[{ label: "Logo", name: "icon", type: "text", icon: <FaceIcon /> }],
 	];
 
 	return (
