@@ -90,8 +90,8 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 				<CardMedia
 					component="img"
 					image={
-						sucursal.icon && sucursal.icon != ""
-							? sucursal.icon
+						sucursal.logo && sucursal.logo != ""
+							? sucursal.logo
 							: `https://via.placeholder.com/150?text=${sucursal.nombre.charAt(0)}`
 					}
 				/>

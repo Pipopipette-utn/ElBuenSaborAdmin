@@ -47,7 +47,7 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 					aria-haspopup="true"
 					aria-expanded={open ? "true" : undefined}
 				>
-					<Avatar sx={{ width: 32, height: 32 }} src={empresa?.icon} />
+					<Avatar sx={{ width: 32, height: 32 }} src={empresa?.logo} />
 				</IconButton>
 			</Tooltip>
 			<Menu
@@ -89,7 +89,7 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 					if (e.id !== empresa?.id) {
 						return (
 							<MenuItem key={index} onClick={() => handleSelect(e)}>
-								<Avatar src={e?.icon} /> {e.nombre}
+								<Avatar src={e?.logo} /> {e.nombre}
 							</MenuItem>
 						);
 					}

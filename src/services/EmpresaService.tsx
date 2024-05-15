@@ -3,4 +3,7 @@ import { IEmpresa } from "../types/empresa";
 import { BackendClient } from "./BakendClient";
 
 // Clase EmpresaService que extiende BackendClient para interactuar con la API de personas
-export class EmpresaService extends BackendClient<IEmpresa> {}
+export class EmpresaService extends BackendClient<IEmpresa> {
+
+    
+}

@@ -74,7 +74,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 			<SucursalCard>
 				<CardMedia
 					component="img"
-					image={sucursal.icon}
+					image={sucursal.logo}
 					sx={{ height: "140px" }}
 				/>
 				<SucursalCardHeader title={sucursal.nombre} />

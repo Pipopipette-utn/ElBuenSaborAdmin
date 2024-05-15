@@ -1281,7 +1281,7 @@
       "nombre": "Jebbs",
       "razonSocial": "Jebbs SRL",
       "cuil": 30598765432,
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDc9BAk0JoAY_5VmmwLODLC1x2B2_VnZhg47eCl1DGg&s",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgDc9BAk0JoAY_5VmmwLODLC1x2B2_VnZhg47eCl1DGg&s",
       "id": "1"
     },
     {
@@ -1289,7 +1289,7 @@
       "nombre": "Michel",
       "razonSocial": "Michel Helados SRL",
       "cuil": 30598765432,
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF6a1U6f_BPXg-0_QqXFaT3MHgBQZWsqHZU1uBfb_Mqg&s",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF6a1U6f_BPXg-0_QqXFaT3MHgBQZWsqHZU1uBfb_Mqg&s",
       "id": "2"
     },
     {
@@ -1298,7 +1298,7 @@
       "nombre": "a",
       "razonSocial": "a",
       "cuil": "123455",
-      "icon": ""
+      "logo": ""
     }
   ],
   "localidades": [
@@ -1416,7 +1416,7 @@
       "horarioCierre": "18:00:00",
       "empresaId": 1,
       "domicilioId": 1,
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvaYKo2uJT-p1isDBM7OxYqxXs847pHoY657WXmBCJBA&s"
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvaYKo2uJT-p1isDBM7OxYqxXs847pHoY657WXmBCJBA&s"
     },
     {
       "id": "2",
@@ -1426,7 +1426,7 @@
       "horarioCierre": "18:00:00",
       "empresaId": "1",
       "domicilioId": "2",
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SJfrvi2YnAGifv9sr25OfCJ1PYwNh3AYrl1TD_-urw&s"
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SJfrvi2YnAGifv9sr25OfCJ1PYwNh3AYrl1TD_-urw&s"
     },
     {
       "id": "3",
@@ -1436,7 +1436,7 @@
       "horarioCierre": "18:00:00",
       "empresaId": 2,
       "domicilioId": 3,
-      "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsLhctfz5BIbUPSGl3iSfl9bHaNui1-t2BdnOBSYvrBg&s"
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsLhctfz5BIbUPSGl3iSfl9bHaNui1-t2BdnOBSYvrBg&s"
     },
     {
       "id": "4",
@@ -1446,7 +1446,7 @@
       "horarioCierre": "20:00:00",
       "empresaId": 2,
       "domicilioId": 4,
-      "icon": "https://lujan365.com.ar/download/multimedia.normal.b053cf2ede8e95e5.4d494348454c5f6e6f726d616c2e6a7067.jpg"
+      "logo": "https://lujan365.com.ar/download/multimedia.normal.b053cf2ede8e95e5.4d494348454c5f6e6f726d616c2e6a7067.jpg"
     },
     {
       "id": "a5b3",
@@ -1454,7 +1454,7 @@
       "nombre": "prueba",
       "horarioApertura": "00:00:00",
       "horarioCierre": "00:00:00",
-      "icon": "",
+      "logo": "",
       "empresaId": "7854",
       "domicilioId": "addc"
     }
