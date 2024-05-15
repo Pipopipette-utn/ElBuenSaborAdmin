@@ -12,8 +12,8 @@ export class SucursalService extends BackendClient<ISucursal> {
 	): ISucursal[] => {
 		const sucursalesMapeadas: ISucursal[] = sucursales.map(
 			(sucursal: ISucursal) => {
-				const empresa = empresas?.find((e) => e.id == sucursal.empresaId);
-				const domicilio = domicilios?.find((d) => d.id == sucursal.domicilioId);
+				const empresa = empresas?.find((e) => e.id == sucursal.empresa?.id);
+				const domicilio = domicilios?.find((d) => d.id == sucursal.domicilio?.id);
 				return {
 					...sucursal,
 					empresa,
