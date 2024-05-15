@@ -1243,10 +1243,10 @@
     {
       "id": "2",
       "baja": false,
-      "calle": "Saenz Peña",
-      "numero": 6422,
       "cp": 5507,
-      "localidadId": 2
+      "calle": "Saenz Peña",
+      "numero": "6425",
+      "localidadId": "1"
     },
     {
       "id": "3",
@@ -1254,7 +1254,7 @@
       "calle": "Guardia Vieja",
       "numero": 123,
       "cp": 5507,
-      "localidadId": 3
+      "localidadId": "3"
     },
     {
       "id": "4",
@@ -1263,6 +1263,16 @@
       "numero": 1335,
       "cp": 5508,
       "localidadId": 2
+    },
+    {
+      "id": "8fdd",
+      "baja": false,
+      "cp": "123",
+      "calle": "callecita",
+      "numero": "123",
+      "piso": 0,
+      "nroDpto": 0,
+      "localidadId": "4"
     }
   ],
   "empresas": [
@@ -1414,8 +1424,8 @@
       "nombre": "Sucursal Terramalva",
       "horarioApertura": "09:00:00",
       "horarioCierre": "18:00:00",
-      "empresaId": 1,
-      "domicilioId": 2,
+      "empresaId": "1",
+      "domicilioId": "2",
       "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SJfrvi2YnAGifv9sr25OfCJ1PYwNh3AYrl1TD_-urw&s"
     },
     {
@@ -1437,6 +1447,16 @@
       "empresaId": 2,
       "domicilioId": 4,
       "icon": "https://lujan365.com.ar/download/multimedia.normal.b053cf2ede8e95e5.4d494348454c5f6e6f726d616c2e6a7067.jpg"
+    },
+    {
+      "id": "a5b3",
+      "baja": false,
+      "nombre": "prueba",
+      "horarioApertura": "00:00:00",
+      "horarioCierre": "00:00:00",
+      "icon": "",
+      "empresaId": "7854",
+      "domicilioId": "addc"
     }
   ],
   "unidadMedidas": [

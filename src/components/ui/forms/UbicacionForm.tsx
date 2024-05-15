@@ -11,7 +11,6 @@ import {
 	UbicacionContext,
 	UbicacionContextValues,
 } from "../../../types/ubicacion";
-import { emptyLocalidad, emptyProvincia } from "../../../types/emptyEntities";
 
 export const UbicacionForm = () => {
 	const paises = useAppSelector((state) => state.location.paises);
@@ -67,23 +66,11 @@ export const UbicacionForm = () => {
 			localidad: Yup.string().required("Este campo es requerido."),
 		});
 
-	const handleSubmitForm = async (values: { [key: string]: any }) => {
-		try {
-			console.log(values.pais);
-			console.log(values.provincia);
-			console.log(values.localidad);
-		} catch (error: any) {
-			throw new Error(error);
-		}
-	};
-
 	return (
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
-			onSubmit={async (values, _actions) => {
-				await handleSubmitForm(values);
-			}}
+			onSubmit={() => {}}
 		>
 			{({ values, errors, touched, handleChange }) => (
 				<Stack direction="row" width="100%" spacing={3}>

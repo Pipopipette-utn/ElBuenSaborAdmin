@@ -1,5 +1,5 @@
 import { ICategoria, IEmpresa, ISucursal } from "./empresa";
-import { ILocalidad, IProvincia } from "./ubicacion";
+import { IDomicilio, ILocalidad, IProvincia } from "./ubicacion";
 
 export const emptyEmpresa: IEmpresa = {
 	baja: false,
@@ -31,4 +31,13 @@ export const emptyProvincia: IProvincia = {
 export const emptyLocalidad: ILocalidad = {
 	baja: false,
 	nombre: "",
+}
+
+export const emptyDomicilio: IDomicilio = {
+	baja: false,
+	calle: "",
+	cp: 0,
+	numero: 0,
+	nroDpto: 0,
+	piso: 0,
 }
