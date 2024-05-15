@@ -26,7 +26,6 @@ export const ListaSucursales = () => {
 	return (
 		<Stack
 			className="SucursalesContainer"
-			height="100%"
 			mt="4%"
 			justifyContent="center"
 			sx={{ alignItems: "center" }}
@@ -61,7 +60,7 @@ export const ListaSucursales = () => {
 					open={showModal}
 					handleClose={handleCloseModal}
 				>
-					<SucursalForm sucursal={emptySucursal} onClose={handleCloseModal} />
+					<SucursalForm initialSucursal={emptySucursal} onClose={handleCloseModal} />
 				</GenericModal>
 			</Stack>
 		</Stack>

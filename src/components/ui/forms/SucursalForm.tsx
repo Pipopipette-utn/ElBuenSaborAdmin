@@ -19,17 +19,29 @@ import { useUbicacion } from "../../../hooks/useUbicacion";
 import { IDomicilio, UbicacionContext } from "../../../types/ubicacion";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { SucursalService } from "../../../services/SucursalService";
-import { setSucursalesEmpresa } from "../../../redux/slices/SelectedData";
-import { setSucursales } from "../../../redux/slices/Business";
+import {
+	addSucursalEmpresa,
+	editSucursalEmpresa,
+} from "../../../redux/slices/SelectedData";
+import { addSucursal, editSucursal } from "../../../redux/slices/Business";
 import { DomicilioService } from "../../../services/DomicilioService";
+import { emptyDomicilio } from "../../../types/emptyEntities";
+import { DomicilioForm } from "./DomicilioForm";
 
 interface SucursalFormProps {
-	sucursal: ISucursal;
+	initialSucursal: ISucursal;
 	onClose: Function;
 }
 
-export const SucursalForm: FC<SucursalFormProps> = ({ sucursal, onClose }) => {
+// En este componente uso un stepper ya que tiene 2 pasos el formulario: el de los datos de la sucursal
+// y el de la ubicacion.
+export const SucursalForm: FC<SucursalFormProps> = ({
+	initialSucursal,
+	onClose,
+}) => {
+	const [sucursal, setSucursal] = useState(initialSucursal);
 	const [activeStep, setActiveStep] = useState(0);
+
 	const dispatch = useAppDispatch();
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 
@@ -49,83 +61,62 @@ export const SucursalForm: FC<SucursalFormProps> = ({ sucursal, onClose }) => {
 		...sucursal,
 		horarioApertura: dayjs(`2024-05-13T${sucursal.horarioApertura}`),
 		horarioCierre: dayjs(`2024-05-13T${sucursal.horarioCierre}`),
-		cp: sucursal.domicilio ? sucursal.domicilio.cp : "",
-		calle: sucursal.domicilio ? sucursal.domicilio.calle : "",
-		numero: sucursal.domicilio ? sucursal.domicilio.numero : "",
-		piso: sucursal.domicilio ? sucursal.domicilio.piso : "",
-		nroDpto: sucursal.domicilio ? sucursal.domicilio.nroDpto : "",
 	};
 
-	let sucursalSchemaDatosSucursal: Yup.ObjectSchema<
-		any,
-		Yup.AnyObject,
-		any,
-		""
-	> = Yup.object().shape({
-		nombre: Yup.string().trim().required("Este campo es requerido."),
-		horarioApertura: Yup.string().required("Este campo es requerido."),
-		horarioCierre: Yup.string().required("Este campo es requerido."),
-		icon: Yup.string(),
-	});
-
-	let sucursalSchemaUbicacion: Yup.ObjectSchema<any, Yup.AnyObject, any, ""> =
+	let validationSchema: Yup.ObjectSchema<any, Yup.AnyObject, any, ""> =
 		Yup.object().shape({
-			cp: Yup.number()
-				.typeError("Este campo sólo puede tener números")
-				.required("Este campo es requerido."),
-			calle: Yup.string().required("Este campo es requerido."),
-			numero: Yup.number()
-				.typeError("Este campo sólo puede tener números")
-				.required("Este campo es requerido."),
-			piso: Yup.number().typeError("Este campo sólo puede tener números"),
-			nroDpto: Yup.number().typeError("Este campo sólo puede tener números"),
+			nombre: Yup.string().trim().required("Este campo es requerido."),
+			horarioApertura: Yup.string().required("Este campo es requerido."),
+			horarioCierre: Yup.string().required("Este campo es requerido."),
+			icon: Yup.string(),
 		});
 
 	const handleBack = () => setActiveStep((prev) => prev - 1);
 	const handleNext = () => setActiveStep((prev) => prev + 1);
 
-	const handleSubmitForm = async (values: { [key: string]: any }) => {
-		try {
-			const domicilioService = new DomicilioService("/domicilios");
-			let domicilio: IDomicilio = {
-				baja: false,
-				cp: values.cp,
-				calle: values.calle,
-				numero: values.numero,
-				piso: values.piso,
-				nroDpto: values.piso,
-				localidadId: ubicacionData["localidad"]?.id!,
-			};
+	const handleNextForm = (values: { [key: string]: any }) => {
+		handleNext();
+		const newSucursal = {
+			...sucursal,
+			nombre: values.nombre,
+			horarioApertura: values.horarioApertura.format("HH:mm:ss"),
+			horarioCierre: values.horarioCierre.format("HH:mm:ss"),
+			icon: values.icon,
+		};
+		setSucursal(newSucursal);
+	};
 
-			if (values.id) {
-				domicilio = await domicilioService.update(values.id, domicilio);
-			} else {
-				domicilio = await domicilioService.create(domicilio);
-			}
+	const handleSubmitForm = async (domicilio: IDomicilio) => {
+		try {
+			if (!empresa) throw new Error("No se ha seleccionado la empresa");
 
 			const sucursalService = new SucursalService("/sucursales");
-			const sucursal: ISucursal = {
+			//Si está siendo editado, ya viene con empresa y domicilio, se lo borro
+			const newSucursal = {
+				...sucursal,
+				empresa: undefined,
+				domicilio: undefined,
 				empresaId: empresa!.id,
 				baja: false,
-				nombre: values.nombre,
-				horarioApertura: values.horarioApertura,
-				horarioCierre: values.horarioCierre,
-				icon: values.icon,
 				domicilioId: domicilio.id,
 			};
 
-			if (values.id) {
-				await sucursalService.update(values.id, sucursal);
+			const sucursalUpdated = {
+				...newSucursal,
+				empresa: empresa!,
+				domicilio: domicilio,
+			};
+
+			if (sucursal.id) {
+				await sucursalService.update(sucursal.id, newSucursal);
+				dispatch(editSucursal(sucursalUpdated));
+				dispatch(editSucursalEmpresa(sucursalUpdated));
 			} else {
-				await sucursalService.create(sucursal);
+				await sucursalService.create(newSucursal);
+				dispatch(addSucursal(sucursalUpdated));
+				dispatch(addSucursalEmpresa(sucursalUpdated));
 			}
-			const sucursales = await sucursalService.getAll();
-			dispatch(setSucursales(sucursales));
-			dispatch(
-				setSucursalesEmpresa(
-					sucursales.filter((s) => s.empresa!.id == empresa!.id)
-				)
-			);
+
 			onClose();
 		} catch (error: any) {
 			throw new Error(error);
@@ -209,29 +200,30 @@ export const SucursalForm: FC<SucursalFormProps> = ({ sucursal, onClose }) => {
 			<Stack width={"80%"} marginBottom={2}>
 				<FormStepper steps={steps} activeStep={activeStep} />
 			</Stack>
-			<UbicacionContext.Provider value={ubicacionData}>
-				{activeStep === 1 && <UbicacionForm />}
-			</UbicacionContext.Provider>
-			<GenericForm
-				fields={steps[activeStep].fields}
-				initialValues={initialValues}
-				validationSchema={
-					activeStep === 0
-						? sucursalSchemaDatosSucursal
-						: sucursalSchemaUbicacion
-				}
-				onBack={activeStep > 0 ? handleBack : undefined}
-				onSubmit={
-					activeStep === steps.length - 1 ? handleSubmitForm : handleNext
-				}
-				submitButtonText={
-					activeStep !== steps.length - 1
-						? "Continuar"
-						: sucursal.id
-						? "Editar sucursal"
-						: "Crear sucursal"
-				}
-			/>
+			{activeStep === 0 && (
+				<GenericForm
+					fields={steps[activeStep].fields}
+					initialValues={initialValues}
+					validationSchema={validationSchema}
+					onSubmit={handleNextForm}
+					submitButtonText={
+						activeStep !== steps.length - 1
+							? "Continuar"
+							: sucursal.id
+							? "Editar sucursal"
+							: "Crear sucursal"
+					}
+				/>
+			)}
+			{activeStep === 1 && (
+				<DomicilioForm
+					domicilio={sucursal.domicilio ?? emptyDomicilio}
+					fields={steps[1].fields}
+					handleBack={handleBack}
+					handleSubmitForm={handleSubmitForm}
+					submitButtonText={sucursal.id ? "Editar sucursal" : "Crear sucursal"}
+				/>
+			)}
 		</Stack>
 	);
 };

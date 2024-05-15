@@ -117,7 +117,14 @@ export const GenericForm: FC<FormProps> = ({
 																<TimePicker
 																	name={f.name}
 																	value={values[f.name]}
-																	onChange={handleChange}
+																	onChange={(time: any) => {
+																		handleChange({
+																			target: {
+																				name: f.name,
+																				value: time,
+																			},
+																		});
+																	}}
 																/>
 															</LocalizationProvider>
 														);

@@ -77,13 +77,13 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 					sx={{ height: "140px" }}
 				/>
 				<SucursalCardHeader title={sucursal.nombre} />
-				<CardContent sx={{ pb: 0 }}>
+				<CardContent sx={{ pb: 0, height: "80px" }}>
 					<Typography>
 						{sucursal.horarioApertura}-{sucursal.horarioCierre}
 					</Typography>
-					<Typography>
+					<Typography fontSize="14px">
 						{sucursal.domicilio?.calle} {sucursal.domicilio?.numero},{" "}
-						{sucursal.domicilio?.localidad}
+						{sucursal.domicilio?.localidad?.nombre}
 					</Typography>
 				</CardContent>
 				<CardActions disableSpacing>
@@ -115,7 +115,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<SucursalForm sucursal={sucursal} onClose={handleCloseModal} />
+				<SucursalForm initialSucursal={sucursal} onClose={handleCloseModal} />
 			</GenericModal>
 			<AlertDialog
 				open={showAlert}

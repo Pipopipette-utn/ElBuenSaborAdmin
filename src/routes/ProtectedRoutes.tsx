@@ -8,6 +8,7 @@ import { Sucursales } from "../components/screens/Sucursal/Sucursales";
 import { Categorias } from "../components/screens/Categoria/Categorias";
 import { ArticulosInsumos } from "../components/screens/Articulos/ArticulosInsumos";
 import { ArticulosManufacturados } from "../components/screens/Articulos/ArticulosManufacturados";
+import SelectArticulo from "../components/screens/Articulos/SelectArticulo";
 export const ProtectedRoutes = () => {
 	return (
 		<>
@@ -18,8 +19,8 @@ export const ProtectedRoutes = () => {
 				display="flex"
 				flexDirection="column"
 				flexGrow={1}
-				height="100%"
-				mt={8}
+				minHeight="100%"
+				sx={{mt: {mobile: 8, xs: 7, sm: 8}}}
 			>
 				<Routes>
 					<Route path="/" element={<ListaEmpresas />} />
@@ -28,6 +29,7 @@ export const ProtectedRoutes = () => {
 					<Route path="/inicio" element={<Home />} />
 					<Route path="/sucursales" element={<Sucursales />} />
 					<Route path="/categorias" element={<Categorias />} />
+					<Route path="/articulos" element={<SelectArticulo />} />
 					<Route path="/articulos/insumos" element={<ArticulosInsumos />} />
 					<Route
 						path="/articulos/manufacturados"

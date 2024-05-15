@@ -53,7 +53,7 @@ export const Sucursales = () => {
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<SucursalForm sucursal={emptySucursal} onClose={handleCloseModal} />
+				<SucursalForm initialSucursal={emptySucursal} onClose={handleCloseModal} />
 			</GenericModal>
 		</>
 	);
