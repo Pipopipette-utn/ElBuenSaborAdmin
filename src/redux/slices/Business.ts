@@ -49,6 +49,21 @@ const BusinessSlice = createSlice({
 		setSucursales: (state, action: PayloadAction<ISucursal[] | null>) => {
 			state.sucursales = action.payload;
 		},
+		addSucursal: (state, action: PayloadAction<ISucursal>) => {
+			if(state.sucursales){
+				state.sucursales!.push(action.payload);
+			}else{
+				state.sucursales = [action.payload];
+			}
+		},
+		editSucursal: (state, action: PayloadAction<ISucursal>) => {
+			const sucursalEditada = action.payload;
+			if (state.sucursales) {
+				state.sucursales = state.sucursales.map((sucursal) =>
+					sucursal.id === sucursalEditada.id ? sucursalEditada : sucursal
+				);
+			}
+		},
 		setCategorias: (state, action: PayloadAction<ICategoria[] | null>) => {
 			state.categorias = action.payload;
 		},
@@ -72,6 +87,8 @@ export const {
 	setUnidadMedidas,
 	setEmpresas,
 	setSucursales,
+	addSucursal,
+	editSucursal,
 	setCategorias,
 	setArticulosInsumos,
 	setArticulosManufacturados,

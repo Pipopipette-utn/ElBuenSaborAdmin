@@ -33,7 +33,6 @@ export class CategoriaService extends BackendClient<ICategoria> {
 		);
 
 		categoriasSucursal.forEach((categoriaSucursal) => {
-			console.log(categoriaSucursal.categoriaId);
 			const categoria = categorias.find(
 				(c) => c.id == categoriaSucursal.categoriaId
 			);
