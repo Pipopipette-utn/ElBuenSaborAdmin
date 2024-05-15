@@ -6,7 +6,7 @@ export const emptyEmpresa: IEmpresa = {
 	nombre: "",
 	razonSocial: "",
 	cuil: 0,
-	icon: "",
+	logo: "",
 }
 
 export const emptySucursal: ISucursal = {
@@ -14,7 +14,7 @@ export const emptySucursal: ISucursal = {
 	nombre: "",
 	horarioApertura: "00:00:00",
 	horarioCierre: "00:00:00",
-	icon: ""
+	logo: ""
 }
 
 export const emptyCategoria: ICategoria =  {

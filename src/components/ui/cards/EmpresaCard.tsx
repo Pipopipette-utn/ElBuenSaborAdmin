@@ -73,8 +73,8 @@ const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
 				<CardMedia
 					component="img"
 					image={
-						empresa.icon && empresa.icon != ""
-							? empresa.icon
+						empresa.logo && empresa.logo != ""
+							? empresa.logo
 							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${empresa.nombre
 									.toUpperCase()
 									.charAt(0)}`

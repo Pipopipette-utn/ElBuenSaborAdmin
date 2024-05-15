@@ -23,6 +23,7 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 	const initialValues = {
 		...empresa,
 		cuil: empresa.cuil == 0 ? "" : empresa.cuil,
+		logo: empresa.logo == null ? "" : empresa.logo
 	};
 
 	let empresaSchema = Yup.object().shape({
@@ -31,22 +32,25 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 		cuil: Yup.number()
 			.typeError("El campo sólo puede tener números")
 			.required("Este campo es requerido."),
-		icon: Yup.string(),
+		logo: Yup.string(),
 	});
 
 	const handleSubmitForm = async (values: { [key: string]: any }) => {
 		try {
+			console.log("entrando");
 			const empresaService = new EmpresaService("/empresa");
 			const newEmpresa: IEmpresa = {
-				... empresa,
+				...empresa,
 				eliminado: false,
 				nombre: values.nombre,
 				razonSocial: values.razonSocial,
 				cuil: values.cuil,
-				icon: values.icon,
+				logo: values.logo,
 			};
 
+			console.log({newEmpresa});
 			if (values.id) {
+				console.log("editando");
 				await empresaService.update(values.id, newEmpresa);
 			} else {
 				await empresaService.create(newEmpresa);
@@ -86,7 +90,7 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 			},
 		],
 
-		[{ label: "Logo", name: "icon", type: "text", icon: <FaceIcon /> }],
+		[{ label: "Logo", name: "logo", type: "text", icon: <FaceIcon /> }],
 	];
 
 	return (

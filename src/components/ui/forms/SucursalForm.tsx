@@ -53,7 +53,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			nombre: Yup.string().trim().required("Este campo es requerido."),
 			horarioApertura: Yup.string().required("Este campo es requerido."),
 			horarioCierre: Yup.string().required("Este campo es requerido."),
-			icon: Yup.string(),
+			logo: Yup.string(),
 		});
 
 	const handleBack = () => setActiveStep((prev) => prev - 1);
@@ -66,7 +66,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			nombre: values.nombre,
 			horarioApertura: values.horarioApertura.format("HH:mm:ss"),
 			horarioCierre: values.horarioCierre.format("HH:mm:ss"),
-			icon: values.icon,
+			logo: values.icon,
 		};
 		setSucursal(newSucursal);
 	};
