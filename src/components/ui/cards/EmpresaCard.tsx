@@ -19,7 +19,6 @@ import { AlertDialog } from "../shared/DialogAlert";
 import { EmpresaService } from "../../../services/EmpresaService";
 import { setEmpresas } from "../../../redux/slices/Business";
 import { EmpresaForm } from "../forms/EmpresaForm";
-import { theme } from "../../../styles/theme";
 
 interface EmpresaCardProps {
 	empresa: IEmpresa;
@@ -60,7 +59,7 @@ const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
 	};
 
 	const handleDelete = async () => {
-		const empresaService = new EmpresaService("/empresas");
+		const empresaService = new EmpresaService("/empresa");
 		await empresaService.delete(empresa.id!);
 		const newEmpresas = empresas!.filter((e) => e.id != empresa.id!);
 		dispatch(setEmpresas(newEmpresas));

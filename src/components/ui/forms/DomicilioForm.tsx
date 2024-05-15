@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { GenericForm } from "../shared/GenericForm";
 import { IField } from "../../../types/business";
 import { UbicacionForm } from "./UbicacionForm";

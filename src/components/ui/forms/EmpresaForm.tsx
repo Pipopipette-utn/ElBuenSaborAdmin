@@ -36,7 +36,7 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 
 	const handleSubmitForm = async (values: { [key: string]: any }) => {
 		try {
-			const empresaService = new EmpresaService("/empresas");
+			const empresaService = new EmpresaService("/empresa");
 			const empresa: IEmpresa = {
 				baja: false,
 				nombre: values.nombre,
