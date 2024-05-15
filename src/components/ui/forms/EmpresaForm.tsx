@@ -37,7 +37,8 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 	const handleSubmitForm = async (values: { [key: string]: any }) => {
 		try {
 			const empresaService = new EmpresaService("/empresa");
-			const empresa: IEmpresa = {
+			const newEmpresa: IEmpresa = {
+				... empresa,
 				eliminado: false,
 				nombre: values.nombre,
 				razonSocial: values.razonSocial,
@@ -46,9 +47,9 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 			};
 
 			if (values.id) {
-				await empresaService.update(values.id, empresa);
+				await empresaService.update(values.id, newEmpresa);
 			} else {
-				await empresaService.create(empresa);
+				await empresaService.create(newEmpresa);
 			}
 			const empresas = await empresaService.getAll();
 			dispatch(setEmpresas(empresas));
