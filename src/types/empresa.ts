@@ -14,9 +14,7 @@ export interface ISucursal extends BaseEntity {
 	horarioCierre: string;
 	icon: string;
 	empresa?: IEmpresa;
-	empresaId?: number;
 	domicilio?: IDomicilio;
-	domicilioId?: number;
 	categorias?: ICategoria[];
 }
 

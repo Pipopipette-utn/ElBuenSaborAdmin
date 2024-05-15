@@ -14,9 +14,7 @@ import { IStep } from "../../../types/business";
 import FormStepper from "../shared/FormStepper";
 import { Stack } from "@mui/material";
 import dayjs from "dayjs";
-import { UbicacionForm } from "./UbicacionForm";
-import { useUbicacion } from "../../../hooks/useUbicacion";
-import { IDomicilio, UbicacionContext } from "../../../types/ubicacion";
+import { IDomicilio } from "../../../types/ubicacion";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { SucursalService } from "../../../services/SucursalService";
 import {
@@ -24,7 +22,6 @@ import {
 	editSucursalEmpresa,
 } from "../../../redux/slices/SelectedData";
 import { addSucursal, editSucursal } from "../../../redux/slices/Business";
-import { DomicilioService } from "../../../services/DomicilioService";
 import { emptyDomicilio } from "../../../types/emptyEntities";
 import { DomicilioForm } from "./DomicilioForm";
 
@@ -44,18 +41,6 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 
 	const dispatch = useAppDispatch();
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
-
-	const pais = sucursal.domicilio
-		? sucursal.domicilio.localidad!.provincia!.pais!
-		: undefined;
-	const provincia = sucursal.domicilio
-		? sucursal.domicilio.localidad!.provincia!
-		: undefined;
-	const localidad = sucursal.domicilio
-		? sucursal.domicilio.localidad!
-		: undefined;
-
-	const ubicacionData = useUbicacion(pais, provincia, localidad);
 
 	const initialValues = {
 		...sucursal,
@@ -90,31 +75,24 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		try {
 			if (!empresa) throw new Error("No se ha seleccionado la empresa");
 
-			const sucursalService = new SucursalService("/sucursales");
+			const sucursalService = new SucursalService("/sucursal");
 			//Si está siendo editado, ya viene con empresa y domicilio, se lo borro
 			const newSucursal = {
 				...sucursal,
-				empresa: undefined,
-				domicilio: undefined,
-				empresaId: empresa!.id,
-				baja: false,
-				domicilioId: domicilio.id,
-			};
-
-			const sucursalUpdated = {
-				...newSucursal,
-				empresa: empresa!,
+				eliminado: false,
+				esCasaMatriz: false,
 				domicilio: domicilio,
+				empresa: empresa!,
 			};
 
 			if (sucursal.id) {
 				await sucursalService.update(sucursal.id, newSucursal);
-				dispatch(editSucursal(sucursalUpdated));
-				dispatch(editSucursalEmpresa(sucursalUpdated));
+				dispatch(editSucursal(newSucursal));
+				dispatch(editSucursalEmpresa(newSucursal));
 			} else {
 				await sucursalService.create(newSucursal);
-				dispatch(addSucursal(sucursalUpdated));
-				dispatch(addSucursalEmpresa(sucursalUpdated));
+				dispatch(addSucursal(newSucursal));
+				dispatch(addSucursalEmpresa(newSucursal));
 			}
 
 			onClose();

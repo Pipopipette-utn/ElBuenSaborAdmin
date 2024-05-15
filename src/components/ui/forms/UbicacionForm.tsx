@@ -36,7 +36,7 @@ export const UbicacionForm = () => {
 	// Filtrar las provincias según el país seleccionado
 	useEffect(() => {
 		if (pais) {
-			const filteredProvincias = todasProvincias!.filter((provincia) => {
+			const filteredProvincias = todasProvincias!.filter((provincia: IProvincia) => {
 				return provincia.pais?.id == pais.id;
 			});
 			setProvincias(filteredProvincias);
@@ -47,7 +47,7 @@ export const UbicacionForm = () => {
 	useEffect(() => {
 		if (provincia) {
 			const filteredLocalidades = todasLocalidades!.filter(
-				(localidad) => localidad.provincia?.id == provincia.id
+				(localidad: ILocalidad) => localidad.provincia?.id == provincia.id
 			);
 			setLocalidades(filteredLocalidades);
 		}

@@ -2,10 +2,10 @@ import React from "react";
 
 export interface IDomicilio extends BaseEntity {
 	calle: string;
-	numero: number;
-	cp: number;
-	piso: number;
-	nroDpto: number;
+	numero?: number;
+	cp?: number;
+	piso?: number;
+	nroDpto?: number;
 	localidad?: ILocalidad;
 	localidadId?: number;
 }

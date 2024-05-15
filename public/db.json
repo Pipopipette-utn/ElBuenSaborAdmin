@@ -2,7 +2,7 @@
   "articulos": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Limonada",
       "precioVenta": 2.5,
       "categoriaId": 2,
@@ -10,7 +10,7 @@
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Agua mineral",
       "precioVenta": 1,
       "categoriaId": 2,
@@ -18,7 +18,7 @@
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Cerveza artesanal",
       "precioVenta": 5,
       "categoriaId": 4,
@@ -26,7 +26,7 @@
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Vino tinto reserva",
       "precioVenta": 25,
       "categoriaId": 4,
@@ -34,7 +34,7 @@
     },
     {
       "id": "5",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Jugo de naranja natural",
       "precioVenta": 3,
       "categoriaId": 3,
@@ -42,7 +42,7 @@
     },
     {
       "id": "6",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Ensalada César",
       "precioVenta": 8.5,
       "categoriaId": 6,
@@ -50,7 +50,7 @@
     },
     {
       "id": "7",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Bruschetta de tomate y albahaca",
       "precioVenta": 6,
       "categoriaId": 6,
@@ -58,7 +58,7 @@
     },
     {
       "id": "8",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Ceviche de camarón",
       "precioVenta": 12,
       "categoriaId": 3,
@@ -66,7 +66,7 @@
     },
     {
       "id": "9",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Lomo saltado",
       "precioVenta": 15,
       "categoriaId": 3,
@@ -74,7 +74,7 @@
     },
     {
       "id": "10",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Pizza Margarita",
       "precioVenta": 10,
       "categoriaId": 5,
@@ -82,7 +82,7 @@
     },
     {
       "id": "11",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Tiramisú",
       "precioVenta": 6.5,
       "categoriaId": 7,
@@ -90,7 +90,7 @@
     },
     {
       "id": "12",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Cheesecake de frutos rojos",
       "precioVenta": 7.5,
       "categoriaId": 9,
@@ -98,7 +98,7 @@
     },
     {
       "id": "13",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Pollo al curry",
       "precioVenta": 14,
       "categoriaId": 3,
@@ -106,7 +106,7 @@
     },
     {
       "id": "14",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Sopa de verduras",
       "precioVenta": 6,
       "categoriaId": 6,
@@ -114,7 +114,7 @@
     },
     {
       "id": "15",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Filete de salmón a la parrilla",
       "precioVenta": 18,
       "categoriaId": 3,
@@ -122,7 +122,7 @@
     },
     {
       "id": "16",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Hamburguesa clásica",
       "precioVenta": 9,
       "categoriaId": 10,
@@ -130,7 +130,7 @@
     },
     {
       "id": "17",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Mousse de chocolate",
       "precioVenta": 5.5,
       "categoriaId": 7,
@@ -138,7 +138,7 @@
     },
     {
       "id": "18",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Sushi variado",
       "precioVenta": 20,
       "categoriaId": 5,
@@ -146,7 +146,7 @@
     },
     {
       "id": "19",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Paella mixta",
       "precioVenta": 22,
       "categoriaId": 5,
@@ -154,7 +154,7 @@
     },
     {
       "id": "20",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Spaghetti carbonara",
       "precioVenta": 12,
       "categoriaId": 5,
@@ -162,7 +162,7 @@
     },
     {
       "id": "21",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Crema catalana",
       "precioVenta": 6,
       "categoriaId": 7,
@@ -170,7 +170,7 @@
     },
     {
       "id": "22",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Sándwich de pollo a la parrilla",
       "precioVenta": 8,
       "categoriaId": 10,
@@ -178,7 +178,7 @@
     },
     {
       "id": "23",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Tacos al pastor",
       "precioVenta": 10,
       "categoriaId": 5,
@@ -186,7 +186,7 @@
     },
     {
       "id": "24",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Risotto de champiñones",
       "precioVenta": 14.5,
       "categoriaId": 5,
@@ -194,7 +194,7 @@
     },
     {
       "id": "25",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Lasagna boloñesa",
       "precioVenta": 13,
       "categoriaId": 5,
@@ -202,7 +202,7 @@
     },
     {
       "id": "26",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Sopa de tomate",
       "precioVenta": 5.5,
       "categoriaId": 6,
@@ -210,7 +210,7 @@
     },
     {
       "id": "27",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Parrillada mixta",
       "precioVenta": 30,
       "categoriaId": 6,
@@ -218,7 +218,7 @@
     },
     {
       "id": "28",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Fajitas de pollo",
       "precioVenta": 12,
       "categoriaId": 5,
@@ -226,7 +226,7 @@
     },
     {
       "id": "29",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Papas fritas",
       "precioVenta": 4,
       "categoriaId": 2,
@@ -234,7 +234,7 @@
     },
     {
       "id": "30",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Enchiladas verdes",
       "precioVenta": 11,
       "categoriaId": 5,
@@ -242,145 +242,145 @@
     },
     {
       "id": "31",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Limones",
       "unidadMedidaId": 4
     },
     {
       "id": "32",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Agua",
       "unidadMedidaId": 2
     },
     {
       "id": "33",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Cebada",
       "unidadMedidaId": 1
     },
     {
       "id": "34",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Uvas",
       "unidadMedidaId": 4
     },
     {
       "id": "35",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Naranjas",
       "unidadMedidaId": 4
     },
     {
       "id": "36",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Lechuga",
       "unidadMedidaId": 3
     },
     {
       "id": "37",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Tomates",
       "unidadMedidaId": 3
     },
     {
       "id": "38",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Camarones",
       "unidadMedidaId": 1
     },
     {
       "id": "39",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Lomo de res",
       "unidadMedidaId": 1
     },
     {
       "id": "40",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Masa de pizza",
       "unidadMedidaId": 1
     },
     {
       "id": "41",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Huevos",
       "unidadMedidaId": 4
     },
     {
       "id": "42",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Queso crema",
       "unidadMedidaId": 1
     },
     {
       "id": "43",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Chocolate",
       "unidadMedidaId": 1
     },
     {
       "id": "44",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Arroz",
       "unidadMedidaId": 1
     },
     {
       "id": "45",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Salmón",
       "unidadMedidaId": 1
     },
     {
       "id": "46",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Carne de res",
       "unidadMedidaId": 1
     },
     {
       "id": "47",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Lechuga",
       "unidadMedidaId": 3
     },
     {
       "id": "48",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Pollo",
       "unidadMedidaId": 1
     },
     {
       "id": "49",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Pasta",
       "unidadMedidaId": 1
     },
     {
       "id": "50",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Crema",
       "unidadMedidaId": 4
     },
     {
       "id": "51",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Carne de res",
       "unidadMedidaId": 1
     },
     {
       "id": "52",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Salmón",
       "unidadMedidaId": 1
     },
     {
       "id": "53",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Papas",
       "unidadMedidaId": 4
     },
     {
       "id": "54",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Tortillas de maíz",
       "unidadMedidaId": 4
     }
@@ -928,68 +928,68 @@
   "categorias": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Bebidas"
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Gaseosas",
       "categoriaPadreId": 1
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Jugos",
       "categoriaPadreId": 1
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Cervezas",
       "categoriaPadreId": 1
     },
     {
       "id": "5",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Pizzas"
     },
     {
       "id": "6",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Ensaladas"
     },
     {
       "id": "7",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Postres"
     },
     {
       "id": "8",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Helados",
       "categoriaPadreId": 7
     },
     {
       "id": "9",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Tortas",
       "categoriaPadreId": 7
     },
     {
       "id": "10",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Hamburguesas"
     },
     {
       "id": "11",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Naturales",
       "categoriaPadreId": 3
     },
     {
       "id": "12",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Licuados",
       "categoriaPadreId": 3
     }
@@ -1234,7 +1234,7 @@
   "domicilios": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "calle": "Mitre",
       "numero": 1256,
       "cp": 5506,
@@ -1242,7 +1242,7 @@
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "cp": 5507,
       "calle": "Saenz Peña",
       "numero": "6425",
@@ -1250,7 +1250,7 @@
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "calle": "Guardia Vieja",
       "numero": 123,
       "cp": 5507,
@@ -1258,7 +1258,7 @@
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "calle": "Guiñazú",
       "numero": 1335,
       "cp": 5508,
@@ -1266,7 +1266,7 @@
     },
     {
       "id": "8fdd",
-      "baja": false,
+      "eliminado": false,
       "cp": "123",
       "calle": "callecita",
       "numero": "123",
@@ -1277,7 +1277,7 @@
   ],
   "empresas": [
     {
-      "baja": false,
+      "eliminado": false,
       "nombre": "Jebbs",
       "razonSocial": "Jebbs SRL",
       "cuil": 30598765432,
@@ -1285,7 +1285,7 @@
       "id": "1"
     },
     {
-      "baja": false,
+      "eliminado": false,
       "nombre": "Michel",
       "razonSocial": "Michel Helados SRL",
       "cuil": 30598765432,
@@ -1294,7 +1294,7 @@
     },
     {
       "id": "7854",
-      "baja": false,
+      "eliminado": false,
       "nombre": "a",
       "razonSocial": "a",
       "cuil": "123455",
@@ -1304,61 +1304,61 @@
   "localidades": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Chacras de coria",
       "provincia_id": 2
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Luján de Cuyo",
       "provincia_id": 2
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Vistalba",
       "provincia_id": 2
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Villa Carlos Paz",
       "provincia_id": 1
     },
     {
       "id": "5",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Río Cuarto",
       "provincia_id": 1
     },
     {
       "id": "6",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Villa Mercedes",
       "provincia_id": 4
     },
     {
       "id": "7",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Merlo",
       "provincia_id": 4
     },
     {
       "id": "8",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Rivadavia",
       "provincia_id": 3
     },
     {
       "id": "9",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Rawson",
       "provincia_id": 3
     },
     {
       "id": "9",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Valparaíso",
       "provincia_id": 5
     }
@@ -1366,43 +1366,43 @@
   "paises": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Argentina"
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Chile"
     }
   ],
   "provincias": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Córdoba",
       "pais_id": 1
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Mendoza",
       "pais_id": 1
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "nombre": "San Juan",
       "pais_id": 1
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "nombre": "San Luis",
       "pais_id": 1
     },
     {
       "id": "5",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Viña del Mar",
       "pais_id": 2
     }
@@ -1410,7 +1410,7 @@
   "sucursales": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Sucursal Chacras",
       "horarioApertura": "09:00:00",
       "horarioCierre": "18:00:00",
@@ -1420,7 +1420,7 @@
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Sucursal Terramalva",
       "horarioApertura": "09:00:00",
       "horarioCierre": "18:00:00",
@@ -1430,7 +1430,7 @@
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Sucursal Food Market",
       "horarioApertura": "09:00:00",
       "horarioCierre": "18:00:00",
@@ -1440,7 +1440,7 @@
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "nombre": "Fábrica",
       "horarioApertura": "08:00:00",
       "horarioCierre": "20:00:00",
@@ -1450,7 +1450,7 @@
     },
     {
       "id": "a5b3",
-      "baja": false,
+      "eliminado": false,
       "nombre": "prueba",
       "horarioApertura": "00:00:00",
       "horarioCierre": "00:00:00",
@@ -1462,29 +1462,29 @@
   "unidadMedidas": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Kilos"
     },
     {
       "id": "2",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Litros"
     },
     {
       "id": "3",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Porciones"
     },
     {
       "id": "4",
-      "baja": false,
+      "eliminado": false,
       "denominacion": "Unidades"
     }
   ],
   "users": [
     {
       "id": "1",
-      "baja": false,
+      "eliminado": false,
       "username": "jazmin",
       "password": "1234"
     }
