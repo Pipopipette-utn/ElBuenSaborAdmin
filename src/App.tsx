@@ -27,7 +27,7 @@ export const App: FC = () => {
 	const paisService = new PaisService("/pais");
 	const provinciaService = new ProvinciaService("/provincia");
 	const localidadService = new LocalidadService("/localidad");
-	const domicilioService = new DomicilioService("/domicilio");
+	const domicilioService = new DomicilioService("/domicilios");
 	//const usuarioService = new UsuarioService("/usuario");
 	//const unidadMedidaService = new UnidadMedidaService("/unidadMedida");
 	const empresaService = new EmpresaService("/empresa");
