@@ -28,6 +28,7 @@ interface SucursalCardProps {
 }
 
 const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
+	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const sucursalesEmpresa = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
@@ -61,7 +62,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	const handleDelete = async () => {
-		const sucursalService = new SucursalService("/sucursales");
+		const sucursalService = new SucursalService("/sucursal");
 		await sucursalService.delete(sucursal.id!);
 		const newSucursales = sucursales!.filter((s) => s.id != sucursal.id!);
 		dispatch(setSucursales(newSucursales));
@@ -108,7 +109,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 				</CardActions>
 			</Card>
 			<GenericModal
-				title={"Editar sucursal"}
+				title={`Editar sucursal de ${empresa!.nombre}`}
 				icon={<StoreIcon fontSize="large" />}
 				open={showModal}
 				handleClose={handleCloseModal}

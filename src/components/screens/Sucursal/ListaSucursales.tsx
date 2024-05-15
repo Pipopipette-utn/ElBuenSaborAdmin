@@ -18,6 +18,8 @@ export const ListaSucursales = () => {
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
+	const empresa = useAppSelector((state) => state.selectedData.empresa);
+
 	const [showModal, setShowModal] = useState(false);
 
 	const handleOpenModal = () => setShowModal(true);
@@ -55,12 +57,15 @@ export const ListaSucursales = () => {
 					</AddCardActions>
 				</AddCard>
 				<GenericModal
-					title={"Crear sucursal"}
+					title={`Crear sucursal para ${empresa!.nombre}`}
 					icon={<StoreIcon fontSize="large" />}
 					open={showModal}
 					handleClose={handleCloseModal}
 				>
-					<SucursalForm initialSucursal={emptySucursal} onClose={handleCloseModal} />
+					<SucursalForm
+						initialSucursal={emptySucursal}
+						onClose={handleCloseModal}
+					/>
 				</GenericModal>
 			</Stack>
 		</Stack>
