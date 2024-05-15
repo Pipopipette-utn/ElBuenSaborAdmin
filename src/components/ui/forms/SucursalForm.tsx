@@ -79,27 +79,20 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			//Si está siendo editado, ya viene con empresa y domicilio, se lo borro
 			const newSucursal = {
 				...sucursal,
-				empresa: undefined,
-				domicilio: undefined,
-				empresaId: empresa!.id,
-				baja: false,
-				domicilioId: domicilio.id,
-			};
-
-			const sucursalUpdated = {
-				...newSucursal,
-				empresa: empresa!,
+				eliminado: false,
+				esCasaMatriz: false,
 				domicilio: domicilio,
+				empresa: empresa!,
 			};
 
 			if (sucursal.id) {
 				await sucursalService.update(sucursal.id, newSucursal);
-				dispatch(editSucursal(sucursalUpdated));
-				dispatch(editSucursalEmpresa(sucursalUpdated));
+				dispatch(editSucursal(newSucursal));
+				dispatch(editSucursalEmpresa(newSucursal));
 			} else {
 				await sucursalService.create(newSucursal);
-				dispatch(addSucursal(sucursalUpdated));
-				dispatch(addSucursalEmpresa(sucursalUpdated));
+				dispatch(addSucursal(newSucursal));
+				dispatch(addSucursalEmpresa(newSucursal));
 			}
 
 			onClose();

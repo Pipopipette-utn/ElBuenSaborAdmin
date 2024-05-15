@@ -64,10 +64,10 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	const handleDelete = async () => {
 		const sucursalService = new SucursalService("/sucursal");
 		await sucursalService.delete(sucursal.id!);
-		const newSucursales = sucursales!.filter((s) => s.id != sucursal.id!);
+		const newSucursales = sucursales!.filter((s: ISucursal) => s.id != sucursal.id!);
 		dispatch(setSucursales(newSucursales));
 		const newSucursalesEmpresa = sucursalesEmpresa!.filter(
-			(s) => s.id != sucursal.id!
+			(s: ISucursal) => s.id != sucursal.id!
 		);
 		dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
 		handleCloseAlert();

@@ -38,7 +38,7 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 		try {
 			const empresaService = new EmpresaService("/empresa");
 			const empresa: IEmpresa = {
-				baja: false,
+				eliminado: false,
 				nombre: values.nombre,
 				razonSocial: values.razonSocial,
 				cuil: values.cuil,
