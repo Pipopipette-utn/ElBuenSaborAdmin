@@ -29,13 +29,14 @@ export const Home = () => {
 	return (
 		<StyledStack
 			spacing={2}
+			minHeight="100%"
 			sx={{ borderRadius: 0 }}
 			justifyContent="center"
 			alignItems="center"
 		>
 			<Stack direction="row" spacing={3} width="100%">
 				<ReportStack spacing={1} flexGrow={1}>
-					<CalendarTodayIcon fontSize="large" />
+					<TodayIcon fontSize="large" />
 					<ReportAmount>$0.000,00</ReportAmount>
 					Recaudado hoy
 				</ReportStack>
@@ -45,7 +46,7 @@ export const Home = () => {
 					Recaudado esta semana
 				</ReportStack>
 				<ReportStack spacing={1} flexGrow={1}>
-					<TodayIcon fontSize="large" />
+					<CalendarTodayIcon fontSize="large" />
 					<ReportAmount>$000.000,00</ReportAmount>
 					Recaudado este mes
 				</ReportStack>
@@ -65,7 +66,7 @@ export const Home = () => {
 								<ReportAmount>$00.000,00</ReportAmount>
 							</Stack>
 						</Stack>
-						<ToggleButtonGroup value={month} exclusive onChange={handleMonth}>
+						<ToggleButtonGroup value={month} size="small" exclusive onChange={handleMonth}>
 							<ToggleButton value="january">J</ToggleButton>
 							<ToggleButton value="february">F</ToggleButton>
 							<ToggleButton value="march">M</ToggleButton>

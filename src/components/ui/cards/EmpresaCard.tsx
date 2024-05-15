@@ -19,6 +19,7 @@ import { AlertDialog } from "../shared/DialogAlert";
 import { EmpresaService } from "../../../services/EmpresaService";
 import { setEmpresas } from "../../../redux/slices/Business";
 import { EmpresaForm } from "../forms/EmpresaForm";
+import { theme } from "../../../styles/theme";
 
 interface EmpresaCardProps {
 	empresa: IEmpresa;
@@ -70,7 +71,16 @@ const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
 		<>
 			<Card onClick={handleClick}>
 				<CardHeader title={empresa.nombre} subheader={empresa.razonSocial} />
-				<CardMedia component="img" image={empresa.icon} />
+				<CardMedia
+					component="img"
+					image={
+						empresa.icon && empresa.icon != ""
+							? empresa.icon
+							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${empresa.nombre
+									.toUpperCase()
+									.charAt(0)}`
+					}
+				/>
 				<CardActions>
 					<Tooltip title="Editar">
 						<IconButton onClick={handleEditClick}>

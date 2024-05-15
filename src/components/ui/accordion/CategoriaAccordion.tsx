@@ -4,7 +4,7 @@ import "./AccordionStyles.css";
 import tinycolor from "tinycolor2";
 
 import { ICategoria } from "../../../types/empresa";
-import { FC, useState } from "react";
+import { FC, MouseEvent, useState } from "react";
 import { Accordion } from "../../ui/styled/StyledAccordion";
 import { theme } from "../../../styles/theme";
 
@@ -49,7 +49,9 @@ export const CategoriaAccordion: FC<{
 						{categoria.denominacion}
 						<ActionButtons
 							categoria={categoria}
-							onClick={handleClick}
+							onClick={(event: MouseEvent<HTMLButtonElement, MouseEvent>) =>
+								handleClick(event, categoria)
+							}
 							color={buttonsColor}
 						/>
 					</AccordionSummary>
@@ -58,7 +60,12 @@ export const CategoriaAccordion: FC<{
 						{categoria.denominacion}
 						<ActionButtons
 							categoria={categoria}
-							onClick={handleClick}
+							onClick={(
+								event: MouseEvent<
+									HTMLButtonElement,
+									MouseEvent<Element, globalThis.MouseEvent>
+								>
+							) => handleClick(event, categoria)}
 							color={buttonsColor}
 						/>
 					</AccordionSummary>
@@ -98,5 +105,3 @@ export const CategoriaAccordion: FC<{
 		</>
 	);
 };
-
-

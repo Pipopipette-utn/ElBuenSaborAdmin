@@ -38,9 +38,9 @@ export const App: FC = () => {
 	const paisService = new PaisService("/paises");
 	const provinciaService = new ProvinciaService("/provincias");
 	const localidadService = new LocalidadService("/localidades");
+	const domicilioService = new DomicilioService("/domicilios");
 	const usuarioService = new UsuarioService("/users");
 	const unidadMedidaService = new UnidadMedidaService("/unidadMedidas");
-	const domicilioService = new DomicilioService("/domicilios");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
 	const categoriaService = new CategoriaService("/categorias");
@@ -59,9 +59,9 @@ export const App: FC = () => {
 	useEffect(() => {
 		const traerEmpresas = async () => {
 			const paises = await paisService.getAll();
-			const provincias = await provinciaService.getAll();
-			const localidades = await localidadService.getAll();
-			const domicilios = await domicilioService.getAll();
+			const provincias = await provinciaService.getAllMapped(paises);
+			const localidades = await localidadService.getAllMapped(provincias);
+			const domicilios = await domicilioService.getAllMapped(localidades);
 			dispatch(setPaises(paises));
 			dispatch(setProvincias(provincias));
 			dispatch(setLocalidades(localidades));

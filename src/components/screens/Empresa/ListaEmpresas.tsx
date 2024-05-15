@@ -26,10 +26,9 @@ export const ListaEmpresas = () => {
 	return (
 		<Stack
 			className="EmpresasContainer"
-			height="100%"
 			mt="4%"
 			justifyContent="center"
-			sx={{ overflowY: "scroll" }}
+			sx={{ alignItems: "center" }}
 		>
 			<Typography variant="h1" textAlign="center">
 				¿Qué empresa querés usar?

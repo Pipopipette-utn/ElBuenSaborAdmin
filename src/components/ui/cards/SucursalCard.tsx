@@ -11,7 +11,10 @@ import {
 	CardMedia,
 	IconButton,
 } from "../../ui/styled/StyledCard";
-import { setSucursal, setSucursalesEmpresa } from "../../../redux/slices/SelectedData";
+import {
+	setSucursal,
+	setSucursalesEmpresa,
+} from "../../../redux/slices/SelectedData";
 import StoreIcon from "@mui/icons-material/Store";
 import GenericModal from "../shared/GenericModal";
 import { Tooltip } from "@mui/material";
@@ -73,15 +76,24 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 		dispatch(setSucursal(sucursal));
 		navigate("/inicio");
 	};
-
+	
 	return (
 		<>
 			<Card onClick={handleClick}>
 				<CardHeader
 					title={sucursal.nombre}
-					subheader={`${sucursal.domicilio?.calle} ${sucursal.domicilio?.numero}, ${sucursal.domicilio?.localidad}`}
+					subheader={`${sucursal.domicilio?.calle} 
+						${sucursal.domicilio?.numero}, 
+						${sucursal.domicilio?.localidad?.nombre}`}
 				/>
-				<CardMedia component="img" image={sucursal.icon} />
+				<CardMedia
+					component="img"
+					image={
+						sucursal.icon && sucursal.icon != ""
+							? sucursal.icon
+							: `https://via.placeholder.com/150?text=${sucursal.nombre.charAt(0)}`
+					}
+				/>
 				<CardActions>
 					<Tooltip title="Editar">
 						<IconButton onClick={handleEditClick}>
@@ -101,7 +113,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<SucursalForm sucursal={sucursal} onClose={handleCloseModal} />
+				<SucursalForm initialSucursal={sucursal} onClose={handleCloseModal} />
 			</GenericModal>
 			<AlertDialog
 				open={showAlert}
