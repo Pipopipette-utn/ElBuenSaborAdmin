@@ -37,11 +37,10 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 
 	const handleSubmitForm = async (values: { [key: string]: any }) => {
 		try {
-			console.log("entrando");
-			const empresaService = new EmpresaService("/empresa");
+			const empresaService = new EmpresaService("/empresas");
 			const newEmpresa: IEmpresa = {
 				...empresa,
-				eliminado: false,
+				baja: false,
 				nombre: values.nombre,
 				razonSocial: values.razonSocial,
 				cuil: values.cuil,
@@ -50,7 +49,6 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 
 			console.log({newEmpresa});
 			if (values.id) {
-				console.log("editando");
 				await empresaService.update(values.id, newEmpresa);
 			} else {
 				await empresaService.create(newEmpresa);

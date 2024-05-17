@@ -57,7 +57,7 @@ export const DomicilioForm: FC<DomicilioFormProps> = ({
 	const handleSubmit = async (values: { [key: string]: any }) => {
 		let newDomicilio: IDomicilio = {
 			... domicilio,
-			eliminado: false,
+			baja: false,
 			cp: values.cp,
 			calle: values.calle,
 			numero: values.numero,

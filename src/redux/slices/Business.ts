@@ -50,9 +50,9 @@ const BusinessSlice = createSlice({
 			state.sucursales = action.payload;
 		},
 		addSucursal: (state, action: PayloadAction<ISucursal>) => {
-			if(state.sucursales){
+			if (state.sucursales) {
 				state.sucursales!.push(action.payload);
-			}else{
+			} else {
 				state.sucursales = [action.payload];
 			}
 		},
@@ -73,11 +73,42 @@ const BusinessSlice = createSlice({
 		) => {
 			state.articulosInsumos = action.payload;
 		},
+		editArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
+			const insumoEditado = action.payload;
+			if (state.articulosInsumos) {
+				state.articulosInsumos = state.articulosInsumos.map((insumo) =>
+					insumo.id === insumoEditado.id ? insumoEditado : insumo
+				);
+			}
+		},
+		addArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
+			if (state.articulosInsumos) {
+				state.articulosInsumos!.push(action.payload);
+			} else {
+				state.articulosInsumos = [action.payload];
+			}
+		},
 		setArticulosManufacturados: (
 			state,
 			action: PayloadAction<IArticuloManufacturado[] | null>
 		) => {
 			state.articulosManufacturados = action.payload;
+		},
+
+		editArticuloManufacturado: (state, action: PayloadAction<IArticuloManufacturado>) => {
+			const insumoEditado = action.payload;
+			if (state.articulosManufacturados) {
+				state.articulosManufacturados = state.articulosManufacturados.map((producto) =>
+					producto.id === insumoEditado.id ? insumoEditado : producto
+				);
+			}
+		},
+		addArticuloManufacturado: (state, action: PayloadAction<IArticuloManufacturado>) => {
+			if (state.articulosManufacturados) {
+				state.articulosManufacturados!.push(action.payload);
+			} else {
+				state.articulosManufacturados = [action.payload];
+			}
 		},
 	},
 });
@@ -91,6 +122,10 @@ export const {
 	editSucursal,
 	setCategorias,
 	setArticulosInsumos,
+	editArticuloInsumo,
+	addArticuloInsumo,
 	setArticulosManufacturados,
+	editArticuloManufacturado,
+	addArticuloManufacturado
 } = BusinessSlice.actions;
 export default BusinessSlice.reducer;

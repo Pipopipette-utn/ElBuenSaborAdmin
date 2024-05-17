@@ -16,6 +16,7 @@ export interface ISucursal extends BaseEntity {
 	empresa?: IEmpresa;
 	domicilio?: IDomicilio;
 	categorias?: ICategoria[];
+	articulos?: IArticulo[];
 }
 
 export interface ICategoria extends BaseEntity {
@@ -31,12 +32,10 @@ export interface ICategoriaSucursal extends BaseEntity {
 
 export interface IArticulo extends BaseEntity {
 	denominacion: string;
-	precioVenta: number;
+	precioVenta: number | null;
 	imagenes?: IImagen[];
 	categoria?: ICategoria;
-	categoriaId?: number;
 	unidadMedida?: IUnidadMedida;
-	unidadMedidaId?: number;
 }
 
 export interface IArticuloInsumo extends IArticulo{
@@ -51,23 +50,23 @@ export interface IArticuloManufacturado extends IArticulo {
 	descripcion: string;
 	tiempoEstimadoMinutos: number;
 	preparacion: string;
-	articuloManufacturadoDetalle: IArticuloManufacturadoDetalle;
+	articuloManufacturadoDetalles?: IArticuloManufacturadoDetalle[];
 }
 
 export interface IArticuloManufacturadoDetalle extends BaseEntity {
 	cantidad: number;
-	tiempoEstimadoMinutos: IArticuloInsumo;
+	articuloInsumo?: IArticuloInsumo;
 }
 
 export interface IUnidadMedida extends BaseEntity {
 	denominacion: string;
 }
 
-export interface IImagen extends BaseEntity {
-	denominacion: string;
-}
-
 export interface IUsuario extends BaseEntity {
 	username: string;
 	password: string;
+}
+
+export interface IImagen extends BaseEntity {
+	url: string;
 }

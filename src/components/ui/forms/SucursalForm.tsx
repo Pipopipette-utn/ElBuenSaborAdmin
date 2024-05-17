@@ -42,6 +42,9 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 	const dispatch = useAppDispatch();
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 
+	const handleBack = () => setActiveStep((prev) => prev - 1);
+	const handleNext = () => setActiveStep((prev) => prev + 1);
+
 	const initialValues = {
 		...sucursal,
 		horarioApertura: dayjs(`2024-05-13T${sucursal.horarioApertura}`),
@@ -55,9 +58,6 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			horarioCierre: Yup.string().required("Este campo es requerido."),
 			logo: Yup.string(),
 		});
-
-	const handleBack = () => setActiveStep((prev) => prev - 1);
-	const handleNext = () => setActiveStep((prev) => prev + 1);
 
 	const handleNextForm = (values: { [key: string]: any }) => {
 		handleNext();
@@ -75,20 +75,23 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		try {
 			if (!empresa) throw new Error("No se ha seleccionado la empresa");
 
-			const sucursalService = new SucursalService("/sucursal");
+			const sucursalService = new SucursalService("/sucursales");
 			//Si está siendo editado, ya viene con empresa y domicilio, se lo borro
 			const newSucursal = {
 				...sucursal,
-				eliminado: false,
+				baja: false,
 				esCasaMatriz: false,
 				domicilio: domicilio,
 				empresa: empresa!,
 			};
 
 			if (sucursal.id) {
-				await sucursalService.update(sucursal.id, newSucursal);
-				dispatch(editSucursal(newSucursal));
-				dispatch(editSucursalEmpresa(newSucursal));
+				const updatedSucursal = await sucursalService.update(
+					sucursal.id,
+					newSucursal
+				);
+				dispatch(editSucursal(updatedSucursal));
+				dispatch(editSucursalEmpresa(updatedSucursal));
 			} else {
 				await sucursalService.create(newSucursal);
 				dispatch(addSucursal(newSucursal));

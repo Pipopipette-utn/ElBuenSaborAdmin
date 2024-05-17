@@ -62,7 +62,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	const handleDelete = async () => {
-		const sucursalService = new SucursalService("/sucursal");
+		const sucursalService = new SucursalService("/sucursales");
 		await sucursalService.delete(sucursal.id!);
 		const newSucursales = sucursales!.filter((s: ISucursal) => s.id != sucursal.id!);
 		dispatch(setSucursales(newSucursales));
@@ -92,7 +92,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 					image={
 						sucursal.logo && sucursal.logo != ""
 							? sucursal.logo
-							: `https://via.placeholder.com/150?text=${sucursal.nombre.charAt(0)}`
+							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(0)}`
 					}
 				/>
 				<CardActions>

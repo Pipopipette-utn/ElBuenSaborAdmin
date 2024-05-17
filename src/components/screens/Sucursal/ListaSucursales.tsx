@@ -33,7 +33,7 @@ export const ListaSucursales = () => {
 			sx={{ alignItems: "center" }}
 		>
 			<Typography variant="h1" textAlign="center">
-				¿Qué sucursal querés ver?
+				Sucursales de {empresa!.nombre}
 			</Typography>
 			<Stack
 				direction="row"

@@ -86,3 +86,35 @@ export const AddIconButton = styled(MuiIconButton)(({ theme }) => ({
 	width: "130px",
 	height: "130px",
 }));
+
+export const ArticuloInsumoCard = styled(MuiCard)(({ theme }) => ({
+	display: "flex",
+	flexDirection: "column",
+	width: 160,
+	height: 160,
+	alignItems: "center",
+	justifyContent: "center",
+	backgroundColor: theme.palette.bg.dark,
+	margin: "0px 18px 30px 18px",
+	"&:hover": {
+		backgroundColor: theme.palette.bg.main,
+		cursor: "pointer",
+	},
+}));
+
+export const ArticuloInsumoCardHeader = styled(MuiCardHeader)(() => ({
+	textAlign: "center",
+	"& .MuiCardHeader-title": {
+		fontWeight: "bold",
+		fontSize: 16,
+	},
+	"& .MuiCardHeader-subheader": {
+		fontSize: 14,
+	},
+}));
+
+export const ArticuloInsumoCardMedia = styled(MuiCardMedia)<{ component: string }>(() => ({
+	borderRadius: "10px",
+	width: "40%", 
+	maxHeight: "40%", 
+}));

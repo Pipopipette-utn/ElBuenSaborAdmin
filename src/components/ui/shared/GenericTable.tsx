@@ -18,9 +18,11 @@ export interface TableColumn {
 export interface TableProps<T> {
 	data: T[];
 	columns: TableColumn[];
+	onEdit: (id: number) => void;
+	onDelete: (id: number) => void;
 }
 
-export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
+export const GenericTable = <T,>({ data, columns, onEdit, onDelete}: TableProps<T>) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(8);
 
@@ -89,7 +91,11 @@ export const GenericTable = <T,>({ data, columns }: TableProps<T>) => {
 												return (
 													<TableCell key={i} align={"center"}>
 														{column.label === "Acciones" ? (
-															<ButtonGroup />
+															<ButtonGroup
+																idEntity={row["id"]}
+																onEdit={onEdit}
+																onDelete={onDelete}
+															/>
 														) : (
 															cellValue
 														)}

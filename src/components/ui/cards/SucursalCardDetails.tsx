@@ -20,7 +20,10 @@ import {
 } from "../styled/StyledSucursalCard";
 import GenericModal from "../shared/GenericModal";
 import { useDispatch } from "react-redux";
-import { setSucursal, setSucursalesEmpresa } from "../../../redux/slices/SelectedData";
+import {
+	setSucursal,
+	setSucursalesEmpresa,
+} from "../../../redux/slices/SelectedData";
 import { SucursalForm } from "../forms/SucursalForm";
 import { AlertDialog } from "../shared/DialogAlert";
 import { SucursalService } from "../../../services/SucursalService";
@@ -37,7 +40,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	const sucursalesEmpresa = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
-	
+
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 
@@ -58,7 +61,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	const handleDelete = async () => {
-		const sucursalService = new SucursalService("/sucursal");
+		const sucursalService = new SucursalService("/sucursales");
 		await sucursalService.delete(sucursal.id!);
 		const newSucursales = sucursales!.filter((s) => s.id != sucursal.id!);
 		dispatch(setSucursales(newSucursales));
@@ -74,7 +77,13 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 			<SucursalCard>
 				<CardMedia
 					component="img"
-					image={sucursal.logo}
+					image={
+						sucursal.logo && sucursal.logo != ""
+							? sucursal.logo
+							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(
+									0
+							  )}`
+					}
 					sx={{ height: "140px" }}
 				/>
 				<SucursalCardHeader title={sucursal.nombre} />

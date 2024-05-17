@@ -50,7 +50,7 @@ const FormStepper: FC<FormStepperProps> = ({ steps, activeStep }) => {
 							}}
 						>
 							{activeStep === index && (
-								<Typography variant="h6">{step.title}</Typography>
+								<Typography variant="h5">{step.title}</Typography>
 							)}
 						</StepLabel>
 					</Step>
