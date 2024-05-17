@@ -25,7 +25,6 @@ import {
 	setUnidadMedidas,
 } from "./redux/slices/Business";
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
-import { CategoriaService } from "./services/CategoriaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
 //INICIAR: json-server --watch public/db.json

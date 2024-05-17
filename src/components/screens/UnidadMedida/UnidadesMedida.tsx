@@ -3,14 +3,14 @@ import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppSelector } from "../../../redux/hooks";
-import { CategoriaAccordion } from "../../ui/accordion/CategoriaAccordion";
 import { useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { UnidadMedidaPaper } from "../../ui/papers/UnidadMedidaPaper";
 
 export const UnidadesMedida = () => {
-	const categorias = useAppSelector(
-		(state) => state.selectedData.categoriasSucursal
+	const unidadesdMedida = useAppSelector(
+		(state) => state.business.unidadMedidas
 	);
 
 	const [showModal, setShowModal] = useState(false);
@@ -30,34 +30,30 @@ export const UnidadesMedida = () => {
 							sx={{ width: "40px", height: "40px" }}
 						/>
 					}
-					quantity={categorias?.length ?? 0}
-					activeEntities={"Categorias activas"}
-					buttonText={"Nueva categoria"}
+					quantity={unidadesdMedida?.length ?? 0}
+					activeEntities={"Unidades de medida"}
+					buttonText={"Nueva unidad de medida"}
 					onClick={handleClick}
 				/>
 				<Stack sx={{ p: "12px" }}>
 					<Typography variant="h5" sx={{ pb: "12px" }}>
-						Todas las categorias
+						Todas las unidades de medida
 					</Typography>
-					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
-						{categorias &&
-							categorias.map((categoria, index) => (
-								<CategoriaAccordion
-									key={index}
-									categoria={categoria}
-									order={0}
-								/>
+					<Stack direction="column"  spacing={2} sx={{ p: "12px" }}>
+						{unidadesdMedida &&
+							unidadesdMedida.map((unidad, index) => (
+								<UnidadMedidaPaper key={index} unidadMedida={unidad} />
 							))}
 					</Stack>
 				</Stack>
 			</GenericDoubleStack>
 			<GenericModal
-				title={"Crear categoría"}
+				title={"Crear unidad de medida"}
 				icon={<LocalOfferIcon fontSize="large" />}
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<>Formulario categoría</>
+				<>Formulario unidad medida</>
 			</GenericModal>
 		</>
 	);
