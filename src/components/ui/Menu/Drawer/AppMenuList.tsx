@@ -6,9 +6,11 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import SellIcon from "@mui/icons-material/Sell";
 import PercentIcon from "@mui/icons-material/Percent";
 import PersonIcon from "@mui/icons-material/Person";
+import ScaleIcon from "@mui/icons-material/Scale";
 import { Link } from "react-router-dom";
 import { renderMenuItem } from "./MenuItemButton";
 import { theme } from "../../../../styles/theme";
+import { toKebabCase } from "../../../../utils/textTransform";
 
 interface AppMenuListProps {
 	open: boolean;
@@ -40,6 +42,7 @@ const listItems: MenuItem[] = [
 			{ label: "Empleados" },
 		],
 	},
+	{ label: "Unidades de medida", icon: ScaleIcon },
 ];
 
 export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
@@ -64,7 +67,7 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
 				<div key={index}>
 					{!item.subcategories || !open ? (
 						<Link
-							to={`/${item.label.toLowerCase()}`}
+							to={`/${toKebabCase(item.label)}`}
 							style={{ textDecoration: "none" }}
 						>
 							{renderMenuItem(item, index, open, openedListItems, handleClick)}
@@ -78,7 +81,9 @@ export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
 								<div key={subIndex}>
 									{!subcategory.subcategories || !open ? (
 										<Link
-											to={`${item.label.toLowerCase()}/${subcategory.label.toLowerCase()}`}
+											to={`${toKebabCase(
+												item.label.toLowerCase()
+											)}/${toKebabCase(subcategory.label.toLowerCase())}`}
 											style={{ textDecoration: "none" }}
 										>
 											{renderMenuItem(

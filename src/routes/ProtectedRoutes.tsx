@@ -9,6 +9,7 @@ import { Categorias } from "../components/screens/Categoria/Categorias";
 import { ArticulosInsumos } from "../components/screens/Articulos/ArticulosInsumos";
 import { ArticulosManufacturados } from "../components/screens/Articulos/ArticulosManufacturados";
 import SelectArticulo from "../components/screens/Articulos/SelectArticulo";
+import { UnidadesMedida } from "../components/screens/UnidadMedida/UnidadesMedida";
 export const ProtectedRoutes = () => {
 	return (
 		<>
@@ -20,7 +21,7 @@ export const ProtectedRoutes = () => {
 				flexDirection="column"
 				flexGrow={1}
 				minHeight="100%"
-				sx={{mt: {mobile: 8, xs: 7, sm: 8}}}
+				sx={{ mt: { mobile: 8, xs: 7, sm: 8 } }}
 			>
 				<Routes>
 					<Route path="/" element={<ListaEmpresas />} />
@@ -35,6 +36,7 @@ export const ProtectedRoutes = () => {
 						path="/articulos/manufacturados"
 						element={<ArticulosManufacturados />}
 					/>
+					<Route path="/unidades-de-medida" element={<UnidadesMedida />} />
 				</Routes>
 			</Box>
 		</>

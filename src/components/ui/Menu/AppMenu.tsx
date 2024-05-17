@@ -21,6 +21,7 @@ import { AppMenuList } from "./Drawer/AppMenuList";
 import { background } from "../../../styles/palette";
 import { SucursalSelect } from "./NavBar/SucursalSelect";
 import { UserButton } from "./NavBar/UserButton";
+import { fromKebabCase } from "../../../utils/textTransform";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -107,7 +108,8 @@ export const AppMenu = () => {
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 	const [open, setOpen] = useState(isSmallScreen ? false : true);
 	const path = useLocation().pathname;
-	const isEmpresasPage = path === "/" || path === "/empresas" || path === "/empresas/sucursales";
+	const isEmpresasPage =
+		path === "/" || path === "/empresas" || path === "/empresas/sucursales";
 
 	useEffect(() => {
 		if (isSmallScreen) setOpen(false);
@@ -120,7 +122,7 @@ export const AppMenu = () => {
 
 	const handleOverlayClick = () => {
 		setOpen(false);
-	  };
+	};
 
 	return (
 		<Box className="AppMenuContainer" sx={{ display: "flex" }}>
@@ -149,7 +151,7 @@ export const AppMenu = () => {
 					>
 						{path.replace(/\//g, " ").trim() === ""
 							? "EMPRESAS"
-							: path.toUpperCase().replace(/\//g, " ")}
+							: fromKebabCase(path.toUpperCase().replace(/\//g, " "))}
 					</Typography>
 					{!isEmpresasPage && <SucursalSelect />}
 					<UserButton />
