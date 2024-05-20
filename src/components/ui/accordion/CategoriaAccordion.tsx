@@ -1,4 +1,4 @@
-import { AccordionSummary, Stack } from "@mui/material";
+import { AccordionSummary, Chip, Stack, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "./AccordionStyles.css";
 import tinycolor from "tinycolor2";
@@ -47,7 +47,13 @@ export const CategoriaAccordion: FC<{
 			<Accordion sx={{ backgroundColor: subcategoriaColor }}>
 				{categoria.subCategorias && categoria.subCategorias.length > 0 ? (
 					<AccordionSummary expandIcon={<ExpandMoreIcon />}>
-						{categoria.denominacion}
+						<Stack direction="row" spacing={2} alignItems="center">
+							<Typography>{categoria.denominacion}</Typography>
+							{categoria.esInsumo && (
+								<Chip label="Es insumo" variant="outlined" color="primary" />
+							)}
+						</Stack>
+
 						<ActionButtons
 							categoria={categoria}
 							onClick={(event: MouseEvent<HTMLButtonElement, MouseEvent>) =>
@@ -58,7 +64,12 @@ export const CategoriaAccordion: FC<{
 					</AccordionSummary>
 				) : (
 					<AccordionSummary>
-						{categoria.denominacion}
+						<Stack direction="row" spacing={2} alignItems="center">
+							<Typography>{categoria.denominacion}</Typography>
+							{categoria.esInsumo && (
+								<Chip label="Es insumo" variant="outlined" color="primary" />
+							)}
+						</Stack>
 						<ActionButtons
 							categoria={categoria}
 							onClick={(

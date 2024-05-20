@@ -24,6 +24,7 @@ export interface ICategoria extends BaseEntity {
 	denominacion: string;
 	subCategorias?: ICategoria[];
 	categoriaPadre?: ICategoria;
+	esInsumo: boolean;
 }
 
 export interface ICategoriaSucursal extends BaseEntity {

@@ -1,10 +1,16 @@
-import { Stack, Typography } from "@mui/material";
+import {
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+	Stack,
+	Typography,
+} from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppSelector } from "../../../redux/hooks";
 import { CategoriaAccordion } from "../../ui/accordion/CategoriaAccordion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { CategoriaForm } from "../../ui/forms/CategoriaForm";
@@ -14,6 +20,26 @@ export const Categorias = () => {
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
+	const [filteredCategorias, setFilteredCategorias] = useState(categorias);
+	const [filterEsInsumo, setFilterEsInsumo] = useState("");
+
+	const handleFilterChange = (event: SelectChangeEvent<string>) => {
+		setFilterEsInsumo(event.target.value);
+	};
+
+	useEffect(() => {
+		let filtered = categorias;
+		const filterByIsInsumo = () => {
+			filtered = filtered!.filter((categoria) => {
+				if (filterEsInsumo === "esInsumo") return categoria.esInsumo;
+				else if (filterEsInsumo === "noEsInsumo") return !categoria.esInsumo;
+			});
+		};
+		if (filterEsInsumo !== "") {
+			filterByIsInsumo();
+		}
+		setFilteredCategorias(filtered);
+	}, [filterEsInsumo]);
 
 	const [showModal, setShowModal] = useState(false);
 
@@ -36,14 +62,36 @@ export const Categorias = () => {
 					activeEntities={"Categorias activas"}
 					buttonText={"Nueva categoria"}
 					onClick={handleClick}
-				/>
+				>
+					<Stack direction="row">
+						<Stack
+							spacing={1}
+							direction="row"
+							justifyContent="flex-start"
+							alignItems="center"
+							paddingLeft={3}
+						>
+							<Typography variant="h6">Filtrar por:</Typography>
+							<Select
+								size="small"
+								value={filterEsInsumo}
+								onChange={handleFilterChange}
+								sx={{ width: "140px", fontSize: "14px" }}
+							>
+								<MenuItem value="">Ninguna</MenuItem>
+								<MenuItem value="esInsumo">Es insumo</MenuItem>
+								<MenuItem value="noEsInsumo">No es insumo</MenuItem>
+							</Select>
+						</Stack>
+					</Stack>
+				</GenericHeaderStack>
 				<Stack sx={{ p: "12px" }}>
 					<Typography variant="h5" sx={{ pb: "12px" }}>
 						Todas las categorias
 					</Typography>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
-						{categorias &&
-							categorias.map((categoria, index) => {
+						{filteredCategorias &&
+							filteredCategorias.map((categoria, index) => {
 								if (!categoria.categoriaPadre) {
 									return (
 										<CategoriaAccordion

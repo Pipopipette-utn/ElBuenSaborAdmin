@@ -8,6 +8,8 @@ import { ICategoria } from "../../../types/empresa";
 import {
 	AccordionSummary,
 	Button,
+	Checkbox,
+	FormControlLabel,
 	IconButton,
 	Stack,
 	TextField,
@@ -26,6 +28,7 @@ interface CategoriaFormAccordionProps {
 	initialCategoria: ICategoria;
 	order: number;
 	onDelete?: Function;
+	insumo?: boolean;
 }
 
 export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
@@ -35,11 +38,18 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 	initialCategoria,
 	order,
 	onDelete,
+	insumo,
 }) => {
 	const [expanded, setExpanded] = useState(false);
 	const [categoria, setCategoria] = useState(initialCategoria);
+	const [esInsumo, setEsInsumo] = useState(insumo);
 
 	const handleExpand = () => setExpanded((prev) => !prev);
+
+	const handleChangeEsInsumo = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setCategoria({ ...categoria, esInsumo: event.target.checked });
+		setEsInsumo(event.target.checked);
+	};
 
 	const handleAddCategoria = (e: React.MouseEvent) => {
 		if (expanded) e.stopPropagation();
@@ -47,6 +57,7 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 			baja: false,
 			denominacion: "",
 			subCategorias: [],
+			esInsumo: esInsumo ?? false,
 		};
 		const newCategoria = {
 			...categoria,
@@ -66,26 +77,29 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 	};
 
 	const handleCategoriaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const updatedCategoria = { ...categoria, denominacion: e.target.value };
-        setCategoria(updatedCategoria);
-        if (order > 0 && onChangeSubcategorias) {
-            onChangeSubcategorias(updatedCategoria, index!);
-        }
-    };
+		const updatedCategoria = { ...categoria, denominacion: e.target.value };
+		setCategoria(updatedCategoria);
+		if (order > 0 && onChangeSubcategorias) {
+			onChangeSubcategorias(updatedCategoria, index!);
+		}
+	};
 
 	const handleSubcategoriaChange = (
-        subcategoria: ICategoria,
-        subIndex: number
-    ) => {
-        const updatedSubcategorias = categoria.subCategorias!.map((subcat, idx) =>
-            idx === subIndex ? subcategoria : subcat
-        );
-        const updatedCategoria = { ...categoria, subCategorias: updatedSubcategorias };
-        setCategoria(updatedCategoria);
-        if (order > 0 && onChangeSubcategorias) {
-            onChangeSubcategorias(updatedCategoria, index!);
-        }
-    };
+		subcategoria: ICategoria,
+		subIndex: number
+	) => {
+		const updatedSubcategorias = categoria.subCategorias!.map((subcat, idx) =>
+			idx === subIndex ? subcategoria : subcat
+		);
+		const updatedCategoria = {
+			...categoria,
+			subCategorias: updatedSubcategorias,
+		};
+		setCategoria(updatedCategoria);
+		if (order > 0 && onChangeSubcategorias) {
+			onChangeSubcategorias(updatedCategoria, index!);
+		}
+	};
 
 	const getDarkerColor = (color: string, level: number) => {
 		return tinycolor(color)
@@ -149,21 +163,35 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 								order={order + 1}
 								onDelete={handleDelete}
 								onChangeSubcategorias={handleSubcategoriaChange}
+								insumo={esInsumo}
 							/>
 						))}
 					</Stack>
 				)}
 			</Accordion>
 			{order === 0 && (
-				<Button
-					variant="contained"
-					sx={{ mt: 2, p: 1, width: "80%" }}
-					onClick={() => {
-						if (onChangeDenominaciones) onChangeDenominaciones(categoria);
-					}}
-				>
-					Siguiente
-				</Button>
+				<Stack width="80%">
+					<Stack direction="row" alignItems="center" alignSelf="flex-start">
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={categoria.esInsumo}
+									onChange={handleChangeEsInsumo}
+								/>
+							}
+							label="Es insumo"
+						/>
+					</Stack>
+					<Button
+						variant="contained"
+						sx={{ mt: 2, p: 1 }}
+						onClick={() => {
+							if (onChangeDenominaciones) onChangeDenominaciones(categoria);
+						}}
+					>
+						Siguiente
+					</Button>
+				</Stack>
 			)}
 		</>
 	);

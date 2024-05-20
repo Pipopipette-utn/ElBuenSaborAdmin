@@ -54,6 +54,22 @@ const SelectedDataSlice = createSlice({
 		) => {
 			state.categoriasSucursal = action.payload;
 		},
+		
+		addCategoriaSucursal: (state, action: PayloadAction<ICategoria>) => {
+			if (state.categoriasSucursal) {
+				state.categoriasSucursal!.push(action.payload);
+			} else {
+				state.categoriasSucursal = [action.payload];
+			}
+		},
+		editCategoriaSucursal: (state, action: PayloadAction<ICategoria>) => {
+			const categoriaEditada = action.payload;
+			if (state.categoriasSucursal) {
+				state.categoriasSucursal = state.categoriasSucursal.map((unidad) =>
+					unidad.id === categoriaEditada.id ? categoriaEditada : unidad
+				);
+			}
+		},
 	},
 });
 
@@ -64,5 +80,7 @@ export const {
 	editSucursalEmpresa,
 	setSucursal,
 	setCategoriasSucursal,
+	addCategoriaSucursal,
+	editCategoriaSucursal
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;

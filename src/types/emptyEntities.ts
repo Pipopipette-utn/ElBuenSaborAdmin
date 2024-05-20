@@ -22,6 +22,7 @@ export const emptyCategoria: ICategoria =  {
     baja: false,
 	denominacion: "",
 	subCategorias: [],
+	esInsumo: false,
 }
 
 export const emptyArticulo: IArticulo =  {

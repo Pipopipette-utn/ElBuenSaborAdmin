@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import{ FC, useState } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { CategoriaService } from "../../../services/CategoriaService";
 import { ICategoria } from "../../../types/empresa";
@@ -8,6 +8,10 @@ import FormStepper from "../shared/FormStepper";
 import { CategoriaFormAccordion } from "../accordion/CategoriaFormAccordion";
 import { SucursalesSelector } from "./SucursalesSelector";
 import { addCategoria, editCategoria } from "../../../redux/slices/Business";
+import {
+	editCategoriaSucursal,
+	addCategoriaSucursal,
+} from "../../../redux/slices/SelectedData";
 
 interface CategoriaFormProps {
 	initialCategoria: ICategoria;
@@ -42,13 +46,17 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 			};
 
 			if (categoria.id) {
-				const updatedCategoria = await categoriaService.update(categoria.id, newCategoria);
+				const updatedCategoria = await categoriaService.update(
+					categoria.id,
+					newCategoria
+				);
 				dispatch(editCategoria(updatedCategoria));
+				dispatch(editCategoriaSucursal(updatedCategoria));
 			} else {
 				const createdCategoria = await categoriaService.create(newCategoria);
 				dispatch(addCategoria(createdCategoria));
+				dispatch(addCategoriaSucursal(createdCategoria));
 			}
-
 			onClose();
 		} catch (error: any) {
 			throw new Error(error);
