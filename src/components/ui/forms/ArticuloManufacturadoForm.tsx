@@ -35,7 +35,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	const dispatch = useAppDispatch();
 
 	const [activeStep, setActiveStep] = useState(0);
-	const [articuloManufacturado, setarticuloManufacturado] = useState(
+	const [articuloManufacturado, setArticuloManufacturado] = useState(
 		initialArticuloManufacturado
 	);
 
@@ -51,12 +51,6 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		tiempoEstimadoMinutos: articuloManufacturado.tiempoEstimadoMinutos
 			? dayjs(`2024-05-13T00:${articuloManufacturado.tiempoEstimadoMinutos}:00`)
 			: dayjs(`2024-05-13T00:00:00`),
-		unidadMedida: articuloManufacturado.unidadMedida
-			? articuloManufacturado.unidadMedida.denominacion
-			: "",
-		categoria: articuloManufacturado.categoria
-			? articuloManufacturado.categoria.denominacion
-			: "",
 		imagen:
 			articuloManufacturado.imagenes &&
 			articuloManufacturado.imagenes.length > 0
@@ -72,50 +66,53 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	});
 
 	const handleSubmitArticulo = (articulo: IArticulo) => {
-		const newarticuloManufacturado = {
+		const newArticuloManufacturado = {
 			...articuloManufacturado,
 			...articulo,
 		};
-		setarticuloManufacturado(newarticuloManufacturado);
+		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
 	};
 
 	const handleSubmitDescripcion = (values: { [key: string]: any }) => {
-		const newarticuloManufacturado = {
+		const newArticuloManufacturado = {
 			...articuloManufacturado,
 			...values,
 			tiempoEstimadoMinutos: values.tiempoEstimadoMinutos.format("mm"),
 		};
-		console.log(values);
-		setarticuloManufacturado(newarticuloManufacturado);
+		console.log({ newArticuloManufacturado });
+		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
 	};
 
 	const handleSubmitDetalles = (detalles: IArticuloManufacturadoDetalle[]) => {
-		const newarticuloManufacturado = {
+		const newArticuloManufacturado = {
 			...articuloManufacturado,
 			articuloManufacturadoDetalles: detalles,
 		};
-		setarticuloManufacturado(newarticuloManufacturado);
+		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
-		handleSubmitForm();
+		handleSubmitForm(newArticuloManufacturado);
 	};
 
-	const handleSubmitForm = async () => {
+	const handleSubmitForm = async (
+		newArticuloManufacturado: IArticuloManufacturado
+	) => {
 		try {
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
-				"/articulosInsumos"
+				"/articulosManufacturados"
 			);
 
+			console.log({ newArticuloManufacturado });
 			if (articuloManufacturado.id) {
-				const updatedInsumo = await articuloManufacturadoService.update(
+				const updatedArticulo = await articuloManufacturadoService.update(
 					articuloManufacturado.id,
-					articuloManufacturado
+					newArticuloManufacturado
 				);
-				dispatch(editArticuloManufacturado(updatedInsumo));
+				dispatch(editArticuloManufacturado(updatedArticulo));
 			} else {
 				const artManufacturado = await articuloManufacturadoService.create(
-					articuloManufacturado
+					newArticuloManufacturado
 				);
 				dispatch(addArticuloManufacturado(artManufacturado));
 			}
@@ -175,13 +172,9 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			title: "Detalles",
 			fields: [],
 		},
-		{
-			title: "Sucursal y categoría",
-			fields: [],
-		},
 	];
 	return (
-		<Stack alignItems="center" spacing={3}>
+		<Stack width={"100%"} alignItems="center" spacing={3}>
 			<Stack width={"80%"} marginBottom={2}>
 				<FormStepper steps={steps} activeStep={activeStep} />
 			</Stack>
@@ -192,6 +185,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 						return (
 							<ArticuloForm
 								articulo={articuloManufacturado}
+								isManufacturado={true}
 								submitButtonText={"Continuar"}
 								handleSubmitForm={handleSubmitArticulo}
 							/>

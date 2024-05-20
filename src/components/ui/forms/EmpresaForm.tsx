@@ -23,7 +23,7 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 	const initialValues = {
 		...empresa,
 		cuil: empresa.cuil == 0 ? "" : empresa.cuil,
-		logo: empresa.logo == null ? "" : empresa.logo
+		logo: empresa.logo == null ? "" : empresa.logo,
 	};
 
 	let empresaSchema = Yup.object().shape({
@@ -47,7 +47,6 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 				logo: values.logo,
 			};
 
-			console.log({newEmpresa});
 			if (values.id) {
 				await empresaService.update(values.id, newEmpresa);
 			} else {

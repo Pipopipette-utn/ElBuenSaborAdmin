@@ -1,16 +1,23 @@
-import { Stack, Typography } from "@mui/material";
+import {
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+	Stack,
+	TextField,
+	Typography,
+} from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { GenericTable } from "../../ui/shared/GenericTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import { InsumoForm } from "../../ui/forms/InsumoForm";
 import { emptyInsumo } from "../../../types/emptyEntities";
-import { IArticuloInsumo } from "../../../types/empresa";
+import { IArticuloInsumo, ICategoria } from "../../../types/empresa";
 import { AlertDialog } from "../../ui/shared/DialogAlert";
 import { setArticulosInsumos } from "../../../redux/slices/Business";
 
@@ -21,12 +28,58 @@ export const ArticulosInsumos = () => {
 	const articulosInsumos = useAppSelector(
 		(state) => state.business.articulosInsumos
 	);
+	const categorias = useAppSelector((state) => state.business.categorias) ?? [];
 
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [idArticulo, setIdArticulo] = useState<number>();
 
 	const [articulo, setArticulo] = useState<IArticuloInsumo | null>(null);
+
+	const [filteredInsumos, setFilteredInsumos] = useState(articulosInsumos);
+	const [filter, setFilter] = useState("");
+	const [categoryFilter, setCategoryFilter] = useState("");
+
+	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFilter(event.target.value);
+	};
+
+	useEffect(() => {
+		let filtered = articulosInsumos;
+		const filterByDenominacion = () => {
+			filtered = filtered!.filter((insumo) =>
+				insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
+			);
+		};
+		const filterByCategory = (cf: string) => {
+			const isCategoryOrSubcategory = (categoria: ICategoria) => {
+				if (categoria.denominacion == cf) {
+					return true;
+				}
+				if (categoria.categoriaPadre) {
+					return categoria.categoriaPadre.denominacion == cf;
+				}
+				return false;
+			};
+
+			filtered = filtered!.filter(
+				(insumo) =>
+					insumo.categoria && isCategoryOrSubcategory(insumo.categoria)
+			);
+		};
+
+		if (filter !== "") {
+			filterByDenominacion();
+		}
+		if (categoryFilter !== "") {
+			filterByCategory(categoryFilter);
+		}
+		setFilteredInsumos(filtered);
+	}, [filter, categoryFilter]);
+
+	const handleCategoryFilterChange = (event: SelectChangeEvent<string>) => {
+		setCategoryFilter(event.target.value);
+	};
 
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => {
@@ -72,7 +125,49 @@ export const ArticulosInsumos = () => {
 					activeEntities={"Insumos activos"}
 					buttonText={"Nuevo insumo"}
 					onClick={handleOpenModal}
-				/>
+				>
+					<Stack direction="row">
+						<Stack
+							spacing={1}
+							direction="row"
+							justifyContent="flex-start"
+							alignItems="center"
+							paddingLeft={3}
+						>
+							<Typography variant="h6">Buscar:</Typography>
+							<TextField
+								size="small"
+								variant="outlined"
+								value={filter}
+								onChange={handleFilterChange}
+								sx={{ width: "90px", "& input": { fontSize: "14px" } }}
+							/>
+						</Stack>
+						<Stack
+							spacing={1}
+							direction="row"
+							justifyContent="flex-start"
+							alignItems="center"
+							paddingLeft={3}
+						>
+							<Typography variant="h6">Filtrar por categoría:</Typography>
+							<Select
+								size="small"
+								value={categoryFilter}
+								onChange={handleCategoryFilterChange}
+								sx={{ width: "120px", fontSize: "14px" }}
+							>
+								<MenuItem value="">Ninguna</MenuItem>
+								{categorias &&
+									categorias!.map((categoria, index) => (
+										<MenuItem key={index} value={categoria!.denominacion}>
+											{categoria!.denominacion}
+										</MenuItem>
+									))}
+							</Select>
+						</Stack>
+					</Stack>
+				</GenericHeaderStack>
 				<>
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los insumos
@@ -83,7 +178,7 @@ export const ArticulosInsumos = () => {
 								onDelete={handleDeleteClick}
 								onEdit={handleOpenEditModal}
 								data={articuloInsumoService.articulosInsumosToDTO(
-									articulosInsumos
+									filteredInsumos!
 								)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },

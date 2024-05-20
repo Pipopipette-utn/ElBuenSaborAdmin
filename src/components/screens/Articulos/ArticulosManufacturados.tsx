@@ -1,18 +1,19 @@
-import { Stack, Typography } from "@mui/material";
+import { SelectChangeEvent, Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { GenericTable } from "../../ui/shared/GenericTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { ArticuloManufacturadoService } from "../../../services/ArticuloManufacturadoService";
-import { IArticuloManufacturado } from "../../../types/empresa";
+import { IArticuloManufacturado, ICategoria } from "../../../types/empresa";
 import { setArticulosManufacturados } from "../../../redux/slices/Business";
 import { AlertDialog } from "../../ui/shared/DialogAlert";
 import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoForm";
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
+import FilterFields from "../../ui/shared/FilterFields";
 
 export const ArticulosManufacturados = () => {
 	const dispatch = useAppDispatch();
@@ -64,6 +65,53 @@ export const ArticulosManufacturados = () => {
 		handleCloseAlert();
 	};
 
+	const [filteredArticulosManufacturados, setFilteredArticulosManufacturados] =
+		useState(articulosManufacturados);
+	const [filter, setFilter] = useState("");
+	const [categoryFilter, setCategoryFilter] = useState("");
+	const categorias = useAppSelector((state) => state.business.categorias) ?? [];
+
+	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFilter(event.target.value);
+	};
+
+	useEffect(() => {
+		let filtered = filteredArticulosManufacturados;
+		const filterByDenominacion = () => {
+			filtered = filtered!.filter((insumo) =>
+				insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
+			);
+		};
+		const filterByCategory = (cf: string) => {
+			const isCategoryOrSubcategory = (categoria: ICategoria) => {
+				if (categoria.denominacion == cf) {
+					return true;
+				}
+				if (categoria.categoriaPadre) {
+					return categoria.categoriaPadre.denominacion == cf;
+				}
+				return false;
+			};
+
+			filtered = filtered!.filter(
+				(insumo) =>
+					insumo.categoria && isCategoryOrSubcategory(insumo.categoria)
+			);
+		};
+
+		if (filter !== "") {
+			filterByDenominacion();
+		}
+		if (categoryFilter !== "") {
+			filterByCategory(categoryFilter);
+		}
+		setFilteredArticulosManufacturados(filtered);
+	}, [filter, categoryFilter]);
+
+	const handleCategoryFilterChange = (event: SelectChangeEvent<string>) => {
+		setCategoryFilter(event.target.value);
+	};
+
 	return (
 		<>
 			<GenericDoubleStack>
@@ -78,7 +126,15 @@ export const ArticulosManufacturados = () => {
 					activeEntities={"Productos activos"}
 					buttonText={"Nuevo producto"}
 					onClick={handleOpenModal}
-				/>
+				>
+					<FilterFields
+						filter={filter}
+						onFilterChange={handleFilterChange}
+						categorias={categorias}
+						categoryFilter={categoryFilter}
+						onCategoryFilterChange={handleCategoryFilterChange}
+					/>
+				</GenericHeaderStack>
 				<>
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los productos manufacturados

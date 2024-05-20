@@ -10,6 +10,8 @@ import {
 	CardActions,
 	CardContent,
 	CardMedia,
+	Chip,
+	Stack,
 	Tooltip,
 	Typography,
 } from "@mui/material";
@@ -75,17 +77,33 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	return (
 		<>
 			<SucursalCard>
-				<CardMedia
-					component="img"
-					image={
-						sucursal.logo && sucursal.logo != ""
-							? sucursal.logo
-							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(
-									0
-							  )}`
-					}
-					sx={{ height: "140px" }}
-				/>
+				<Stack position="relative">
+					<CardMedia
+						component="img"
+						image={
+							sucursal.logo && sucursal.logo != ""
+								? sucursal.logo
+								: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(
+										0
+								  )}`
+						}
+						sx={{ height: "140px" }}
+					/>
+
+					{sucursal.esCasaMatriz && (
+						<Chip
+							size="small"
+							color="primary"
+							label="Casa matriz"
+							sx={{
+								position: "absolute", // Añade 'position: absolute'
+								bottom: 0, // Añade 'bottom: 0' para posicionar el Chip en la parte inferior
+								right: 0, // Añade 'left: 0' para posicionar el Chip en la izquierda
+								m: 1, // Añade margen
+							}}
+						/>
+					)}
+				</Stack>
 				<SucursalCardHeader title={sucursal.nombre} />
 				<CardContent sx={{ pb: 0, height: "80px" }}>
 					<Typography>

@@ -43,6 +43,21 @@ const BusinessSlice = createSlice({
 		) => {
 			state.unidadMedidas = action.payload;
 		},
+		addUnidadMedida: (state, action: PayloadAction<IUnidadMedida>) => {
+			if (state.unidadMedidas) {
+				state.unidadMedidas!.push(action.payload);
+			} else {
+				state.unidadMedidas = [action.payload];
+			}
+		},
+		editUnidadMedida: (state, action: PayloadAction<IUnidadMedida>) => {
+			const unidadEditada = action.payload;
+			if (state.unidadMedidas) {
+				state.unidadMedidas = state.unidadMedidas.map((unidad) =>
+					unidad.id === unidadEditada.id ? unidadEditada : unidad
+				);
+			}
+		},
 		setEmpresas: (state, action: PayloadAction<IEmpresa[] | null>) => {
 			state.empresas = action.payload;
 		},
@@ -67,6 +82,21 @@ const BusinessSlice = createSlice({
 		setCategorias: (state, action: PayloadAction<ICategoria[] | null>) => {
 			state.categorias = action.payload;
 		},
+		addCategoria: (state, action: PayloadAction<ICategoria>) => {
+			if (state.categorias) {
+				state.categorias!.push(action.payload);
+			} else {
+				state.categorias = [action.payload];
+			}
+		},
+		editCategoria: (state, action: PayloadAction<ICategoria>) => {
+			const categoriaEditada = action.payload;
+			if (state.categorias) {
+				state.categorias = state.categorias.map((unidad) =>
+					unidad.id === categoriaEditada.id ? categoriaEditada : unidad
+				);
+			}
+		},
 		setArticulosInsumos: (
 			state,
 			action: PayloadAction<IArticuloInsumo[] | null>
@@ -88,6 +118,7 @@ const BusinessSlice = createSlice({
 				state.articulosInsumos = [action.payload];
 			}
 		},
+
 		setArticulosManufacturados: (
 			state,
 			action: PayloadAction<IArticuloManufacturado[] | null>
@@ -95,15 +126,22 @@ const BusinessSlice = createSlice({
 			state.articulosManufacturados = action.payload;
 		},
 
-		editArticuloManufacturado: (state, action: PayloadAction<IArticuloManufacturado>) => {
+		editArticuloManufacturado: (
+			state,
+			action: PayloadAction<IArticuloManufacturado>
+		) => {
 			const insumoEditado = action.payload;
 			if (state.articulosManufacturados) {
-				state.articulosManufacturados = state.articulosManufacturados.map((producto) =>
-					producto.id === insumoEditado.id ? insumoEditado : producto
+				state.articulosManufacturados = state.articulosManufacturados.map(
+					(producto) =>
+						producto.id === insumoEditado.id ? insumoEditado : producto
 				);
 			}
 		},
-		addArticuloManufacturado: (state, action: PayloadAction<IArticuloManufacturado>) => {
+		addArticuloManufacturado: (
+			state,
+			action: PayloadAction<IArticuloManufacturado>
+		) => {
 			if (state.articulosManufacturados) {
 				state.articulosManufacturados!.push(action.payload);
 			} else {
@@ -116,16 +154,20 @@ const BusinessSlice = createSlice({
 export const {
 	setUsuarios,
 	setUnidadMedidas,
+	addUnidadMedida,
+	editUnidadMedida,
 	setEmpresas,
 	setSucursales,
 	addSucursal,
 	editSucursal,
 	setCategorias,
+	addCategoria,
+	editCategoria,
 	setArticulosInsumos,
 	editArticuloInsumo,
 	addArticuloInsumo,
 	setArticulosManufacturados,
 	editArticuloManufacturado,
-	addArticuloManufacturado
+	addArticuloManufacturado,
 } = BusinessSlice.actions;
 export default BusinessSlice.reducer;

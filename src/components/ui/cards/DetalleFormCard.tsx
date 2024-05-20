@@ -38,6 +38,17 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	const [openModal, setOpenModal] = useState(false);
 	const [openInsumoModal, setOpenInsumoModal] = useState(false);
 
+	const [filter, setFilter] = useState("");
+
+	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFilter(event.target.value);
+	};
+
+	// Filtrar los insumos basado en el valor del filtro
+	const filteredInsumos = insumos!.filter((insumo) =>
+		insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
+	);
+
 	const handleOpenModal = () => setOpenModal(true);
 
 	const handleCloseModal = () => setOpenModal(false);
@@ -48,13 +59,13 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 
 	const handleIncrement = () => {
 		setCantidad(cantidad + 1);
-        detalle.cantidad = cantidad + 1;
+		detalle.cantidad = cantidad + 1;
 	};
 
 	const handleDecrement = () => {
 		if (cantidad > 0) {
 			setCantidad(cantidad - 1);
-            detalle.cantidad = cantidad - 1;
+			detalle.cantidad = cantidad - 1;
 		}
 	};
 
@@ -82,7 +93,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 							<TextField
 								size="small"
 								variant="outlined"
-								type="text"
+								type="number"
 								value={cantidad}
 								inputProps={{ min: 0 }}
 								onChange={handleInputChange}
@@ -121,7 +132,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 					<TextFieldStack spacing={1}>
 						<Typography variant="h6">Insumo</Typography>
 						{detalle.articuloInsumo !== emptyInsumo &&
-							(detalle.articuloInsumo && (
+							detalle.articuloInsumo && (
 								<Stack
 									direction="row"
 									height="40px"
@@ -133,7 +144,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 										color="primary"
 									/>
 								</Stack>
-							))}
+							)}
 					</TextFieldStack>
 				</Stack>
 				<Tooltip title="Eliminar">
@@ -148,15 +159,29 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 				open={openModal}
 				handleClose={handleCloseModal}
 			>
-				<>
+				<Stack spacing={2}>
+					<Stack
+						direction="row"
+						spacing={2}
+						justifyContent="center"
+						alignItems="center"
+					>
+						<Typography>Buscar:</Typography>
+						<TextField
+							variant="outlined"
+							value={filter}
+							onChange={handleFilterChange}
+							sx={{ width: "40%" }}
+						/>
+					</Stack>
 					<Stack
 						direction="row"
 						spacing={3}
 						justifyContent="center"
 						sx={{ overflowX: "wrap" }}
 					>
-						{insumos !== null ? (
-							insumos
+						{filteredInsumos !== null ? (
+							filteredInsumos
 								.filter((insumo) => insumo.esParaElaborar == true)
 								.sort((a, b) => a.denominacion.localeCompare(b.denominacion))
 								.map((i: IArticuloInsumo, index: number) => (
@@ -177,7 +202,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 					>
 						Nuevo insumo
 					</Button>
-				</>
+				</Stack>
 			</GenericModal>
 			<GenericModal
 				title={"Crear insumo"}

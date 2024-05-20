@@ -13,6 +13,7 @@ export interface ISucursal extends BaseEntity {
 	horarioApertura: string;
 	horarioCierre: string;
 	logo: string;
+	esCasaMatriz: boolean;
 	empresa?: IEmpresa;
 	domicilio?: IDomicilio;
 	categorias?: ICategoria[];
@@ -21,8 +22,8 @@ export interface ISucursal extends BaseEntity {
 
 export interface ICategoria extends BaseEntity {
 	denominacion: string;
-	subcategorias?: ICategoria[];
-	categoriaPadreId?: number;
+	subCategorias?: ICategoria[];
+	categoriaPadre?: ICategoria;
 }
 
 export interface ICategoriaSucursal extends BaseEntity {

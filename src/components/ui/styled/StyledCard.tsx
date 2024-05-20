@@ -23,8 +23,12 @@ export const Card = styled(MuiCard)(({ theme }) => ({
 export const CardHeader = styled(MuiCardHeader)(() => ({
 	textAlign: "center",
 	"& .MuiCardHeader-title": {
+		fontWeight: 500,
+		fontSize: 16,
+	},
+	"& .MuiCardHeader-subheader": {
 		fontWeight: "400",
-		fontSize: 20,
+		fontSize: 14,
 	},
 }));
 

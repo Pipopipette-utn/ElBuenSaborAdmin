@@ -6,7 +6,9 @@ import { useAppSelector } from "../../../redux/hooks";
 import { CategoriaAccordion } from "../../ui/accordion/CategoriaAccordion";
 import { useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { CategoriaForm } from "../../ui/forms/CategoriaForm";
+import { emptyCategoria } from "../../../types/emptyEntities";
 
 export const Categorias = () => {
 	const categorias = useAppSelector(
@@ -41,13 +43,18 @@ export const Categorias = () => {
 					</Typography>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
 						{categorias &&
-							categorias.map((categoria, index) => (
-								<CategoriaAccordion
-									key={index}
-									categoria={categoria}
-									order={0}
-								/>
-							))}
+							categorias.map((categoria, index) => {
+								if (!categoria.categoriaPadre) {
+									return (
+										<CategoriaAccordion
+											key={index}
+											categoria={categoria}
+											order={0}
+										/>
+									);
+								}
+								return null;
+							})}
 					</Stack>
 				</Stack>
 			</GenericDoubleStack>
@@ -57,7 +64,13 @@ export const Categorias = () => {
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<>Formulario categoría</>
+				<Stack width="90%">
+					<CategoriaForm
+						initialCategoria={emptyCategoria}
+						onClose={handleCloseModal}
+						buttonTitle="Crear categoría"
+					/>
+				</Stack>
 			</GenericModal>
 		</>
 	);

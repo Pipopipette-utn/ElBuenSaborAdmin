@@ -36,7 +36,7 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 
 	return (
 		<Stack width="80%" spacing={1}>
-			<Stack spacing={2}>
+			<Stack spacing={2} width="100%">
 				{detalles.map((detalle, index) => (
 					<DetalleFormCard
 						key={index}

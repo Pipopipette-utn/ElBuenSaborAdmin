@@ -10,15 +10,23 @@ import {
 import SucursalCard from "../../ui/cards/SucursalCard";
 import GenericModal from "../../ui/shared/GenericModal";
 import StoreIcon from "@mui/icons-material/Store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SucursalForm } from "../../ui/forms/SucursalForm";
 import { emptySucursal } from "../../../types/emptyEntities";
+import { useNavigate } from "react-router-dom";
 
 export const ListaSucursales = () => {
+	const empresa = useAppSelector((state) => state.selectedData.empresa);
+	const navigate = useNavigate();
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
-	const empresa = useAppSelector((state) => state.selectedData.empresa);
+
+	useEffect(() => {
+		if (!empresa) {
+			navigate("/empresas");
+		}
+	}, []);
 
 	const [showModal, setShowModal] = useState(false);
 
@@ -33,7 +41,7 @@ export const ListaSucursales = () => {
 			sx={{ alignItems: "center" }}
 		>
 			<Typography variant="h1" textAlign="center">
-				Sucursales de {empresa!.nombre}
+				Sucursales de {empresa?.nombre}
 			</Typography>
 			<Stack
 				direction="row"
@@ -57,7 +65,7 @@ export const ListaSucursales = () => {
 					</AddCardActions>
 				</AddCard>
 				<GenericModal
-					title={`Crear sucursal para ${empresa!.nombre}`}
+					title={`Crear sucursal para ${empresa?.nombre}`}
 					icon={<StoreIcon fontSize="large" />}
 					open={showModal}
 					handleClose={handleCloseModal}

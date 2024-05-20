@@ -10,6 +10,7 @@ import { ArticulosInsumos } from "../components/screens/Articulos/ArticulosInsum
 import { ArticulosManufacturados } from "../components/screens/Articulos/ArticulosManufacturados";
 import SelectArticulo from "../components/screens/Articulos/SelectArticulo";
 import { UnidadesMedida } from "../components/screens/UnidadMedida/UnidadesMedida";
+
 export const ProtectedRoutes = () => {
 	return (
 		<>

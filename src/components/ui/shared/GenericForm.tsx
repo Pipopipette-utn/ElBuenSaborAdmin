@@ -25,6 +25,7 @@ interface FormProps {
 	onBack?: () => void;
 	submitButtonText: string;
 	children?: ReactNode;
+	childrenPosition?: "top" | "bottom";
 }
 
 export const GenericForm: FC<FormProps> = ({
@@ -35,6 +36,7 @@ export const GenericForm: FC<FormProps> = ({
 	onBack,
 	submitButtonText,
 	children,
+	childrenPosition,
 }) => {
 	const [error, setError] = useState("");
 
@@ -68,7 +70,7 @@ export const GenericForm: FC<FormProps> = ({
 					isSubmitting,
 				}) => (
 					<>
-						{children}
+						{childrenPosition === "top" && children}
 						{fields.map((field, index) => {
 							return (
 								<Stack direction="row" width="100%" spacing={2} key={index}>
@@ -129,7 +131,7 @@ export const GenericForm: FC<FormProps> = ({
 																<TimePicker
 																	name={f.name}
 																	value={values[f.name]}
-																	sx={{width: "100%"}}
+																	sx={{ width: "100%" }}
 																	views={f.timeView ?? ["hours", "seconds"]}
 																	onChange={(time: any) => {
 																		handleChange({
@@ -142,6 +144,7 @@ export const GenericForm: FC<FormProps> = ({
 																/>
 															</LocalizationProvider>
 														);
+
 													default:
 														return null;
 												}
@@ -156,6 +159,7 @@ export const GenericForm: FC<FormProps> = ({
 								</Stack>
 							);
 						})}
+						{childrenPosition === "bottom" && children}
 						{error && <ErrorTypography> {error}</ErrorTypography>}
 						<Stack direction="row" width="100%" spacing={2}>
 							{onBack && (

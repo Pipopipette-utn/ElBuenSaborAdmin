@@ -7,9 +7,9 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 		this.baseUrl += baseUrl;
 	}
 
-	async getAllActive(): Promise<T[]> {
+	async getAllIncludeDeleted(): Promise<T[]> {
 		try {
-			const response = await fetch(`${this.baseUrl}/active`);
+			const response = await fetch(`${this.baseUrl}/includeDeleted`);
 			if (!response.ok) {
 				throw Error(response.statusText);
 			}
@@ -68,7 +68,7 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 	async update(id: number, data: T): Promise<T> {
 		try {
 			const response = await fetch(`${this.baseUrl}/${id}`, {
-				method: "PATCH",
+				method: "PUT",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",

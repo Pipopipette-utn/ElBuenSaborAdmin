@@ -20,6 +20,7 @@ import { AppRouter } from "./routes/AppRouter";
 import {
 	setArticulosInsumos,
 	setArticulosManufacturados,
+	setCategorias,
 	setEmpresas,
 	setSucursales,
 	setUnidadMedidas,
@@ -27,6 +28,7 @@ import {
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
+import { CategoriaService } from "./services/CategoriaService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
@@ -39,11 +41,13 @@ export const App: FC = () => {
 	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
+	const categoriaService = new CategoriaService("/categorias");
 	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
 	);
 
+	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 
@@ -62,11 +66,15 @@ export const App: FC = () => {
 			const unidadMedidas = await unidadMedidaService.getAll();
 			dispatch(setUnidadMedidas(unidadMedidas));
 
-			const empresasData = await empresaService.getAllActive();
+			const empresasData = await empresaService.getAll();
 			dispatch(setEmpresas(empresasData));
 
-			const sucursales = await sucursalService.getAllActive();
+			const sucursales = await sucursalService.getAll();
 			dispatch(setSucursales(sucursales));
+
+			const categorias = await categoriaService.getAll();
+			dispatch(setCategorias(categorias));
+			dispatch(setCategoriasSucursal(categorias));
 
 			const articulosInsumos = await articuloInsumoService.getAll();
 			dispatch(setArticulosInsumos(articulosInsumos));
@@ -82,17 +90,20 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		if (empresa) {
-			const sucursalesFiltradas = empresa.sucursales ?? [];
+			const sucursalesFiltradas =
+				sucursalService.filterByEmpresaId(sucursales!, empresa.id!) ?? [];
 			dispatch(setSucursalesEmpresa(sucursalesFiltradas));
 			dispatch(setSucursal(sucursalesFiltradas[0] ?? null));
 		}
 	}, [empresa]);
 
 	useEffect(() => {
+		/*
 		if (sucursal) {
 			const categoriasSucursal = sucursal.categorias ?? [];
 			dispatch(setCategoriasSucursal(categoriasSucursal));
 		}
+		*/
 	}, [sucursal]);
 
 	return (

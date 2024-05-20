@@ -71,10 +71,11 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			const newArticuloInsumo: IArticuloInsumo = {
 				...articuloInsumo,
 				...values,
-				precioVenta: values.precioVenta !== 0 ? parseFloat(values.precioVenta) : null,
+				precioVenta:
+					values.precioVenta !== 0 ? parseFloat(values.precioVenta) : null,
 				categoria:
 					values.categoria !== ""
-						? {id: values.categoria, baja:false, denominacion: ""}
+						? { id: values.categoria, baja: false, denominacion: "" }
 						: undefined,
 				unidadMedida: articuloInsumo.unidadMedida,
 			};
@@ -136,8 +137,8 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		},
 	];
 	return (
-		<Stack alignItems="center" spacing={3}>
-			<Stack width={"80%"} marginBottom={2}>
+		<Stack width="100%" alignItems="center" spacing={3}>
+			<Stack width="80%" marginBottom={2}>
 				<FormStepper steps={steps} activeStep={activeStep} />
 			</Stack>
 
@@ -156,6 +157,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					validationSchema={articuloInsumoSchema}
 					onBack={handleBack}
 					onSubmit={handleSubmitForm}
+					childrenPosition="top"
 					submitButtonText={
 						articuloInsumo.id ? "Editar insumo" : "Crear insumo"
 					}

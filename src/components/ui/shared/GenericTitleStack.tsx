@@ -1,5 +1,5 @@
 import { Button, Stack, Typography } from "@mui/material";
-import { FC, ReactElement } from "react";
+import { FC, ReactElement, ReactNode } from "react";
 import { theme } from "../../../styles/theme";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -9,6 +9,7 @@ interface GenericHeaderStackProps {
 	activeEntities: string;
 	buttonText: string;
 	onClick: any;
+	children?: ReactNode;
 }
 
 export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
@@ -16,7 +17,8 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 	quantity,
 	activeEntities,
 	buttonText,
-	onClick
+	onClick,
+	children
 }) => {
 	return (
 		<Stack
@@ -47,6 +49,7 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 						{activeEntities}
 					</Typography>
 				</Stack>
+				{children}
 			</Stack>
 			<Button
 				onClick={onClick}
