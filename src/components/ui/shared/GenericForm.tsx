@@ -13,7 +13,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
 import { IField } from "../../../types/business";
 
@@ -24,6 +24,8 @@ interface FormProps {
 	onSubmit: (values: { [key: string]: any }) => void | Promise<any>;
 	onBack?: () => void;
 	submitButtonText: string;
+	children?: ReactNode;
+	childrenPosition?: "top" | "bottom";
 }
 
 export const GenericForm: FC<FormProps> = ({
@@ -33,6 +35,8 @@ export const GenericForm: FC<FormProps> = ({
 	onSubmit,
 	onBack,
 	submitButtonText,
+	children,
+	childrenPosition,
 }) => {
 	const [error, setError] = useState("");
 
@@ -40,6 +44,7 @@ export const GenericForm: FC<FormProps> = ({
 		<Stack
 			direction="column"
 			spacing={2}
+			width="80%"
 			sx={{
 				alignItems: "center",
 			}}
@@ -65,6 +70,7 @@ export const GenericForm: FC<FormProps> = ({
 					isSubmitting,
 				}) => (
 					<>
+						{childrenPosition === "top" && children}
 						{fields.map((field, index) => {
 							return (
 								<Stack direction="row" width="100%" spacing={2} key={index}>
@@ -82,6 +88,7 @@ export const GenericForm: FC<FormProps> = ({
 															<TextField
 																type={f.type}
 																fullWidth
+																multiline={f.multiline}
 																placeholder={f.label.toUpperCase()}
 																name={f.name}
 																value={values[f.name]}
@@ -103,6 +110,13 @@ export const GenericForm: FC<FormProps> = ({
 																name={f.name}
 																value={values[f.name]}
 																onChange={handleChange}
+																startAdornment={
+																	f.icon && (
+																		<InputAdornment position="start">
+																			{f.icon}
+																		</InputAdornment>
+																	)
+																}
 															>
 																{f.options!.map((option, index) => (
 																	<MenuItem key={index} value={option}>
@@ -117,6 +131,8 @@ export const GenericForm: FC<FormProps> = ({
 																<TimePicker
 																	name={f.name}
 																	value={values[f.name]}
+																	sx={{ width: "100%" }}
+																	views={f.timeView ?? ["hours", "seconds"]}
 																	onChange={(time: any) => {
 																		handleChange({
 																			target: {
@@ -128,6 +144,7 @@ export const GenericForm: FC<FormProps> = ({
 																/>
 															</LocalizationProvider>
 														);
+
 													default:
 														return null;
 												}
@@ -142,6 +159,7 @@ export const GenericForm: FC<FormProps> = ({
 								</Stack>
 							);
 						})}
+						{childrenPosition === "bottom" && children}
 						{error && <ErrorTypography> {error}</ErrorTypography>}
 						<Stack direction="row" width="100%" spacing={2}>
 							{onBack && (

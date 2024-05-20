@@ -1,8 +1,8 @@
-import { ICategoria, IEmpresa, ISucursal } from "./empresa";
+import { IArticulo, IArticuloInsumo, IArticuloManufacturado, IArticuloManufacturadoDetalle, ICategoria, IEmpresa, ISucursal, IUnidadMedida } from "./empresa";
 import { IDomicilio, ILocalidad, IProvincia } from "./ubicacion";
 
 export const emptyEmpresa: IEmpresa = {
-	eliminado: false,
+	baja: false,
 	nombre: "",
 	razonSocial: "",
 	cuil: 0,
@@ -10,30 +10,64 @@ export const emptyEmpresa: IEmpresa = {
 }
 
 export const emptySucursal: ISucursal = {
-	eliminado: false,
+	baja: false,
 	nombre: "",
 	horarioApertura: "00:00:00",
 	horarioCierre: "00:00:00",
-	logo: ""
+	logo: "",
+	esCasaMatriz: false
 }
 
 export const emptyCategoria: ICategoria =  {
-    eliminado: false,
+    baja: false,
 	denominacion: "",
-	subcategorias: [],
+	subCategorias: [],
+}
+
+export const emptyArticulo: IArticulo =  {
+    baja: false,
+	denominacion: "",
+	precioVenta: 0
+}
+
+export const emptyInsumo: IArticuloInsumo =  {
+	... emptyArticulo,
+	esParaElaborar: false,
+	precioCompra: 0,
+	stockActual: 0,
+	stockMaximo: 0,
+	stockMinimo: 0,
+}
+
+export const emptyArticuloManufacturado: IArticuloManufacturado =  {
+	... emptyArticulo,
+	preparacion: "",
+	tiempoEstimadoMinutos: 0,
+	descripcion: "",
+	articuloManufacturadoDetalles: [],
+}
+
+export const emptyArticuloManufacturadoDetalle: IArticuloManufacturadoDetalle = {
+	baja: false,
+	cantidad: 0,
 }
 
 export const emptyProvincia: IProvincia = {
-	eliminado: false,
+	baja: false,
 	nombre: "",
 }
 
 export const emptyLocalidad: ILocalidad = {
-	eliminado: false,
+	baja: false,
 	nombre: "",
 }
 
 export const emptyDomicilio: IDomicilio = {
-	eliminado: false,
+	baja: false,
 	calle: ""
+}
+
+export const emptyUnidadDeMedida: IUnidadMedida = {
+	baja: false,
+	denominacion: "", 
 }

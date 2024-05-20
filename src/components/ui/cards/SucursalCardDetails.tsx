@@ -10,6 +10,8 @@ import {
 	CardActions,
 	CardContent,
 	CardMedia,
+	Chip,
+	Stack,
 	Tooltip,
 	Typography,
 } from "@mui/material";
@@ -20,7 +22,10 @@ import {
 } from "../styled/StyledSucursalCard";
 import GenericModal from "../shared/GenericModal";
 import { useDispatch } from "react-redux";
-import { setSucursal, setSucursalesEmpresa } from "../../../redux/slices/SelectedData";
+import {
+	setSucursal,
+	setSucursalesEmpresa,
+} from "../../../redux/slices/SelectedData";
 import { SucursalForm } from "../forms/SucursalForm";
 import { AlertDialog } from "../shared/DialogAlert";
 import { SucursalService } from "../../../services/SucursalService";
@@ -37,7 +42,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	const sucursalesEmpresa = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
-	
+
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 
@@ -58,7 +63,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	const handleDelete = async () => {
-		const sucursalService = new SucursalService("/sucursal");
+		const sucursalService = new SucursalService("/sucursales");
 		await sucursalService.delete(sucursal.id!);
 		const newSucursales = sucursales!.filter((s) => s.id != sucursal.id!);
 		dispatch(setSucursales(newSucursales));
@@ -72,11 +77,33 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	return (
 		<>
 			<SucursalCard>
-				<CardMedia
-					component="img"
-					image={sucursal.logo}
-					sx={{ height: "140px" }}
-				/>
+				<Stack position="relative">
+					<CardMedia
+						component="img"
+						image={
+							sucursal.logo && sucursal.logo != ""
+								? sucursal.logo
+								: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(
+										0
+								  )}`
+						}
+						sx={{ height: "140px" }}
+					/>
+
+					{sucursal.esCasaMatriz && (
+						<Chip
+							size="small"
+							color="primary"
+							label="Casa matriz"
+							sx={{
+								position: "absolute", // Añade 'position: absolute'
+								bottom: 0, // Añade 'bottom: 0' para posicionar el Chip en la parte inferior
+								right: 0, // Añade 'left: 0' para posicionar el Chip en la izquierda
+								m: 1, // Añade margen
+							}}
+						/>
+					)}
+				</Stack>
 				<SucursalCardHeader title={sucursal.nombre} />
 				<CardContent sx={{ pb: 0, height: "80px" }}>
 					<Typography>

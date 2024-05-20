@@ -61,7 +61,7 @@ const GenericModal: FC<GenericModalProps> = ({
 							<CloseIcon />
 						</IconButton>
 					</Stack>
-					<Stack sx={{ overflowY: "auto", px: 2 }}>{children}</Stack>
+					<Stack alignItems="center" sx={{ overflowY: "auto", px: 2 }}>{children}</Stack>
 				</Stack>
 			</Box>
 		</Modal>

@@ -119,7 +119,12 @@ export const theme = createTheme({
 			fontWeight: "bolder",
 		},
 		h5: {
+			fontSize: "16px",
 			fontWeight: "bolder",
+		},
+		h6: {
+			fontSize: "14px",
+			fontWeight: "500",
 		},
 	},
 	breakpoints: {

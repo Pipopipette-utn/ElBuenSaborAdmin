@@ -21,5 +21,5 @@ export interface IArticuloManufacturadoTableDTO {
     descripcion: string;
 	tiempoEstimadoMinutos: number;
 	preparacion: string;
-	articuloManufacturadoDetalle: IArticuloManufacturadoDetalle;
+	articuloManufacturadoDetalle: IArticuloManufacturadoDetalle[];
 }

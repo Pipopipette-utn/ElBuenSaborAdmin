@@ -5,13 +5,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-interface ButtonGroupProps {}
+interface ButtonGroupProps {
+	idEntity: number;
+	onEdit: (id: number) => void;
+	onDelete: (id: number) => void;
+}
 
-const ButtonGroup: FC<ButtonGroupProps> = () => {
+const ButtonGroup: FC<ButtonGroupProps> = ({ idEntity, onDelete, onEdit }) => {
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
 			<Tooltip title="Editar">
-				<IconButton>
+				<IconButton onClick={() => onEdit(idEntity)}>
 					<EditIcon fontSize="small" color="primary" />
 				</IconButton>
 			</Tooltip>
@@ -20,8 +24,8 @@ const ButtonGroup: FC<ButtonGroupProps> = () => {
 					<VisibilityIcon fontSize="small" color="primary" />
 				</IconButton>
 			</Tooltip>
-			<Tooltip title="Eliminar artículo">
-				<IconButton>
+			<Tooltip title="Eliminar">
+				<IconButton onClick={() => onDelete(idEntity)}>
 					<DeleteOutlineIcon fontSize="small" color="primary" />
 				</IconButton>
 			</Tooltip>

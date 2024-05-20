@@ -12,6 +12,7 @@ import StyleIcon from "@mui/icons-material/Style";
 import GenericModal from "../../ui/shared/GenericModal";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { ActionButtons } from "./AccordionButtons";
+import { CategoriaForm } from "../forms/CategoriaForm";
 
 export const CategoriaAccordion: FC<{
 	categoria: ICategoria;
@@ -44,7 +45,7 @@ export const CategoriaAccordion: FC<{
 	return (
 		<>
 			<Accordion sx={{ backgroundColor: subcategoriaColor }}>
-				{categoria.subcategorias && categoria.subcategorias.length > 0 ? (
+				{categoria.subCategorias && categoria.subCategorias.length > 0 ? (
 					<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 						{categoria.denominacion}
 						<ActionButtons
@@ -70,13 +71,13 @@ export const CategoriaAccordion: FC<{
 						/>
 					</AccordionSummary>
 				)}
-				{categoria.subcategorias && (
+				{categoria.subCategorias && (
 					<Stack
 						direction="column"
 						spacing={1}
 						sx={{ p: "0px 12px 12px 12px" }}
 					>
-						{categoria.subcategorias.map((subcategoria, index) => (
+						{categoria.subCategorias.map((subcategoria, index) => (
 							<CategoriaAccordion
 								key={index}
 								categoria={subcategoria}
@@ -99,7 +100,11 @@ export const CategoriaAccordion: FC<{
 					open={showModal !== null}
 					handleClose={handleCloseModal}
 				>
-					<>Formulario categoria</>
+					<CategoriaForm
+						buttonTitle="Editar categoria"
+						initialCategoria={categoria}
+						onClose={handleCloseModal}
+					/>
 				</GenericModal>
 			)}
 		</>

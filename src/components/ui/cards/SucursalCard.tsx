@@ -17,7 +17,7 @@ import {
 } from "../../../redux/slices/SelectedData";
 import StoreIcon from "@mui/icons-material/Store";
 import GenericModal from "../shared/GenericModal";
-import { Tooltip } from "@mui/material";
+import { Chip, Tooltip } from "@mui/material";
 import { SucursalForm } from "../forms/SucursalForm";
 import { SucursalService } from "../../../services/SucursalService";
 import { setSucursales } from "../../../redux/slices/Business";
@@ -62,9 +62,11 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	const handleDelete = async () => {
-		const sucursalService = new SucursalService("/sucursal");
+		const sucursalService = new SucursalService("/sucursales");
 		await sucursalService.delete(sucursal.id!);
-		const newSucursales = sucursales!.filter((s: ISucursal) => s.id != sucursal.id!);
+		const newSucursales = sucursales!.filter(
+			(s: ISucursal) => s.id != sucursal.id!
+		);
 		dispatch(setSucursales(newSucursales));
 		const newSucursalesEmpresa = sucursalesEmpresa!.filter(
 			(s: ISucursal) => s.id != sucursal.id!
@@ -77,7 +79,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 		dispatch(setSucursal(sucursal));
 		navigate("/inicio");
 	};
-	
+
 	return (
 		<>
 			<Card onClick={handleClick}>
@@ -92,9 +94,19 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 					image={
 						sucursal.logo && sucursal.logo != ""
 							? sucursal.logo
-							: `https://via.placeholder.com/150?text=${sucursal.nombre.charAt(0)}`
+							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(
+									0
+							  )}`
 					}
 				/>
+				{sucursal.esCasaMatriz && (
+					<Chip
+						color="primary"
+						label="Casa matriz"
+						size="small"
+						sx={{ mt: 1 }}
+					/>
+				)}
 				<CardActions>
 					<Tooltip title="Editar">
 						<IconButton onClick={handleEditClick}>

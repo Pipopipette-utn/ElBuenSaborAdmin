@@ -59,7 +59,7 @@ const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
 	};
 
 	const handleDelete = async () => {
-		const empresaService = new EmpresaService("/empresa");
+		const empresaService = new EmpresaService("/empresas");
 		await empresaService.delete(empresa.id!);
 		const newEmpresas = empresas!.filter((e) => e.id != empresa.id!);
 		dispatch(setEmpresas(newEmpresas));

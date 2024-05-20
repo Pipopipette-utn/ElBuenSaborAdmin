@@ -19,15 +19,15 @@ const Select = styled(MuiSelect)(({ theme }) => ({
 export const SucursalSelect = () => {
 	const dispatch = useAppDispatch();
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
-	const sucursales = useAppSelector((state) => state.selectedData.sucursalesEmpresa);
+	const sucursales = useAppSelector(
+		(state) => state.selectedData.sucursalesEmpresa
+	);
 	const [sucursalSeleccionada, setSucursalSeleccionada] =
 		useState<ISucursal | null>(sucursal);
 
 	const handleChange = (event: SelectChangeEvent<unknown>) => {
-		const s = sucursales?.find(
-			(suc) => suc.id!.toString() === (event.target.value as string)
-		)!;
-		dispatch(setSucursal(s));
+		const s = sucursales?.find((suc) => suc.id! === event.target.value);
+		dispatch(setSucursal(s!));
 		setSucursalSeleccionada(s || null);
 	};
 
@@ -38,7 +38,7 @@ export const SucursalSelect = () => {
 	return (
 		<Select value={sucursalSeleccionada?.id || ""} onChange={handleChange}>
 			{sucursales?.map((s, index) => (
-				<MenuItem value={s.id!.toString()} key={index}>
+				<MenuItem value={s.id!} key={index}>
 					{s.nombre}
 				</MenuItem>
 			))}

@@ -7,6 +7,18 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 		this.baseUrl += baseUrl;
 	}
 
+	async getAllIncludeDeleted(): Promise<T[]> {
+		try {
+			const response = await fetch(`${this.baseUrl}/includeDeleted`);
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			return response.json(); // Retorna los datos en formato JSON
+		} catch (error) {
+			return Promise.reject(error); // Rechaza la promesa con el error
+		}
+	}
+
 	// Función generica para obtener datos mediante una solicitud GET
 	async getAll(): Promise<T[]> {
 		try {

@@ -73,7 +73,7 @@ export const UbicacionForm = () => {
 			onSubmit={() => {}}
 		>
 			{({ values, errors, touched, handleChange }) => (
-				<Stack direction="row" width="100%" spacing={3}>
+				<Stack direction="row" width="80%" spacing={3}>
 					<TextFieldStack spacing={1}>
 						<Typography>
 							Pais: <span style={{ color: "red" }}> *</span>

@@ -23,7 +23,7 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 	const initialValues = {
 		...empresa,
 		cuil: empresa.cuil == 0 ? "" : empresa.cuil,
-		logo: empresa.logo == null ? "" : empresa.logo
+		logo: empresa.logo == null ? "" : empresa.logo,
 	};
 
 	let empresaSchema = Yup.object().shape({
@@ -37,20 +37,17 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 
 	const handleSubmitForm = async (values: { [key: string]: any }) => {
 		try {
-			console.log("entrando");
-			const empresaService = new EmpresaService("/empresa");
+			const empresaService = new EmpresaService("/empresas");
 			const newEmpresa: IEmpresa = {
 				...empresa,
-				eliminado: false,
+				baja: false,
 				nombre: values.nombre,
 				razonSocial: values.razonSocial,
 				cuil: values.cuil,
 				logo: values.logo,
 			};
 
-			console.log({newEmpresa});
 			if (values.id) {
-				console.log("editando");
 				await empresaService.update(values.id, newEmpresa);
 			} else {
 				await empresaService.create(newEmpresa);

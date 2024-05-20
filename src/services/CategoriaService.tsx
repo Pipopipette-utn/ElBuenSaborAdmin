@@ -11,7 +11,7 @@ export class CategoriaService extends BackendClient<ICategoria> {
 		parentId?: number
 	): ICategoria[] => {
 		return categorias
-			.filter((categoria) => categoria.categoriaPadreId == parentId)
+			.filter((categoria) => categoria.categoriaPadre?.id == parentId)
 			.map((categoria) => ({
 				...categoria,
 				subcategorias: this.mapCategorias(categorias, categoria.id),

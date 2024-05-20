@@ -12,7 +12,7 @@ import { GenericForm } from "../shared/GenericForm";
 import { ISucursal } from "../../../types/empresa";
 import { IStep } from "../../../types/business";
 import FormStepper from "../shared/FormStepper";
-import { Stack } from "@mui/material";
+import { Checkbox, FormControlLabel, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import { IDomicilio } from "../../../types/ubicacion";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -42,6 +42,9 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 	const dispatch = useAppDispatch();
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 
+	const handleBack = () => setActiveStep((prev) => prev - 1);
+	const handleNext = () => setActiveStep((prev) => prev + 1);
+
 	const initialValues = {
 		...sucursal,
 		horarioApertura: dayjs(`2024-05-13T${sucursal.horarioApertura}`),
@@ -56,8 +59,13 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			logo: Yup.string(),
 		});
 
-	const handleBack = () => setActiveStep((prev) => prev - 1);
-	const handleNext = () => setActiveStep((prev) => prev + 1);
+	const handleChangeCasaMatriz = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setSucursal((prev) => {
+			return { ...prev, esCasaMatriz: event.target.checked };
+		});
+	};
 
 	const handleNextForm = (values: { [key: string]: any }) => {
 		handleNext();
@@ -66,8 +74,9 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			nombre: values.nombre,
 			horarioApertura: values.horarioApertura.format("HH:mm:ss"),
 			horarioCierre: values.horarioCierre.format("HH:mm:ss"),
-			logo: values.icon,
+			logo: values.logo,
 		};
+
 		setSucursal(newSucursal);
 	};
 
@@ -75,24 +84,25 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		try {
 			if (!empresa) throw new Error("No se ha seleccionado la empresa");
 
-			const sucursalService = new SucursalService("/sucursal");
+			const sucursalService = new SucursalService("/sucursales");
 			//Si está siendo editado, ya viene con empresa y domicilio, se lo borro
 			const newSucursal = {
 				...sucursal,
-				eliminado: false,
-				esCasaMatriz: false,
 				domicilio: domicilio,
 				empresa: empresa!,
 			};
 
 			if (sucursal.id) {
-				await sucursalService.update(sucursal.id, newSucursal);
-				dispatch(editSucursal(newSucursal));
-				dispatch(editSucursalEmpresa(newSucursal));
+				const updatedSucursal = await sucursalService.update(
+					sucursal.id,
+					newSucursal
+				);
+				dispatch(editSucursal(updatedSucursal));
+				dispatch(editSucursalEmpresa(updatedSucursal));
 			} else {
-				await sucursalService.create(newSucursal);
-				dispatch(addSucursal(newSucursal));
-				dispatch(addSucursalEmpresa(newSucursal));
+				const createdSucursal = await sucursalService.create(newSucursal);
+				dispatch(addSucursal(createdSucursal));
+				dispatch(addSucursalEmpresa(createdSucursal));
 			}
 
 			onClose();
@@ -126,7 +136,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 						required: true,
 					},
 				],
-				[{ label: "Logo", name: "icon", type: "text", icon: <FaceIcon /> }],
+				[{ label: "Logo", name: "logo", type: "text", icon: <FaceIcon /> }],
 			],
 		},
 		{
@@ -184,6 +194,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 					initialValues={initialValues}
 					validationSchema={validationSchema}
 					onSubmit={handleNextForm}
+					childrenPosition="bottom"
 					submitButtonText={
 						activeStep !== steps.length - 1
 							? "Continuar"
@@ -191,7 +202,19 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 							? "Editar sucursal"
 							: "Crear sucursal"
 					}
-				/>
+				>
+					<Stack direction="row" alignItems="center" alignSelf="flex-start">
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={initialValues.esCasaMatriz}
+									onChange={handleChangeCasaMatriz}
+								/>
+							}
+							label="Es casa matriz"
+						/>
+					</Stack>
+				</GenericForm>
 			)}
 			{activeStep === 1 && (
 				<DomicilioForm
