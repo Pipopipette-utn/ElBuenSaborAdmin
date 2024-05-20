@@ -89,13 +89,13 @@ export const App: FC = () => {
 	}, []);
 
 	useEffect(() => {
-		if (empresa) {
+		if (empresa && sucursales) {
 			const sucursalesFiltradas =
 				sucursalService.filterByEmpresaId(sucursales!, empresa.id!) ?? [];
 			dispatch(setSucursalesEmpresa(sucursalesFiltradas));
 			dispatch(setSucursal(sucursalesFiltradas[0] ?? null));
 		}
-	}, [empresa]);
+	}, [empresa, sucursales]);
 
 	useEffect(() => {
 		/*

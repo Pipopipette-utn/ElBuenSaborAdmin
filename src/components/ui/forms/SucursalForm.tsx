@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { FC, useState } from "react";
+import { FC, MouseEvent, useState } from "react";
 
 import StoreIcon from "@mui/icons-material/Store";
 import FaceIcon from "@mui/icons-material/Face";
@@ -24,6 +24,7 @@ import {
 import { addSucursal, editSucursal } from "../../../redux/slices/Business";
 import { emptyDomicilio } from "../../../types/emptyEntities";
 import { DomicilioForm } from "./DomicilioForm";
+import { AlertDialog } from "../shared/AlertDialog";
 
 interface SucursalFormProps {
 	initialSucursal: ISucursal;
@@ -38,9 +39,16 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 }) => {
 	const [sucursal, setSucursal] = useState(initialSucursal);
 	const [activeStep, setActiveStep] = useState(0);
+	const [openMatrizDialog, setOpenMatrizDialog] = useState(false);
 
 	const dispatch = useAppDispatch();
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
+	const sucursales = useAppSelector(
+		(state) => state.selectedData.sucursalesEmpresa
+	);
+	const casaMatriz = sucursales!.find((s) => s.esCasaMatriz === true);
+	const casaMatrizDisponible =
+		casaMatriz === undefined || casaMatriz.id! === sucursal.id;
 
 	const handleBack = () => setActiveStep((prev) => prev - 1);
 	const handleNext = () => setActiveStep((prev) => prev + 1);
@@ -49,6 +57,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		...sucursal,
 		horarioApertura: dayjs(`2024-05-13T${sucursal.horarioApertura}`),
 		horarioCierre: dayjs(`2024-05-13T${sucursal.horarioCierre}`),
+		logo: sucursal.logo === null ? "" : sucursal.logo,
 	};
 
 	let validationSchema: Yup.ObjectSchema<any, Yup.AnyObject, any, ""> =
@@ -62,9 +71,13 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 	const handleChangeCasaMatriz = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
-		setSucursal((prev) => {
-			return { ...prev, esCasaMatriz: event.target.checked };
-		});
+		if (event.target.checked && !casaMatrizDisponible) {
+			setOpenMatrizDialog(true);
+		} else {
+			setSucursal((prev) => {
+				return { ...prev, esCasaMatriz: event.target.checked };
+			});
+		}
 	};
 
 	const handleNextForm = (values: { [key: string]: any }) => {
@@ -184,47 +197,60 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 	];
 
 	return (
-		<Stack alignItems="center" spacing={3}>
-			<Stack width={"80%"} marginBottom={2}>
-				<FormStepper steps={steps} activeStep={activeStep} />
+		<>
+			<Stack alignItems="center" spacing={3}>
+				<Stack width={"80%"} marginBottom={2}>
+					<FormStepper steps={steps} activeStep={activeStep} />
+				</Stack>
+				{activeStep === 0 && (
+					<GenericForm
+						fields={steps[activeStep].fields}
+						initialValues={initialValues}
+						validationSchema={validationSchema}
+						onSubmit={handleNextForm}
+						childrenPosition="bottom"
+						submitButtonText={
+							activeStep !== steps.length - 1
+								? "Continuar"
+								: sucursal.id
+								? "Editar sucursal"
+								: "Crear sucursal"
+						}
+					>
+						<Stack direction="row" alignItems="center" alignSelf="flex-start">
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={initialValues.esCasaMatriz}
+										onChange={handleChangeCasaMatriz}
+									/>
+								}
+								label="Es casa matriz"
+							/>
+						</Stack>
+					</GenericForm>
+				)}
+				{activeStep === 1 && (
+					<DomicilioForm
+						domicilio={sucursal.domicilio ?? emptyDomicilio}
+						fields={steps[1].fields}
+						handleBack={handleBack}
+						handleSubmitForm={handleSubmitForm}
+						submitButtonText={
+							sucursal.id ? "Editar sucursal" : "Crear sucursal"
+						}
+					/>
+				)}
 			</Stack>
-			{activeStep === 0 && (
-				<GenericForm
-					fields={steps[activeStep].fields}
-					initialValues={initialValues}
-					validationSchema={validationSchema}
-					onSubmit={handleNextForm}
-					childrenPosition="bottom"
-					submitButtonText={
-						activeStep !== steps.length - 1
-							? "Continuar"
-							: sucursal.id
-							? "Editar sucursal"
-							: "Crear sucursal"
-					}
-				>
-					<Stack direction="row" alignItems="center" alignSelf="flex-start">
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={initialValues.esCasaMatriz}
-									onChange={handleChangeCasaMatriz}
-								/>
-							}
-							label="Es casa matriz"
-						/>
-					</Stack>
-				</GenericForm>
-			)}
-			{activeStep === 1 && (
-				<DomicilioForm
-					domicilio={sucursal.domicilio ?? emptyDomicilio}
-					fields={steps[1].fields}
-					handleBack={handleBack}
-					handleSubmitForm={handleSubmitForm}
-					submitButtonText={sucursal.id ? "Editar sucursal" : "Crear sucursal"}
-				/>
-			)}
-		</Stack>
+			<AlertDialog
+				open={openMatrizDialog}
+				title={"Error. Ya existe una casa matriz en esta sucursal."}
+				content={""}
+				agreeButtonText={"Ok"}
+				onAgreeClose={() => {
+					setOpenMatrizDialog(false);
+				}}
+			/>
+		</>
 	);
 };
