@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { CategoriaService } from "../../../services/CategoriaService";
 import { ICategoria } from "../../../types/empresa";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { IStep } from "../../../types/business";
 import FormStepper from "../shared/FormStepper";
 import { CategoriaFormAccordion } from "../accordion/CategoriaFormAccordion";

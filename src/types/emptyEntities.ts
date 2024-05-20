@@ -21,7 +21,7 @@ export const emptySucursal: ISucursal = {
 export const emptyCategoria: ICategoria =  {
     baja: false,
 	denominacion: "",
-	subcategorias: [],
+	subCategorias: [],
 }
 
 export const emptyArticulo: IArticulo =  {
