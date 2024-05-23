@@ -30,9 +30,9 @@ export const AlertDialog: FC<AlertDialogProps> = ({
 }) => {
 	return (
 		<Dialog open={open} onClose={onDisagreeClose}>
-			<DialogTitle>{title}</DialogTitle>
+			<DialogTitle sx={{fontSize: "16px"}}>{title}</DialogTitle>
 			<DialogContent>
-				<DialogContentText>{content}</DialogContentText>
+				<DialogContentText sx={{fontSize: "14px"}}>{content}</DialogContentText>
 			</DialogContent>
 			<DialogActions sx={{ pb: 2, pr: 2 }}>
 				<Button variant="outlined" onClick={onAgreeClose}>

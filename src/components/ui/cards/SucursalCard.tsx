@@ -21,7 +21,7 @@ import { Chip, Tooltip } from "@mui/material";
 import { SucursalForm } from "../forms/SucursalForm";
 import { SucursalService } from "../../../services/SucursalService";
 import { setSucursales } from "../../../redux/slices/Business";
-import { AlertDialog } from "../shared/DialogAlert";
+import { AlertDialog } from "../shared/AlertDialog";
 
 interface SucursalCardProps {
 	sucursal: ISucursal;

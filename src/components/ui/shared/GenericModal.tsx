@@ -11,7 +11,7 @@ interface GenericModalProps {
 	children: ReactElement;
 }
 
-const style = {
+export const modalStyle = {
 	position: "absolute",
 	borderRadius: "20px",
 	top: "48%",
@@ -33,7 +33,7 @@ const GenericModal: FC<GenericModalProps> = ({
 }) => {
 	return (
 		<Modal open={open} onClose={handleClose}>
-			<Box sx={style} flexDirection="row">
+			<Box sx={modalStyle} flexDirection="row">
 				<Stack
 					spacing={3}
 					sx={{

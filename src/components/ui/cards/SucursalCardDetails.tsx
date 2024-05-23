@@ -27,10 +27,11 @@ import {
 	setSucursalesEmpresa,
 } from "../../../redux/slices/SelectedData";
 import { SucursalForm } from "../forms/SucursalForm";
-import { AlertDialog } from "../shared/DialogAlert";
+import { AlertDialog } from "../shared/AlertDialog";
 import { SucursalService } from "../../../services/SucursalService";
 import { setSucursales } from "../../../redux/slices/Business";
 import { useAppSelector } from "../../../redux/hooks";
+import { SucursalDetails } from "../details/SucursalDetails";
 
 interface SucursalCardProps {
 	sucursal: ISucursal;
@@ -44,6 +45,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	);
 
 	const [showModal, setShowModal] = useState(false);
+	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 
 	const dispatch = useDispatch();
@@ -51,6 +53,9 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => setShowModal(false);
+
+	const handleOpenDetailsModal = () => setShowDetailsModal(true);
+	const handleCloseDetailsModal = () => setShowDetailsModal(false);
 
 	const handleOpenAlert = () => setShowAlert(true);
 	const handleCloseAlert = () => setShowAlert(false);
@@ -121,7 +126,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 						</SucursalIconButton>
 					</Tooltip>
 					<Tooltip title="Ver detalles">
-						<SucursalIconButton onClick={handleOpenModal}>
+						<SucursalIconButton onClick={handleOpenDetailsModal}>
 							<VisibilityIcon />
 						</SucursalIconButton>
 					</Tooltip>
@@ -145,6 +150,11 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 			>
 				<SucursalForm initialSucursal={sucursal} onClose={handleCloseModal} />
 			</GenericModal>
+			<SucursalDetails
+				sucursal={sucursal}
+				open={showDetailsModal}
+				handleClose={handleCloseDetailsModal}
+			/>
 			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar la sucursal?"}

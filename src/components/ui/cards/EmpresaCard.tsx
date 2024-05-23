@@ -15,7 +15,7 @@ import { setEmpresa } from "../../../redux/slices/SelectedData";
 import GenericModal from "../shared/GenericModal";
 import StoreIcon from "@mui/icons-material/Store";
 import { Tooltip } from "@mui/material";
-import { AlertDialog } from "../shared/DialogAlert";
+import { AlertDialog } from "../shared/AlertDialog";
 import { EmpresaService } from "../../../services/EmpresaService";
 import { setEmpresas } from "../../../redux/slices/Business";
 import { EmpresaForm } from "../forms/EmpresaForm";
@@ -104,7 +104,9 @@ const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
 			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar la empresa?"}
-				content={"Esta acción no es reversible"}
+				content={
+					"Esta acción no es reversible, y se darán de baja todas las sucursales enlazadas a esta empresa."
+				}
 				onAgreeClose={handleDelete}
 				onDisagreeClose={handleCloseAlert}
 			/>
