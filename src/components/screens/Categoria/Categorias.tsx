@@ -15,17 +15,30 @@ import GenericModal from "../../ui/shared/GenericModal";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { CategoriaForm } from "../../ui/forms/CategoriaForm";
 import { emptyCategoria } from "../../../types/emptyEntities";
+import { SucursalService } from "../../../services/SucursalService";
 
 export const Categorias = () => {
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const [filteredCategorias, setFilteredCategorias] = useState(categorias);
 	const [filterEsInsumo, setFilterEsInsumo] = useState("");
 
 	const handleFilterChange = (event: SelectChangeEvent<string>) => {
 		setFilterEsInsumo(event.target.value);
 	};
+
+	useEffect(() => {
+		const filterCategorias = async () => {
+			if (sucursal) {
+				const sucursalService = new SucursalService("/sucursales");
+				const categoriasSucursal = sucursalService.getCategorias(sucursal.id!);
+				setFilteredCategorias(await categoriasSucursal);
+			}
+		};
+		filterCategorias();
+	}, [categorias]);
 
 	useEffect(() => {
 		let filtered = categorias;
@@ -58,7 +71,7 @@ export const Categorias = () => {
 							sx={{ width: "40px", height: "40px" }}
 						/>
 					}
-					quantity={categorias?.length ?? 0}
+					quantity={filteredCategorias?.length ?? 0}
 					activeEntities={"Categorias activas"}
 					buttonText={"Nueva categoria"}
 					onClick={handleClick}

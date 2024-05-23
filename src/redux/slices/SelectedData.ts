@@ -30,7 +30,7 @@ const SelectedDataSlice = createSlice({
 			state.sucursalesEmpresa = action.payload;
 		},
 		addSucursalEmpresa: (state, action: PayloadAction<ISucursal>) => {
-			console.log(action.payload)
+			console.log(action.payload);
 			if (state.sucursalesEmpresa) {
 				state.sucursalesEmpresa!.push(action.payload);
 			} else {
@@ -54,7 +54,7 @@ const SelectedDataSlice = createSlice({
 		) => {
 			state.categoriasSucursal = action.payload;
 		},
-		
+
 		addCategoriaSucursal: (state, action: PayloadAction<ICategoria>) => {
 			if (state.categoriasSucursal) {
 				state.categoriasSucursal!.push(action.payload);
@@ -81,6 +81,6 @@ export const {
 	setSucursal,
 	setCategoriasSucursal,
 	addCategoriaSucursal,
-	editCategoriaSucursal
+	editCategoriaSucursal,
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;

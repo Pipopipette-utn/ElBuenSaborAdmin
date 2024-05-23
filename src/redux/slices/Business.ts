@@ -14,7 +14,6 @@ interface IInitialState {
 	unidadMedidas: IUnidadMedida[] | null;
 	empresas: IEmpresa[] | null;
 	sucursales: ISucursal[] | null;
-	categorias: ICategoria[] | null;
 	articulosInsumos: IArticuloInsumo[] | null;
 	articulosManufacturados: IArticuloManufacturado[] | null;
 }
@@ -24,7 +23,6 @@ const initialState: IInitialState = {
 	unidadMedidas: null,
 	empresas: null,
 	sucursales: null,
-	categorias: null,
 	articulosInsumos: null,
 	articulosManufacturados: null,
 };
@@ -79,24 +77,7 @@ const BusinessSlice = createSlice({
 				);
 			}
 		},
-		setCategorias: (state, action: PayloadAction<ICategoria[] | null>) => {
-			state.categorias = action.payload;
-		},
-		addCategoria: (state, action: PayloadAction<ICategoria>) => {
-			if (state.categorias) {
-				state.categorias!.push(action.payload);
-			} else {
-				state.categorias = [action.payload];
-			}
-		},
-		editCategoria: (state, action: PayloadAction<ICategoria>) => {
-			const categoriaEditada = action.payload;
-			if (state.categorias) {
-				state.categorias = state.categorias.map((unidad) =>
-					unidad.id === categoriaEditada.id ? categoriaEditada : unidad
-				);
-			}
-		},
+
 		setArticulosInsumos: (
 			state,
 			action: PayloadAction<IArticuloInsumo[] | null>
@@ -160,9 +141,6 @@ export const {
 	setSucursales,
 	addSucursal,
 	editSucursal,
-	setCategorias,
-	addCategoria,
-	editCategoria,
 	setArticulosInsumos,
 	editArticuloInsumo,
 	addArticuloInsumo,

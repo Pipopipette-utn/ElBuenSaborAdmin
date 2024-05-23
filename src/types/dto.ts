@@ -23,3 +23,7 @@ export interface IArticuloManufacturadoTableDTO {
 	preparacion: string;
 	articuloManufacturadoDetalle: IArticuloManufacturadoDetalle[];
 }
+
+export interface ISucursalDTO extends BaseEntity{
+	nombre: string;
+}

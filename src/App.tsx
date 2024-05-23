@@ -20,7 +20,6 @@ import { AppRouter } from "./routes/AppRouter";
 import {
 	setArticulosInsumos,
 	setArticulosManufacturados,
-	setCategorias,
 	setEmpresas,
 	setSucursales,
 	setUnidadMedidas,
@@ -41,7 +40,6 @@ export const App: FC = () => {
 	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
-	const categoriaService = new CategoriaService("/categorias");
 	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
@@ -72,10 +70,6 @@ export const App: FC = () => {
 			const sucursales = await sucursalService.getAll();
 			dispatch(setSucursales(sucursales));
 
-			const categorias = await categoriaService.getAll();
-			dispatch(setCategorias(categorias));
-			dispatch(setCategoriasSucursal(categorias));
-
 			const articulosInsumos = await articuloInsumoService.getAll();
 			dispatch(setArticulosInsumos(articulosInsumos));
 
@@ -98,12 +92,13 @@ export const App: FC = () => {
 	}, [empresa, sucursales]);
 
 	useEffect(() => {
-		/*
-		if (sucursal) {
-			const categoriasSucursal = sucursal.categorias ?? [];
-			dispatch(setCategoriasSucursal(categoriasSucursal));
-		}
-		*/
+		const filterCategorias = async () => {
+			if (sucursal) {
+				const categoriasSucursal = sucursalService.getCategorias(sucursal.id!);
+				dispatch(setCategoriasSucursal(await categoriasSucursal));
+			}
+		};
+		filterCategorias();
 	}, [sucursal]);
 
 	return (
