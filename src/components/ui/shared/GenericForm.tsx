@@ -26,6 +26,7 @@ interface FormProps {
 	submitButtonText: string;
 	children?: ReactNode;
 	childrenPosition?: "top" | "bottom";
+	handleFileChange?: any;
 }
 
 export const GenericForm: FC<FormProps> = ({
@@ -37,6 +38,7 @@ export const GenericForm: FC<FormProps> = ({
 	submitButtonText,
 	children,
 	childrenPosition,
+	handleFileChange
 }) => {
 	const [error, setError] = useState("");
 
@@ -143,6 +145,18 @@ export const GenericForm: FC<FormProps> = ({
 																	}}
 																/>
 															</LocalizationProvider>
+														);
+													case "image":
+														return (
+															<TextField
+																variant="outlined"
+																type="file"
+																fullWidth
+																onChange={handleFileChange}
+																inputProps={{
+																	multiple: true,
+																}}
+															/>
 														);
 
 													default:

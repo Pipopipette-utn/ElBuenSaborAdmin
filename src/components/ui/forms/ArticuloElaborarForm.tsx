@@ -35,83 +35,79 @@ export const ArticuloElaborarForm: FC = () => {
 			onSubmit={() => {}}
 		>
 			{({ touched, handleBlur }) => (
-				<Stack width="100%" spacing={3}>
-					<Stack spacing={2}>
-						<Stack alignItems="center" spacing={2}>
-							<Typography>¿Es para elaborar?</Typography>
-							<Switch
-								name="esParaElaborar"
-								checked={values["esParaElaborar"]}
+				<Stack spacing={2} direction="row" width="100%" alignItems="center">
+					<Stack alignItems="center" spacing={2} width="100%">
+						<Typography>¿Es para elaborar?</Typography>
+						<Switch
+							name="esParaElaborar"
+							checked={values["esParaElaborar"]}
+							onChange={(event) =>
+								setFieldValue("esParaElaborar", event.target.checked)
+							}
+						/>
+						{touched["esParaElaborar"] && errors["esParaElaborar"] && (
+							<ErrorTypography>
+								{String(errors["esParaElaborar"])}
+							</ErrorTypography>
+						)}
+					</Stack>
+					<TextFieldStack alignItems="center" spacing={1} width="50%">
+						<Typography>Categoría</Typography>
+						<Select
+							fullWidth
+							name="categoria"
+							value={values["categoria"]}
+							onChange={(event) =>
+								setFieldValue("categoria", event.target.value)
+							}
+							onBlur={handleBlur}
+							startAdornment={
+								<InputAdornment position="start">
+									<LocalOfferIcon />
+								</InputAdornment>
+							}
+						>
+							{categorias!
+								.filter((cat) =>
+									values.esParaElaborar ? cat.esInsumo : !cat.esInsumo
+								)
+								.map((categoria, index) => (
+									<MenuItem key={index} value={categoria.id}>
+										{categoria.denominacion}
+									</MenuItem>
+								))}
+						</Select>
+						{touched["categoria"] && errors["categoria"] && (
+							<ErrorTypography>{String(errors["categoria"])}</ErrorTypography>
+						)}
+					</TextFieldStack>
+					{!values["esParaElaborar"] && (
+						<TextFieldStack alignItems="center" spacing={1} width="50%">
+							<Typography>Precio venta</Typography>
+							<TextField
+								type="number"
+								fullWidth
+								placeholder="Precio de venta"
+								name="precioVenta"
+								value={values["precioVenta"]}
 								onChange={(event) =>
-									setFieldValue("esParaElaborar", event.target.checked)
+									setFieldValue("precioVenta", event.target.value)
 								}
+								onBlur={handleBlur}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position="start">
+											<MonetizationOnIcon />
+										</InputAdornment>
+									),
+								}}
 							/>
-							{touched["esParaElaborar"] && errors["esParaElaborar"] && (
+							{touched["precioVenta"] && errors["precioVenta"] && (
 								<ErrorTypography>
-									{String(errors["esParaElaborar"])}
+									{String(errors["precioVenta"])}
 								</ErrorTypography>
 							)}
-						</Stack>
-					</Stack>
-
-					{!values["esParaElaborar"] && (
-						<Stack direction="row" spacing={2}>
-							<TextFieldStack alignItems="center" spacing={1} width="100%">
-								<Typography>Precio venta</Typography>
-								<TextField
-									type="number"
-									fullWidth
-									placeholder="Precio de venta"
-									name="precioVenta"
-									value={values["precioVenta"]}
-									onChange={(event) =>
-										setFieldValue("precioVenta", event.target.value)
-									}
-									onBlur={handleBlur}
-									InputProps={{
-										startAdornment: (
-											<InputAdornment position="start">
-												<MonetizationOnIcon />
-											</InputAdornment>
-										),
-									}}
-								/>
-								{touched["precioVenta"] && errors["precioVenta"] && (
-									<ErrorTypography>
-										{String(errors["precioVenta"])}
-									</ErrorTypography>
-								)}
-							</TextFieldStack>
-							<TextFieldStack alignItems="center" spacing={1} width="100%">
-								<Typography>Categoría</Typography>
-								{/*ver TreeView*/}
-								<Select
-									fullWidth
-									name="categoria"
-									value={values["categoria"]}
-									onChange={(event) =>
-										setFieldValue("categoria", event.target.value)
-									}
-									onBlur={handleBlur}
-									startAdornment={
-										<InputAdornment position="start">
-											<LocalOfferIcon />
-										</InputAdornment>
-									}
-								>
-									{categorias!.map((categoria, index) => (
-										<MenuItem key={index} value={categoria.id}>
-											{categoria.denominacion}
-										</MenuItem>
-									))}
-								</Select>
-								{touched["categoria"] && errors["categoria"] && (
-									<ErrorTypography>
-										{String(errors["categoria"])}
-									</ErrorTypography>
-								)}
-							</TextFieldStack>
-						</Stack>
+						</TextFieldStack>
 					)}
 				</Stack>
 			)}

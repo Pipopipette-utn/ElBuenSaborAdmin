@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { FC, MouseEvent, useState } from "react";
+import { FC, useState } from "react";
 
 import StoreIcon from "@mui/icons-material/Store";
 import FaceIcon from "@mui/icons-material/Face";

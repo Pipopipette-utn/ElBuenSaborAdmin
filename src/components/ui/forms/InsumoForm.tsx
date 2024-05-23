@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 import { FC, useState } from "react";
-import { IArticulo, IArticuloInsumo } from "../../../types/empresa";
+import { IArticulo, IArticuloInsumo, ICategoria } from "../../../types/empresa";
 import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { IStep } from "../../../types/business";
 import { Stack } from "@mui/material";
 import FormStepper from "../shared/FormStepper";
@@ -14,6 +14,7 @@ import {
 	addArticuloInsumo,
 	editArticuloInsumo,
 } from "../../../redux/slices/Business";
+import { ArticuloImagenService } from "../../../services/ArticuloImagenService";
 
 interface InsumoFormProps {
 	initialArticuloInsumo: IArticuloInsumo;
@@ -25,8 +26,12 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 	onClose,
 }) => {
 	const dispatch = useAppDispatch();
+	const categorias = useAppSelector(
+		(state) => state.selectedData.categoriasSucursal
+	);
 	const [activeStep, setActiveStep] = useState(0);
 	const [articuloInsumo, setArticuloInsumo] = useState(initialArticuloInsumo);
+	const [files, setFiles] = useState<FileList | null>(null);
 
 	const handleBack = () => setActiveStep((prev) => prev - 1);
 	const handleNext = () => setActiveStep((prev) => prev + 1);
@@ -37,7 +42,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			? initialArticuloInsumo.unidadMedida.denominacion
 			: "",
 		categoria: initialArticuloInsumo.categoria
-			? initialArticuloInsumo.categoria.denominacion
+			? initialArticuloInsumo.categoria.id
 			: "",
 		imagen:
 			initialArticuloInsumo.imagenes &&
@@ -54,11 +59,15 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		stockMinimo: Yup.number().required("Este campo es requerido."),
 	});
 
-	const handleSubmitArticulo = (articulo: IArticulo) => {
+	const handleSubmitArticulo = (
+		articulo: IArticulo,
+		submittedFiles: FileList | null
+	) => {
 		const newArticuloInsumo = {
 			...articuloInsumo,
 			...articulo,
 		};
+		setFiles(submittedFiles);
 		setArticuloInsumo(newArticuloInsumo);
 		handleNext();
 	};
@@ -68,28 +77,48 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			const articuloInsumoService = new ArticuloInsumoService(
 				"/articulosInsumos"
 			);
-			const newArticuloInsumo: IArticuloInsumo = {
+			const articuloImagenService = new ArticuloImagenService(
+				"/images/uploads"
+			);
+
+			const categoria = categorias?.find(
+				(c: ICategoria) => values.categoria == c.id!
+			);
+			const newArticuloInsumo = {
 				...articuloInsumo,
-				...values,
+				stockActual: values.stockActual,
+				stockMinimo: values.stockMinimo,
+				stockMaximo: values.stockMaximo,
+				precioCompra: values.precioCompra,
 				precioVenta:
 					values.precioVenta !== 0 ? parseFloat(values.precioVenta) : null,
-				categoria:
-					values.categoria !== ""
-						? { id: values.categoria, baja: false, denominacion: "" }
-						: undefined,
+				esParaElaborar: values.esParaElaborar,
+				categoria,
 				unidadMedida: articuloInsumo.unidadMedida,
 			};
 
+			let insumo;
 			if (articuloInsumo.id) {
-				const updatedInsumo = await articuloInsumoService.update(
+				insumo = await articuloInsumoService.update(
 					articuloInsumo.id,
 					newArticuloInsumo
 				);
-				dispatch(editArticuloInsumo(updatedInsumo));
+				dispatch(editArticuloInsumo(insumo));
 			} else {
-				const artInsumo = await articuloInsumoService.create(newArticuloInsumo);
-				dispatch(addArticuloInsumo(artInsumo));
+				insumo = await articuloInsumoService.create(newArticuloInsumo);
+				dispatch(addArticuloInsumo(insumo));
 			}
+
+			if (files != null) {
+				articuloImagenService.crearArticuloImagen(files, insumo!.id!);
+			}
+
+			/*
+			if (articuloInsumo.id) {
+				dispatch(editArticuloInsumo({updatedInsumo}));
+			} else {
+				dispatch(addArticuloInsumo(artInsumo));
+			}*/
 			onClose();
 		} catch (error: any) {
 			throw new Error(error);

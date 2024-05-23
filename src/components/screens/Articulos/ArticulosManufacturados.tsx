@@ -10,7 +10,7 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { ArticuloManufacturadoService } from "../../../services/ArticuloManufacturadoService";
 import { IArticuloManufacturado, ICategoria } from "../../../types/empresa";
 import { setArticulosManufacturados } from "../../../redux/slices/Business";
-import { AlertDialog } from "../../ui/shared/DialogAlert";
+import { AlertDialog } from "../../ui/shared/AlertDialog";
 import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoForm";
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
 import FilterFields from "../../ui/shared/FilterFields";
@@ -24,6 +24,10 @@ export const ArticulosManufacturados = () => {
 	const articulosManufacturados = useAppSelector(
 		(state) => state.business.articulosManufacturados
 	);
+
+	useEffect(() => {
+		setFilteredArticulosManufacturados(articulosManufacturados);
+	}, [articulosManufacturados]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
@@ -69,7 +73,8 @@ export const ArticulosManufacturados = () => {
 		useState(articulosManufacturados);
 	const [filter, setFilter] = useState("");
 	const [categoryFilter, setCategoryFilter] = useState("");
-	const categorias = useAppSelector((state) => state.business.categorias) ?? [];
+	const categorias =
+		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
 
 	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFilter(event.target.value);

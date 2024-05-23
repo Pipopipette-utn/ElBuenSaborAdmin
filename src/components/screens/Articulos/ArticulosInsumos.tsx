@@ -18,7 +18,7 @@ import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import { InsumoForm } from "../../ui/forms/InsumoForm";
 import { emptyInsumo } from "../../../types/emptyEntities";
 import { IArticuloInsumo, ICategoria } from "../../../types/empresa";
-import { AlertDialog } from "../../ui/shared/DialogAlert";
+import { AlertDialog } from "../../ui/shared/AlertDialog";
 import { setArticulosInsumos } from "../../../redux/slices/Business";
 
 export const ArticulosInsumos = () => {
@@ -28,7 +28,16 @@ export const ArticulosInsumos = () => {
 	const articulosInsumos = useAppSelector(
 		(state) => state.business.articulosInsumos
 	);
-	const categorias = useAppSelector((state) => state.business.categorias) ?? [];
+	const categorias = useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
+
+	useEffect(() => {
+		const traerUnidades = async () => {
+			const articulosInsumos = await articuloInsumoService.getAll();
+			dispatch(setArticulosInsumos(articulosInsumos));
+		};
+		traerUnidades();
+		setFilteredInsumos(articulosInsumos);
+	}, [articulosInsumos]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);

@@ -22,6 +22,7 @@ import {
 } from "../../../redux/slices/Business";
 import dayjs from "dayjs";
 import { DetalleFormCardList } from "../cards/DetalleFormCardList";
+import { ArticuloImagenService } from "../../../services/ArticuloImagenService";
 
 interface InsumoFormProps {
 	initialArticuloManufacturado: IArticuloManufacturado;
@@ -34,6 +35,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 }) => {
 	const dispatch = useAppDispatch();
 
+	const [files, setFiles] = useState<FileList | null>(null);
 	const [activeStep, setActiveStep] = useState(0);
 	const [articuloManufacturado, setArticuloManufacturado] = useState(
 		initialArticuloManufacturado
@@ -65,11 +67,12 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		preparacion: Yup.string().trim().required("Este campo es requerido."),
 	});
 
-	const handleSubmitArticulo = (articulo: IArticulo) => {
+	const handleSubmitArticulo = (articulo: IArticulo, f: FileList | null) => {
 		const newArticuloManufacturado = {
 			...articuloManufacturado,
 			...articulo,
 		};
+		setFiles(f);
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
 	};
@@ -102,20 +105,28 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
+			const articuloImagenService = new ArticuloImagenService(
+				"/images/uploads"
+			);
 
-			console.log({ newArticuloManufacturado });
+			let producto;
 			if (articuloManufacturado.id) {
-				const updatedArticulo = await articuloManufacturadoService.update(
+				producto = await articuloManufacturadoService.update(
 					articuloManufacturado.id,
 					newArticuloManufacturado
 				);
-				dispatch(editArticuloManufacturado(updatedArticulo));
+				dispatch(editArticuloManufacturado(producto));
 			} else {
-				const artManufacturado = await articuloManufacturadoService.create(
+				producto = await articuloManufacturadoService.create(
 					newArticuloManufacturado
 				);
-				dispatch(addArticuloManufacturado(artManufacturado));
+				dispatch(addArticuloManufacturado(producto));
 			}
+
+			if (files != null) {
+				articuloImagenService.crearArticuloImagen(files, producto!.id!);
+			}
+
 			onClose();
 		} catch (error: any) {
 			throw new Error(error);

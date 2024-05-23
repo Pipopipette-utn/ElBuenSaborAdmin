@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { IArticulo } from "../../../types/empresa";
 
 import FastfoodIcon from "@mui/icons-material/Fastfood";
@@ -13,7 +13,7 @@ import { useAppSelector } from "../../../redux/hooks";
 
 interface ArticuloFormProps {
 	articulo: IArticulo;
-	handleSubmitForm: (d: IArticulo) => void;
+	handleSubmitForm: (d: IArticulo, f: FileList|null) => void;
 	isManufacturado?: boolean;
 	submitButtonText: string;
 }
@@ -24,10 +24,18 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 	isManufacturado,
 	submitButtonText,
 }) => {
-	const categorias = useAppSelector((state) => state.business.categorias);
+	const categorias = useAppSelector(
+		(state) => state.selectedData.categoriasSucursal
+	);
 	const unidadesMedida = useAppSelector(
 		(state) => state.business.unidadMedidas
 	);
+	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+
+	// Manejador de cambio de archivos seleccionados
+	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSelectedFiles(event.target.files);
+	};
 
 	const initialValues = {
 		...articulo,
@@ -60,9 +68,6 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				newArticulo = {
 					...articulo,
 					denominacion: values.denominacion,
-					imagenes: values.imagen
-						? [{ baja: false, url: values.imagen }]
-						: undefined,
 					unidadMedida,
 					categoria: values.categoria !== "" ? categoria : undefined,
 				};
@@ -70,14 +75,12 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				newArticulo = {
 					...articulo,
 					denominacion: values.denominacion,
-					imagenes: values.imagen
-						? [{ baja: false, url: values.imagen }]
-						: undefined,
+					imagenes: [],
 					unidadMedida,
 				};
 			}
 
-			handleSubmitForm(newArticulo);
+			handleSubmitForm(newArticulo, selectedFiles);
 		} catch (error: any) {
 			throw new Error(error);
 		}
@@ -105,7 +108,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 			{
 				label: "Imagen",
 				name: "imagen",
-				type: "text",
+				type: "image",
 				icon: <BurstModeIcon />,
 			},
 		],
@@ -134,9 +137,11 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				label: "Categoría",
 				name: "categoria",
 				type: "select",
-				options: categorias?.map(
-					(categoria) => categoria.denominacion
-				),
+				options: categorias
+					?.filter((cat) => {
+						return !cat.esInsumo;
+					})
+					.map((categoria) => categoria.denominacion),
 				icon: <LocalOfferIcon />,
 				required: true,
 			},
@@ -145,7 +150,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 			{
 				label: "Imagen",
 				name: "imagen",
-				type: "text",
+				type: "image",
 				icon: <BurstModeIcon />,
 			},
 		],
@@ -158,6 +163,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 			validationSchema={articuloSchema}
 			onSubmit={handleSubmit}
 			submitButtonText={submitButtonText}
+			handleFileChange={handleFileChange}
 		/>
 	);
 };
