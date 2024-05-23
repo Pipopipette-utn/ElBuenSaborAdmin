@@ -155,17 +155,20 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 						spacing={1}
 						sx={{ p: "0px 12px 12px 12px" }}
 					>
-						{categoria.subCategorias.map((subcategoria, index) => (
-							<CategoriaFormAccordion
-								key={index}
-								index={index}
-								initialCategoria={subcategoria}
-								order={order + 1}
-								onDelete={handleDelete}
-								onChangeSubcategorias={handleSubcategoriaChange}
-								insumo={esInsumo}
-							/>
-						))}
+						{categoria.subCategorias.map((subcategoria, index) => {
+							if (!subcategoria.baja)
+								return (
+									<CategoriaFormAccordion
+										key={index}
+										index={index}
+										initialCategoria={subcategoria}
+										order={order + 1}
+										onDelete={handleDelete}
+										onChangeSubcategorias={handleSubcategoriaChange}
+										insumo={esInsumo}
+									/>
+								);
+						})}
 					</Stack>
 				)}
 			</Accordion>

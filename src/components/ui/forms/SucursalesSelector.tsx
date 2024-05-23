@@ -10,14 +10,18 @@ import {
 	Typography,
 } from "@mui/material";
 import { useAppSelector } from "../../../redux/hooks";
+import { ISucursal } from "../../../types/empresa";
+import { ISucursalDTO } from "../../../types/dto";
 
 interface SucursalSelectorProps {
+	selected: ISucursalDTO[];
 	onBack: () => void;
-	handleSubmit: (sucursalesIds: number[]) => void;
+	handleSubmit: (sucursales: ISucursal[] | ISucursalDTO[]) => void;
 	buttonTitle: string;
 }
 
 export const SucursalesSelector: FC<SucursalSelectorProps> = ({
+	selected,
 	onBack,
 	handleSubmit,
 	buttonTitle,
@@ -25,22 +29,23 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
-	const [selectedSucursales, setSelectedSucursales] = useState<number[]>([]);
+	const [selectedSucursales, setSelectedSucursales] = useState<
+		ISucursal[] | ISucursalDTO[]
+	>(selected);
 
-	const handleToggle = (id: number) => {
+	const handleToggle = (sucursal: ISucursal) => {
 		setSelectedSucursales((prevSelected) =>
-			prevSelected.includes(id)
-				? prevSelected.filter((sucursalId) => sucursalId !== id)
-				: [...prevSelected, id]
+			prevSelected.includes(sucursal)
+				? prevSelected.filter((s) => sucursal.id !== s.id)
+				: [...prevSelected, sucursal]
 		);
-		console.log(id);
 	};
 
 	return (
 		<>
 			<FormControl component="fieldset">
 				<FormLabel component="legend">
-					<Typography variant="h5" sx={{mb: 2, fontSize: 18}}>
+					<Typography variant="h5" sx={{ mb: 2, fontSize: 18 }}>
 						¿En qué sucursales quieres aplicar los cambios?
 					</Typography>
 				</FormLabel>
@@ -51,8 +56,11 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 								key={index}
 								control={
 									<Checkbox
-										checked={selectedSucursales.includes(sucursal.id!)}
-										onChange={() => handleToggle(sucursal.id!)}
+										checked={
+											selectedSucursales.find((s) => s.id! === sucursal.id!) !==
+											undefined
+										}
+										onChange={() => handleToggle(sucursal)}
 										name={sucursal.nombre}
 									/>
 								}

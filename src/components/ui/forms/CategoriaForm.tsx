@@ -1,17 +1,17 @@
-import{ FC, useState } from "react";
+import { FC, useState } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { CategoriaService } from "../../../services/CategoriaService";
-import { ICategoria } from "../../../types/empresa";
+import { ICategoria, ISucursal } from "../../../types/empresa";
 import { Stack } from "@mui/material";
 import { IStep } from "../../../types/business";
 import FormStepper from "../shared/FormStepper";
 import { CategoriaFormAccordion } from "../accordion/CategoriaFormAccordion";
 import { SucursalesSelector } from "./SucursalesSelector";
-import { addCategoria, editCategoria } from "../../../redux/slices/Business";
 import {
 	editCategoriaSucursal,
 	addCategoriaSucursal,
 } from "../../../redux/slices/SelectedData";
+import { ISucursalDTO } from "../../../types/dto";
 
 interface CategoriaFormProps {
 	initialCategoria: ICategoria;
@@ -37,24 +37,28 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 		handleNext();
 	};
 
-	const handleSubmitForm = async (sucursalesIds: number[]) => {
+	const handleSubmitForm = async (sucursales: ISucursalDTO[] | ISucursal[]) => {
 		try {
+			const mappedSucursales = sucursales.map((s) => {
+				return { id: s.id, baja: s.baja, nombre: s.nombre };
+			});
 			const categoriaService = new CategoriaService("/categorias");
 			const newCategoria = {
 				...categoria,
-				sucursalesIds,
+				sucursales: mappedSucursales,
 			};
+			newCategoria.subCategorias?.map(
+				(s) => (s = { ...s, esInsumo: newCategoria.esInsumo })
+			);
 
 			if (categoria.id) {
 				const updatedCategoria = await categoriaService.update(
 					categoria.id,
 					newCategoria
 				);
-				dispatch(editCategoria(updatedCategoria));
 				dispatch(editCategoriaSucursal(updatedCategoria));
 			} else {
 				const createdCategoria = await categoriaService.create(newCategoria);
-				dispatch(addCategoria(createdCategoria));
 				dispatch(addCategoriaSucursal(createdCategoria));
 			}
 			onClose();
@@ -92,6 +96,7 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 					case 1:
 						return (
 							<SucursalesSelector
+								selected={categoria.id ? categoria.sucursales! : []}
 								buttonTitle={buttonTitle}
 								onBack={handleBack}
 								handleSubmit={handleSubmitForm}
