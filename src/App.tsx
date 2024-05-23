@@ -27,7 +27,6 @@ import {
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
-import { CategoriaService } from "./services/CategoriaService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
@@ -92,6 +91,7 @@ export const App: FC = () => {
 	}, [empresa, sucursales]);
 
 	useEffect(() => {
+		dispatch(setCategoriasSucursal(null));
 		const filterCategorias = async () => {
 			if (sucursal) {
 				const categoriasSucursal = sucursalService.getCategorias(sucursal.id!);

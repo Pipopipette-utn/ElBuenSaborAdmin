@@ -1,4 +1,5 @@
 import {
+	CircularProgress,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
@@ -15,13 +16,11 @@ import GenericModal from "../../ui/shared/GenericModal";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { CategoriaForm } from "../../ui/forms/CategoriaForm";
 import { emptyCategoria } from "../../../types/emptyEntities";
-import { SucursalService } from "../../../services/SucursalService";
 
 export const Categorias = () => {
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
-	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const [filteredCategorias, setFilteredCategorias] = useState(categorias);
 	const [filterEsInsumo, setFilterEsInsumo] = useState("");
 
@@ -31,12 +30,9 @@ export const Categorias = () => {
 
 	useEffect(() => {
 		const filterCategorias = async () => {
-			if (sucursal) {
-				const sucursalService = new SucursalService("/sucursales");
-				const categoriasSucursal = sucursalService.getCategorias(sucursal.id!);
-				setFilteredCategorias(await categoriasSucursal);
-			}
+			setFilteredCategorias(categorias);
 		};
+		setFilteredCategorias(null);
 		filterCategorias();
 	}, [categorias]);
 
@@ -103,7 +99,7 @@ export const Categorias = () => {
 						Todas las categorias
 					</Typography>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
-						{filteredCategorias &&
+						{filteredCategorias !== null ? (
 							filteredCategorias.map((categoria, index) => {
 								if (!categoria.categoriaPadre) {
 									return (
@@ -115,7 +111,10 @@ export const Categorias = () => {
 									);
 								}
 								return null;
-							})}
+							})
+						) : (
+							<CircularProgress sx={{ alignSelf: "center" }} />
+						)}
 					</Stack>
 				</Stack>
 			</GenericDoubleStack>
