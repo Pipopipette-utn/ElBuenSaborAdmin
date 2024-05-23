@@ -140,7 +140,7 @@ export const ArticulosManufacturados = () => {
 						onCategoryFilterChange={handleCategoryFilterChange}
 					/>
 				</GenericHeaderStack>
-				<>
+				<Stack sx={{ overflow: "hidden" }}>
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los productos manufacturados
 					</Typography>
@@ -165,7 +165,7 @@ export const ArticulosManufacturados = () => {
 							/>
 						)}
 					</Stack>
-				</>
+				</Stack>
 			</GenericDoubleStack>
 			<GenericModal
 				title={

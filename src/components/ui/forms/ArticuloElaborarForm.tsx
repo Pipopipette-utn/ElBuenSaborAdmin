@@ -34,7 +34,7 @@ export const ArticuloElaborarForm: FC = () => {
 
 		function traverseAndFilter(categoryList: ICategoria[]) {
 			categoryList.forEach((categoria) => {
-				if (categoria.esInsumo) {
+				if (values.esParaElaborar == categoria.esInsumo) {
 					result.push(categoria);
 					if (categoria.subCategorias && categoria.subCategorias.length > 0) {
 						traverseAndFilter(categoria.subCategorias);

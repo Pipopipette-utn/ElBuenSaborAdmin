@@ -84,6 +84,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			const categoria = categorias?.find(
 				(c: ICategoria) => values.categoria == c.id!
 			);
+			
 			const newArticuloInsumo = {
 				...articuloInsumo,
 				stockActual: values.stockActual,

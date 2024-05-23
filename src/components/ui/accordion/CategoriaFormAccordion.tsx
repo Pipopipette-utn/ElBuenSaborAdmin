@@ -58,6 +58,7 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 			denominacion: "",
 			subCategorias: [],
 			esInsumo: esInsumo ?? false,
+			esNueva: true
 		};
 		const newCategoria = {
 			...categoria,
@@ -131,7 +132,7 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 								<AddCircleOutlineIcon fontSize="medium" />
 							</IconButton>
 						</Tooltip>
-						{order > 0 && (
+						{order > 0 && categoria.esNueva && (
 							<Tooltip color="primary" title="Eliminar">
 								<IconButton
 									size="medium"

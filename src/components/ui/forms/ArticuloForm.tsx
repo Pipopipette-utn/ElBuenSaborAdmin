@@ -86,7 +86,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 		}
 	};
 
-	function mapCategories(categorias: ICategoria[]) {
+	function mapCategories(categorias: ICategoria[] | null) {
 		const result: string[] = [];
 
 		function traverseAndFilter(categoryList: ICategoria[] | null) {
@@ -157,7 +157,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				label: "Categoría",
 				name: "categoria",
 				type: "select",
-				options: mapCategories(categorias!),
+				options: mapCategories(categorias),
 				icon: <LocalOfferIcon />,
 				required: true,
 			},

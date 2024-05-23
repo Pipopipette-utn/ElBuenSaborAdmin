@@ -65,8 +65,9 @@ const SelectedDataSlice = createSlice({
 		editCategoriaSucursal: (state, action: PayloadAction<ICategoria>) => {
 			const categoriaEditada = action.payload;
 			if (state.categoriasSucursal) {
-				state.categoriasSucursal = state.categoriasSucursal.map((unidad) =>
-					unidad.id === categoriaEditada.id ? categoriaEditada : unidad
+				state.categoriasSucursal = actualizarCategoriaEnLista(
+					state.categoriasSucursal,
+					categoriaEditada
 				);
 			}
 		},
@@ -84,3 +85,28 @@ export const {
 	editCategoriaSucursal,
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;
+
+// Función recursiva para actualizar la categoría en la lista de categorías y subcategorías
+const actualizarCategoriaEnLista = (
+	categorias: ICategoria[],
+	categoriaEditada: ICategoria
+): ICategoria[] => {
+	return categorias.map((categoria) => {
+		if (categoria.id === categoriaEditada.id) {
+			// Si la categoría coincide con la categoría editada, devolver la categoría editada
+			return categoriaEditada;
+		} else if (categoria.subCategorias) {
+			// Si la categoría tiene subcategorías, llamar recursivamente a esta función para actualizarlas también
+			return {
+				...categoria,
+				subCategorias: actualizarCategoriaEnLista(
+					categoria.subCategorias,
+					categoriaEditada
+				),
+			};
+		} else {
+			// Si no es la categoría que estamos buscando y no tiene subcategorías, devolverla sin cambios
+			return categoria;
+		}
+	});
+};

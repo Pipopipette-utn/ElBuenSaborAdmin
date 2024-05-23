@@ -4,6 +4,7 @@ import {
 	Select,
 	SelectChangeEvent,
 	Stack,
+	TextField,
 	Typography,
 } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
@@ -16,16 +17,22 @@ import GenericModal from "../../ui/shared/GenericModal";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { CategoriaForm } from "../../ui/forms/CategoriaForm";
 import { emptyCategoria } from "../../../types/emptyEntities";
+import { ICategoria } from "../../../types/empresa";
 
 export const Categorias = () => {
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
 	const [filteredCategorias, setFilteredCategorias] = useState(categorias);
+	const [filter, setFilter] = useState("");
 	const [filterEsInsumo, setFilterEsInsumo] = useState("");
 
-	const handleFilterChange = (event: SelectChangeEvent<string>) => {
+	const handleCategoryChange = (event: SelectChangeEvent<string>) => {
 		setFilterEsInsumo(event.target.value);
+	};
+
+	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFilter(event.target.value);
 	};
 
 	useEffect(() => {
@@ -38,17 +45,39 @@ export const Categorias = () => {
 
 	useEffect(() => {
 		let filtered = categorias;
+		const filterByDenominacion = (categoryList: ICategoria[]) => {
+			console.log(categoryList);
+			return categoryList.filter((categoria) => {
+				if (
+					categoria.denominacion.toLowerCase().includes(filter.toLowerCase())
+				) {
+					return true;
+				}
+				if (categoria.subCategorias) {
+					const matchingSubcategories = filterByDenominacion(
+						categoria.subCategorias
+					);
+					if (matchingSubcategories.length > 0) {
+						return true;
+					}
+				}
+				return false;
+			});
+		};
 		const filterByIsInsumo = () => {
 			filtered = filtered!.filter((categoria) => {
 				if (filterEsInsumo === "esInsumo") return categoria.esInsumo;
 				else if (filterEsInsumo === "noEsInsumo") return !categoria.esInsumo;
 			});
 		};
+		if (filter !== "" && filtered != null) {
+			filtered = filterByDenominacion(filtered);
+		}
 		if (filterEsInsumo !== "") {
 			filterByIsInsumo();
 		}
 		setFilteredCategorias(filtered);
-	}, [filterEsInsumo]);
+	}, [filter, filterEsInsumo]);
 
 	const [showModal, setShowModal] = useState(false);
 
@@ -80,16 +109,32 @@ export const Categorias = () => {
 							alignItems="center"
 							paddingLeft={3}
 						>
+							<Typography variant="h6">Buscar:</Typography>
+							<TextField
+								size="small"
+								variant="outlined"
+								value={filter}
+								onChange={handleFilterChange}
+								sx={{ width: "90px", "& input": { fontSize: "14px" } }}
+							/>
+						</Stack>
+						<Stack
+							spacing={1}
+							direction="row"
+							justifyContent="flex-start"
+							alignItems="center"
+							paddingLeft={3}
+						>
 							<Typography variant="h6">Filtrar por:</Typography>
 							<Select
 								size="small"
 								value={filterEsInsumo}
-								onChange={handleFilterChange}
+								onChange={handleCategoryChange}
 								sx={{ width: "140px", fontSize: "14px" }}
 							>
 								<MenuItem value="">Ninguna</MenuItem>
 								<MenuItem value="esInsumo">Es insumo</MenuItem>
-								<MenuItem value="noEsInsumo">No es insumo</MenuItem>
+								<MenuItem value="noEsInsumo">Articulos manufacturados</MenuItem>
 							</Select>
 						</Stack>
 					</Stack>

@@ -14,6 +14,7 @@ import { ISucursal } from "../../../types/empresa";
 import { ISucursalDTO } from "../../../types/dto";
 
 interface SucursalSelectorProps {
+	sucursalesAntiguas: ISucursalDTO[];
 	selected: ISucursalDTO[];
 	onBack: () => void;
 	handleSubmit: (sucursales: ISucursal[] | ISucursalDTO[]) => void;
@@ -25,10 +26,12 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 	onBack,
 	handleSubmit,
 	buttonTitle,
+	sucursalesAntiguas,
 }) => {
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
+	const [disabled, setDisabled] = useState(false);
 	const [selectedSucursales, setSelectedSucursales] = useState<
 		ISucursal[] | ISucursalDTO[]
 	>(selected);
@@ -60,6 +63,10 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 											selectedSucursales.find((s) => s.id! === sucursal.id!) !==
 											undefined
 										}
+										disabled={
+											sucursalesAntiguas.find((s) => s.id! === sucursal.id!) !==
+											undefined
+										}
 										onChange={() => handleToggle(sucursal)}
 										name={sucursal.nombre}
 									/>
@@ -79,10 +86,14 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 				</Button>
 				<Button
 					variant="contained"
+					disabled={disabled}
 					type="submit"
 					fullWidth
 					sx={{ py: 1.5, px: 4, textTransform: "uppercase" }}
-					onClick={() => handleSubmit(selectedSucursales)}
+					onClick={() => {
+						setDisabled(true);
+						handleSubmit(selectedSucursales);
+					}}
 				>
 					{buttonTitle}
 				</Button>

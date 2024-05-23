@@ -37,7 +37,7 @@ export const ArticulosInsumos = () => {
 		};
 		traerUnidades();
 		setFilteredInsumos(articulosInsumos);
-	}, [articulosInsumos]);
+	}, []);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
@@ -143,7 +143,7 @@ export const ArticulosInsumos = () => {
 							alignItems="center"
 							paddingLeft={3}
 						>
-							<Typography variant="h6">Buscar:</Typography>
+							<Typography variant="h6">Buscar por nombre:</Typography>
 							<TextField
 								size="small"
 								variant="outlined"
@@ -177,7 +177,7 @@ export const ArticulosInsumos = () => {
 						</Stack>
 					</Stack>
 				</GenericHeaderStack>
-				<>
+				<Stack sx={{ overflow: "hidden" }}>
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los insumos
 					</Typography>
@@ -204,7 +204,7 @@ export const ArticulosInsumos = () => {
 							/>
 						)}
 					</Stack>
-				</>
+				</Stack>
 			</GenericDoubleStack>
 			<GenericModal
 				title={articulo ? "Editar insumo" : "Crear insumo"}
