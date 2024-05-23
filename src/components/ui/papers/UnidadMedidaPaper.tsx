@@ -12,7 +12,7 @@ import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { setUnidadMedidas } from "../../../redux/slices/Business";
 import { useAppSelector } from "../../../redux/hooks";
 import { useDispatch } from "react-redux";
-import { AlertDialog } from "../shared/DialogAlert";
+import { AlertDialog } from "../shared/AlertDialog";
 
 interface UnidadMedidaPaperProps {
 	unidadMedida: IUnidadMedida;

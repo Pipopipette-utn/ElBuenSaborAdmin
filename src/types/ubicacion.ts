@@ -7,19 +7,16 @@ export interface IDomicilio extends BaseEntity {
 	piso?: number;
 	nroDpto?: number;
 	localidad?: ILocalidad;
-	localidadId?: number;
 }
 
 export interface ILocalidad extends BaseEntity {
 	nombre: string;
 	provincia?: IProvincia;
-	provincia_id?: number;
 }
 
 export interface IProvincia extends BaseEntity {
 	nombre: string;
 	pais?: IPais;
-	pais_id?: number;
 }
 
 export interface IPais extends BaseEntity {
