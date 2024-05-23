@@ -1,3 +1,4 @@
+import { ISucursalDTO } from "./dto";
 import { IDomicilio } from "./ubicacion";
 
 export interface IEmpresa extends BaseEntity {
@@ -25,6 +26,7 @@ export interface ICategoria extends BaseEntity {
 	subCategorias?: ICategoria[];
 	categoriaPadre?: ICategoria;
 	esInsumo: boolean;
+	sucursales?: ISucursalDTO[];
 }
 
 export interface ICategoriaSucursal extends BaseEntity {
@@ -40,7 +42,7 @@ export interface IArticulo extends BaseEntity {
 	unidadMedida?: IUnidadMedida;
 }
 
-export interface IArticuloInsumo extends IArticulo{
+export interface IArticuloInsumo extends IArticulo {
 	precioCompra: number;
 	stockActual: number;
 	stockMaximo: number;
@@ -69,6 +71,8 @@ export interface IUsuario extends BaseEntity {
 	password: string;
 }
 
-export interface IImagen extends BaseEntity {
+export interface IImagen {
+	id: string;
 	url: string;
+	name: string;
 }

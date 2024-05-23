@@ -13,7 +13,7 @@ export interface IField {
 	label: string;
 	name: string;
 	multiline?: boolean;
-	type: "text" | "number" | "select" | "time";
+	type: "text" | "number" | "select" | "time" | "image";
 	timeView?: TimeView[];
     options?: string[];
 	icon?: ReactElement;
