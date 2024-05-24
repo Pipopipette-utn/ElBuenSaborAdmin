@@ -14,7 +14,7 @@ import { Formik, FormikValues, useFormikContext } from "formik";
 import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
 import { Switch } from "../styled/StyledSwitch";
 import { useAppSelector } from "../../../redux/hooks";
-import { ICategoria } from "../../../types/empresa";
+import { mapCategories } from "../../../utils/mapCategorias";
 
 export const ArticuloElaborarForm: FC = () => {
 	const { values, setFieldValue, errors } = useFormikContext<FormikValues>();
@@ -28,26 +28,6 @@ export const ArticuloElaborarForm: FC = () => {
 		precioVenta: Yup.number().required("Este campo es requerido."),
 		categoria: Yup.string().required("Este campo es requerido."),
 	});
-
-	function mapCategories(categorias: ICategoria[] | null) {
-		const result: ICategoria[] = [];
-
-		function traverseAndFilter(categoryList: ICategoria[]) {
-			categoryList.forEach((categoria) => {
-				if (values.esParaElaborar == categoria.esInsumo) {
-					result.push(categoria);
-					if (categoria.subCategorias && categoria.subCategorias.length > 0) {
-						traverseAndFilter(categoria.subCategorias);
-					}
-				}
-			});
-		}
-
-		if (categorias != null)
-			traverseAndFilter(categorias);
-
-		return result;
-	}
 
 	return (
 		<Formik
@@ -88,7 +68,7 @@ export const ArticuloElaborarForm: FC = () => {
 								</InputAdornment>
 							}
 						>
-							{mapCategories(categorias)
+							{mapCategories(categorias, values.esInsumo)
 								.filter((cat) =>
 									values.esParaElaborar ? cat.esInsumo : !cat.esInsumo
 								)

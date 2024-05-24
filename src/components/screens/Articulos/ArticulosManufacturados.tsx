@@ -1,4 +1,4 @@
-import { SelectChangeEvent, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
@@ -14,6 +14,7 @@ import { AlertDialog } from "../../ui/shared/AlertDialog";
 import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoForm";
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
 import FilterFields from "../../ui/shared/FilterFields";
+import { ArticuloManufacturadoDetails } from "../../ui/details/ArticuloManufacturadoDetails";
 
 export const ArticulosManufacturados = () => {
 	const dispatch = useAppDispatch();
@@ -26,10 +27,11 @@ export const ArticulosManufacturados = () => {
 	);
 
 	useEffect(() => {
-		setFilteredArticulosManufacturados(articulosManufacturados);
+		setFilteredArticulosManufacturados(articulosManufacturados ?? []);
 	}, [articulosManufacturados]);
 
 	const [showModal, setShowModal] = useState(false);
+	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [idArticulo, setIdArticulo] = useState<number>();
 
@@ -37,6 +39,12 @@ export const ArticulosManufacturados = () => {
 
 	const handleOpenAlert = () => setShowAlert(true);
 	const handleCloseAlert = () => setShowAlert(false);
+
+	const handleOpenDetailsModal = () => setShowDetailsModal(true);
+	const handleCloseDetailsModal = () => {
+		setArticulo(null);
+		setShowDetailsModal(false);
+	};
 
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => {
@@ -50,6 +58,67 @@ export const ArticulosManufacturados = () => {
 		);
 		setArticulo(articuloEncontrado!);
 		setShowModal(true);
+	};
+
+	const [filteredArticulosManufacturados, setFilteredArticulosManufacturados] =
+		useState(articulosManufacturados ?? []);
+
+	const [filter, setFilter] = useState("");
+	const [categoryFilter, setCategoryFilter] = useState("");
+	const categorias =
+		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
+
+	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFilter(event.target.value);
+	};
+
+	const handleCategoryFilterChange = (value: string | null) => {
+		setCategoryFilter(value ?? "");
+	};
+
+	useEffect(() => {
+		let filtered = articulosManufacturados;
+		const filterByDenominacion = () => {
+			filtered = filtered!.filter((insumo) =>
+				insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
+			);
+		};
+		const filterByCategory = (cf: string) => {
+			const isCategoryOrSubcategory = (categoria: ICategoria): boolean => {
+				if (categoria.denominacion == cf) {
+					return true;
+				}
+				if (categoria.subCategorias) {
+					const subcategories = categoria.subCategorias.filter((sub) =>
+						isCategoryOrSubcategory(sub)
+					);
+					return subcategories.length > 0;
+				}
+				return false;
+			};
+
+			filtered = filtered!.filter(
+				(insumo) =>
+					insumo.categoria && isCategoryOrSubcategory(insumo.categoria)
+			);
+			console.log(filtered);
+		};
+
+		if (filter !== "") {
+			filterByDenominacion();
+		}
+		if (categoryFilter !== "") {
+			filterByCategory(categoryFilter);
+		}
+		setFilteredArticulosManufacturados(filtered ?? []);
+	}, [filter, categoryFilter]);
+
+	const handleSeeDetails = (articuloId: number) => {
+		const articuloEncontrado = articulosManufacturados?.find(
+			(a) => a.id == articuloId
+		);
+		setArticulo(articuloEncontrado!);
+		handleOpenDetailsModal();
 	};
 
 	const handleDeleteClick = (articuloId: number) => {
@@ -67,54 +136,6 @@ export const ArticulosManufacturados = () => {
 		);
 		dispatch(setArticulosManufacturados(newProductos));
 		handleCloseAlert();
-	};
-
-	const [filteredArticulosManufacturados, setFilteredArticulosManufacturados] =
-		useState(articulosManufacturados);
-	const [filter, setFilter] = useState("");
-	const [categoryFilter, setCategoryFilter] = useState("");
-	const categorias =
-		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
-
-	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setFilter(event.target.value);
-	};
-
-	useEffect(() => {
-		let filtered = filteredArticulosManufacturados;
-		const filterByDenominacion = () => {
-			filtered = filtered!.filter((insumo) =>
-				insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
-			);
-		};
-		const filterByCategory = (cf: string) => {
-			const isCategoryOrSubcategory = (categoria: ICategoria) => {
-				if (categoria.denominacion == cf) {
-					return true;
-				}
-				if (categoria.categoriaPadre) {
-					return categoria.categoriaPadre.denominacion == cf;
-				}
-				return false;
-			};
-
-			filtered = filtered!.filter(
-				(insumo) =>
-					insumo.categoria && isCategoryOrSubcategory(insumo.categoria)
-			);
-		};
-
-		if (filter !== "") {
-			filterByDenominacion();
-		}
-		if (categoryFilter !== "") {
-			filterByCategory(categoryFilter);
-		}
-		setFilteredArticulosManufacturados(filtered);
-	}, [filter, categoryFilter]);
-
-	const handleCategoryFilterChange = (event: SelectChangeEvent<string>) => {
-		setCategoryFilter(event.target.value);
 	};
 
 	return (
@@ -148,7 +169,7 @@ export const ArticulosManufacturados = () => {
 						{articulosManufacturados && (
 							<GenericTable
 								data={articuloManufacturadoService.articulosManufacturadosToDTO(
-									articulosManufacturados
+									filteredArticulosManufacturados
 								)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
@@ -161,6 +182,7 @@ export const ArticulosManufacturados = () => {
 									{ label: "Acciones", key: "acciones" },
 								]}
 								onEdit={handleOpenEditModal}
+								onSeeDetails={handleSeeDetails}
 								onDelete={handleDeleteClick}
 							/>
 						)}
@@ -184,6 +206,13 @@ export const ArticulosManufacturados = () => {
 					onClose={handleCloseModal}
 				/>
 			</GenericModal>
+			{articulo && (
+				<ArticuloManufacturadoDetails
+					articuloManufacturado={articulo!}
+					open={showDetailsModal}
+					handleClose={handleCloseDetailsModal}
+				/>
+			)}
 			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar el artículo"}

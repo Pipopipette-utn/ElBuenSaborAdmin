@@ -102,4 +102,20 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 			console.error(error); // Imprime el error en la consola
 		}
 	}
+
+	async alta(id: number) {
+		try {
+			const response = await fetch(`${this.baseUrl}/alta/${id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+		} catch (error) {
+			console.error(error); // Imprime el error en la consola
+		}
+	}
 }

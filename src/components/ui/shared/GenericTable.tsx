@@ -20,9 +20,18 @@ export interface TableProps<T> {
 	columns: TableColumn[];
 	onEdit: (id: number) => void;
 	onDelete: (id: number) => void;
+	onAlta: (id: number) => void;
+	onSeeDetails?: (id: number) => void;
 }
 
-export const GenericTable = <T,>({ data, columns, onEdit, onDelete}: TableProps<T>) => {
+export const GenericTable = <T,>({
+	data,
+	columns,
+	onEdit,
+	onDelete,
+	onAlta,
+	onSeeDetails,
+}: TableProps<T>) => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(8);
 
@@ -89,12 +98,22 @@ export const GenericTable = <T,>({ data, columns, onEdit, onDelete}: TableProps<
 											{columns.map((column: any, i: number) => {
 												const cellValue = row[column.key];
 												return (
-													<TableCell key={i} align={"center"}>
+													<TableCell
+														key={i}
+														align={"center"}
+														sx={{
+															backgroundColor: row["baja"]
+																? theme.palette.info.light
+																: theme.palette.bg.dark,
+														}}
+													>
 														{column.label === "Acciones" ? (
 															<ButtonGroup
 																idEntity={row["id"]}
-																onEdit={onEdit}
-																onDelete={onDelete}
+																onEdit={row["baja"] ? undefined : onEdit}
+																onDelete={row["baja"] ? undefined : onDelete}
+																onAlta={row["baja"] ? onAlta : undefined}
+																onSeeDetails={onSeeDetails!}
 															/>
 														) : (
 															cellValue

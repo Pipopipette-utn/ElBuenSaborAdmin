@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { FC, useState } from "react";
-import { IArticulo, ICategoria } from "../../../types/empresa";
+import { IArticulo } from "../../../types/empresa";
 
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import ScaleIcon from "@mui/icons-material/Scale";
@@ -10,6 +10,7 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { GenericForm } from "../shared/GenericForm";
 import { IField } from "../../../types/business";
 import { useAppSelector } from "../../../redux/hooks";
+import { mapCategories } from "../../../utils/mapCategorias";
 
 interface ArticuloFormProps {
 	articulo: IArticulo;
@@ -86,26 +87,6 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 		}
 	};
 
-	function mapCategories(categorias: ICategoria[] | null) {
-		const result: string[] = [];
-
-		function traverseAndFilter(categoryList: ICategoria[] | null) {
-			categoryList!.forEach((categoria) => {
-				if (!categoria.esInsumo) {
-					result.push(categoria.denominacion);
-					if (categoria.subCategorias && categoria.subCategorias.length > 0) {
-						traverseAndFilter(categoria.subCategorias);
-					}
-				}
-			});
-		}
-
-		if (categorias != null)
-			traverseAndFilter(categorias);
-
-		return result;
-	}
-
 	const articuloFields: IField[][] = [
 		[
 			{
@@ -157,7 +138,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				label: "Categoría",
 				name: "categoria",
 				type: "select",
-				options: mapCategories(categorias),
+				options: mapCategories(categorias, false),
 				icon: <LocalOfferIcon />,
 				required: true,
 			},

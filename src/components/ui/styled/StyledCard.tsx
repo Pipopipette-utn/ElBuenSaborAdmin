@@ -94,6 +94,7 @@ export const AddIconButton = styled(MuiIconButton)(({ theme }) => ({
 export const ArticuloInsumoCard = styled(MuiCard)(({ theme }) => ({
 	display: "flex",
 	flexDirection: "column",
+	minWidth: 160,
 	width: 160,
 	height: 160,
 	alignItems: "center",

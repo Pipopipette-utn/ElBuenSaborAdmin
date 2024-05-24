@@ -69,7 +69,7 @@ export const App: FC = () => {
 			const sucursales = await sucursalService.getAll();
 			dispatch(setSucursales(sucursales));
 
-			const articulosInsumos = await articuloInsumoService.getAll();
+			const articulosInsumos = await articuloInsumoService.getAllIncludeDeleted();
 			dispatch(setArticulosInsumos(articulosInsumos));
 
 			const articulosManufacturados =

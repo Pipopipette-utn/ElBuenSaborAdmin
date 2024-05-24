@@ -42,6 +42,6 @@ const styles = {
 	border: {
 		borderRadius: "20px",
 		padding: "10px 24px",
-		flex: 1,
+		flex: 1
 	},
 };

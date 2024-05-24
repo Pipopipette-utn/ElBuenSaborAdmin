@@ -23,6 +23,7 @@ import GenericModal from "../shared/GenericModal";
 import { InsumoCard } from "./InsumoCard";
 import { useAppSelector } from "../../../redux/hooks";
 import { InsumoForm } from "../forms/InsumoForm";
+import Pagination from "@mui/material/Pagination";
 
 interface DetalleFormCardProps {
 	detalle: IArticuloManufacturadoDetalle;
@@ -78,6 +79,16 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	const handleSelectInsumo = (insumo: IArticuloInsumo) => {
 		detalle.articuloInsumo = insumo;
 		handleCloseModal();
+	};
+
+	const itemsPerPage = 4;
+	const [page, setPage] = useState(1);
+	const noOfPages = Math.ceil(
+		(filteredInsumos ? filteredInsumos.length : 0) / itemsPerPage
+	);
+
+	const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+		setPage(value);
 	};
 
 	return (
@@ -159,12 +170,12 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 				open={openModal}
 				handleClose={handleCloseModal}
 			>
-				<Stack spacing={2}>
+				<Stack spacing={2} width="100%" alignItems="center">
 					<Stack
 						direction="row"
 						spacing={2}
 						justifyContent="center"
-						alignItems="center"
+						alignItems="center" width="50%"
 					>
 						<Typography>Buscar:</Typography>
 						<TextField
@@ -178,10 +189,12 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 						direction="row"
 						spacing={3}
 						justifyContent="center"
-						sx={{ overflowX: "wrap" }}
+						width="100%"
+						sx={{ overflowX: "scroll", marginX: "20px" }}
 					>
 						{filteredInsumos !== null ? (
 							filteredInsumos
+								.slice((page - 1) * itemsPerPage, page * itemsPerPage)
 								.filter((insumo) => insumo.esParaElaborar == true)
 								.sort((a, b) => a.denominacion.localeCompare(b.denominacion))
 								.map((i: IArticuloInsumo, index: number) => (
@@ -195,6 +208,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 							<></>
 						)}
 					</Stack>
+					<Pagination count={noOfPages} page={page} onChange={handleChange} />
 					<Button
 						variant="contained"
 						sx={{ width: "40%", alignSelf: "center", mt: 3 }}

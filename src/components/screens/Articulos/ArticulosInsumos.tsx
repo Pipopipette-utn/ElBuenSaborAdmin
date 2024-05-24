@@ -1,13 +1,5 @@
-import {
-	MenuItem,
-	Select,
-	SelectChangeEvent,
-	Stack,
-	TextField,
-	Typography,
-} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
-import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { GenericTable } from "../../ui/shared/GenericTable";
@@ -19,7 +11,11 @@ import { InsumoForm } from "../../ui/forms/InsumoForm";
 import { emptyInsumo } from "../../../types/emptyEntities";
 import { IArticuloInsumo, ICategoria } from "../../../types/empresa";
 import { AlertDialog } from "../../ui/shared/AlertDialog";
-import { setArticulosInsumos } from "../../../redux/slices/Business";
+import {
+	setArticulosInsumos,
+} from "../../../redux/slices/Business";
+import { ArticuloInsumoDetails } from "../../ui/details/ArticuloInsumoDetails";
+import FilterFields from "../../ui/shared/FilterFields";
 
 export const ArticulosInsumos = () => {
 	const dispatch = useAppDispatch();
@@ -28,11 +24,13 @@ export const ArticulosInsumos = () => {
 	const articulosInsumos = useAppSelector(
 		(state) => state.business.articulosInsumos
 	);
-	const categorias = useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
+	const categorias =
+		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
 
 	useEffect(() => {
 		const traerUnidades = async () => {
-			const articulosInsumos = await articuloInsumoService.getAll();
+			const articulosInsumos =
+				await articuloInsumoService.getAllIncludeDeleted();
 			dispatch(setArticulosInsumos(articulosInsumos));
 		};
 		traerUnidades();
@@ -40,7 +38,9 @@ export const ArticulosInsumos = () => {
 	}, []);
 
 	const [showModal, setShowModal] = useState(false);
+	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
+	const [showAlertAlta, setShowAlertAlta] = useState(false);
 	const [idArticulo, setIdArticulo] = useState<number>();
 
 	const [articulo, setArticulo] = useState<IArticuloInsumo | null>(null);
@@ -86,8 +86,8 @@ export const ArticulosInsumos = () => {
 		setFilteredInsumos(filtered);
 	}, [filter, categoryFilter]);
 
-	const handleCategoryFilterChange = (event: SelectChangeEvent<string>) => {
-		setCategoryFilter(event.target.value);
+	const handleCategoryFilterChange = (value: string | null) => {
+		setCategoryFilter(value ?? "");
 	};
 
 	const handleOpenModal = () => setShowModal(true);
@@ -96,8 +96,17 @@ export const ArticulosInsumos = () => {
 		setShowModal(false);
 	};
 
+	const handleOpenDetailsModal = () => setShowDetailsModal(true);
+	const handleCloseDetailsModal = () => {
+		setArticulo(null);
+		setShowDetailsModal(false);
+	};
+
 	const handleOpenAlert = () => setShowAlert(true);
 	const handleCloseAlert = () => setShowAlert(false);
+
+	const handleOpenAlertAlta = () => setShowAlertAlta(true);
+	const handleCloseAlertAlta = () => setShowAlertAlta(false);
 
 	const handleOpenEditModal = (articuloId: number) => {
 		const articuloEncontrado = articulosInsumos?.find(
@@ -112,6 +121,14 @@ export const ArticulosInsumos = () => {
 		setIdArticulo(articuloId);
 	};
 
+	const handleSeeDetails = (articuloId: number) => {
+		const articuloEncontrado = articulosInsumos?.find(
+			(a) => a.id == articuloId
+		);
+		setArticulo(articuloEncontrado!);
+		handleOpenDetailsModal();
+	};
+
 	const handleDelete = async () => {
 		const insumoService = new ArticuloInsumoService("/articulosInsumos");
 		await insumoService.delete(idArticulo!);
@@ -120,14 +137,27 @@ export const ArticulosInsumos = () => {
 		handleCloseAlert();
 	};
 
+	const handleAltaClick = (articuloId: number) => {
+		handleOpenAlertAlta();
+		setIdArticulo(articuloId);
+	};
+
+	const handleAlta = async () => {
+		const insumoService = new ArticuloInsumoService("/articulosInsumos");
+		await insumoService.alta(idArticulo!);
+		const newArticulo = { ...articulo, baja: false };
+		//dispatch(editArticuloInsumo(newArticulo));
+		handleCloseAlertAlta();
+	};
+
 	return (
 		<>
 			<GenericDoubleStack>
 				<GenericHeaderStack
 					icon={
-						<StoreMallDirectoryIcon
+						<ShoppingCartIcon
 							color="primary"
-							sx={{ width: "40px", height: "40px" }}
+							sx={{ width: "35px", height: "35px" }}
 						/>
 					}
 					quantity={articulosInsumos?.length ?? 0}
@@ -135,47 +165,13 @@ export const ArticulosInsumos = () => {
 					buttonText={"Nuevo insumo"}
 					onClick={handleOpenModal}
 				>
-					<Stack direction="row">
-						<Stack
-							spacing={1}
-							direction="row"
-							justifyContent="flex-start"
-							alignItems="center"
-							paddingLeft={3}
-						>
-							<Typography variant="h6">Buscar por nombre:</Typography>
-							<TextField
-								size="small"
-								variant="outlined"
-								value={filter}
-								onChange={handleFilterChange}
-								sx={{ width: "90px", "& input": { fontSize: "14px" } }}
-							/>
-						</Stack>
-						<Stack
-							spacing={1}
-							direction="row"
-							justifyContent="flex-start"
-							alignItems="center"
-							paddingLeft={3}
-						>
-							<Typography variant="h6">Filtrar por categoría:</Typography>
-							<Select
-								size="small"
-								value={categoryFilter}
-								onChange={handleCategoryFilterChange}
-								sx={{ width: "120px", fontSize: "14px" }}
-							>
-								<MenuItem value="">Ninguna</MenuItem>
-								{categorias &&
-									categorias!.map((categoria, index) => (
-										<MenuItem key={index} value={categoria!.denominacion}>
-											{categoria!.denominacion}
-										</MenuItem>
-									))}
-							</Select>
-						</Stack>
-					</Stack>
+					<FilterFields
+						filter={filter}
+						onFilterChange={handleFilterChange}
+						categorias={categorias}
+						categoryFilter={categoryFilter}
+						onCategoryFilterChange={handleCategoryFilterChange}
+					/>
 				</GenericHeaderStack>
 				<Stack sx={{ overflow: "hidden" }}>
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
@@ -185,7 +181,9 @@ export const ArticulosInsumos = () => {
 						{articulosInsumos && (
 							<GenericTable
 								onDelete={handleDeleteClick}
+								onSeeDetails={handleSeeDetails}
 								onEdit={handleOpenEditModal}
+								onAlta={handleAltaClick}
 								data={articuloInsumoService.articulosInsumosToDTO(
 									filteredInsumos!
 								)}
@@ -217,6 +215,22 @@ export const ArticulosInsumos = () => {
 					onClose={handleCloseModal}
 				/>
 			</GenericModal>
+			{articulo && (
+				<ArticuloInsumoDetails
+					articuloInsumo={articulo!}
+					open={showDetailsModal}
+					handleClose={handleCloseDetailsModal}
+				/>
+			)}
+
+			<AlertDialog
+				open={showAlertAlta}
+				title={"¿Estás seguro de que querés dar de alta el artículo"}
+				content={""}
+				onAgreeClose={handleAlta}
+				onDisagreeClose={handleCloseAlertAlta}
+			/>
+
 			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar el artículo"}
