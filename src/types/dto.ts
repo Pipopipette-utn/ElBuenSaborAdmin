@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { IArticuloManufacturadoDetalle } from "./empresa";
+import { IDetalle } from "./empresa";
 
 export interface IArticuloInsumoTableDTO {
     denominacion: string;
@@ -21,7 +21,7 @@ export interface IArticuloManufacturadoTableDTO {
     descripcion: string;
 	tiempoEstimadoMinutos: number;
 	preparacion: string;
-	articuloManufacturadoDetalle: IArticuloManufacturadoDetalle[];
+	articuloManufacturadoDetalle: IDetalle[];
 }
 
 export interface ISucursalDTO extends BaseEntity{
