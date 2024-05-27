@@ -10,6 +10,7 @@ import { ArticulosInsumos } from "../components/screens/Articulos/ArticulosInsum
 import { ArticulosManufacturados } from "../components/screens/Articulos/ArticulosManufacturados";
 import SelectArticulo from "../components/screens/Articulos/SelectArticulo";
 import { UnidadesMedida } from "../components/screens/UnidadMedida/UnidadesMedida";
+import { Promociones } from "../components/screens/Promociones/Promociones";
 
 export const ProtectedRoutes = () => {
 	return (
@@ -38,6 +39,7 @@ export const ProtectedRoutes = () => {
 						element={<ArticulosManufacturados />}
 					/>
 					<Route path="/unidades-de-medida" element={<UnidadesMedida />} />
+					<Route path="/promociones" element={<Promociones />} />
 				</Routes>
 			</Box>
 		</>

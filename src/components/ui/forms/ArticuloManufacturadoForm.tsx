@@ -2,8 +2,9 @@ import * as Yup from "yup";
 import { FC, useState } from "react";
 import {
 	IArticulo,
+	IArticuloInsumo,
 	IArticuloManufacturado,
-	IArticuloManufacturadoDetalle,
+	IDetalle,
 } from "../../../types/empresa";
 import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
@@ -22,7 +23,8 @@ import {
 } from "../../../redux/slices/Business";
 import dayjs from "dayjs";
 import { DetalleFormCardList } from "../cards/DetalleFormCardList";
-import { ArticuloImagenService } from "../../../services/ArticuloImagenService";
+import ImagenUpload from "./ImagenUpload";
+import { ImagenService } from "../../../services/ImagenService";
 
 interface InsumoFormProps {
 	initialArticuloManufacturado: IArticuloManufacturado;
@@ -34,12 +36,16 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	onClose,
 }) => {
 	const dispatch = useAppDispatch();
-
-	const [files, setFiles] = useState<FileList | null>(null);
-	const [activeStep, setActiveStep] = useState(0);
 	const [articuloManufacturado, setArticuloManufacturado] = useState(
 		initialArticuloManufacturado
 	);
+	const [files, setFiles] = useState<File[]>([]);
+	const [previews, setPreviews] = useState<string[]>(
+		articuloManufacturado.imagenes && articuloManufacturado.imagenes.length > 0
+			? articuloManufacturado.imagenes.map((i) => i.url)
+			: []
+	);
+	const [activeStep, setActiveStep] = useState(0);
 
 	const handleBack = () => setActiveStep((prev) => prev - 1);
 	const handleNext = () => setActiveStep((prev) => prev + 1);
@@ -67,14 +73,24 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		preparacion: Yup.string().trim().required("Este campo es requerido."),
 	});
 
-	const handleSubmitArticulo = (articulo: IArticulo, f: FileList | null) => {
+	const handleSubmitArticulo = (articulo: IArticulo) => {
 		const newArticuloManufacturado = {
 			...articuloManufacturado,
 			...articulo,
 		};
-		setFiles(f);
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
+	};
+
+	const handleFileChange = (
+		submittedFiles: FileList | null,
+		submittedPreviews: string[]
+	) => {
+		if (submittedFiles != null) {
+			const newFiles = Array.from(submittedFiles);
+			setFiles((prev) => [...prev, ...newFiles]);
+		}
+		setPreviews(submittedPreviews);
 	};
 
 	const handleSubmitDescripcion = (values: { [key: string]: any }) => {
@@ -88,10 +104,17 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		handleNext();
 	};
 
-	const handleSubmitDetalles = (detalles: IArticuloManufacturadoDetalle[]) => {
+	const handleSubmitDetalles = (detalles: IDetalle[]) => {
+		const detallesArticulo = detalles.map((d) => {
+			return {
+				baja: false,
+				cantidad: d.cantidad,
+				articuloInsumo: d.articulo as IArticuloInsumo,
+			};
+		});
 		const newArticuloManufacturado = {
 			...articuloManufacturado,
-			articuloManufacturadoDetalles: detalles,
+			articuloManufacturadoDetalles: detallesArticulo,
 		};
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
@@ -105,10 +128,9 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
-			const articuloImagenService = new ArticuloImagenService(
-				"/images/uploads"
-			);
+			const articuloImagenService = new ImagenService("/images/uploads");
 
+			console.log(newArticuloManufacturado);
 			let producto;
 			if (articuloManufacturado.id) {
 				producto = await articuloManufacturadoService.update(
@@ -124,7 +146,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			}
 
 			if (files != null) {
-				articuloImagenService.crearArticuloImagen(files, producto!.id!);
+				articuloImagenService.crearImagen(files, producto!.id!);
 			}
 
 			onClose();
@@ -136,6 +158,10 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	const steps: IStep[] = [
 		{
 			title: "Datos del artículo",
+			fields: [],
+		},
+		{
+			title: "Imagenes",
 			fields: [],
 		},
 		{
@@ -203,6 +229,15 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 						);
 					case 1:
 						return (
+							<ImagenUpload
+								imagenes={previews}
+								onBack={handleBack}
+								onNext={handleNext}
+								onChangeImages={handleFileChange}
+							/>
+						);
+					case 2:
+						return (
 							<GenericForm
 								fields={steps[activeStep].fields}
 								initialValues={initialValues}
@@ -212,7 +247,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								submitButtonText={"Continuar"}
 							/>
 						);
-					case 2:
+					case 3:
 						return (
 							<DetalleFormCardList
 								detallesArticulo={
@@ -221,6 +256,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								onBack={handleBack}
 								onSubmit={handleSubmitDetalles}
 								submitButtonText={"Continuar"}
+								esInsumo={true}
 							/>
 						);
 					default:

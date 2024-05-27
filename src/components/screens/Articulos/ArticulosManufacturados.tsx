@@ -183,6 +183,7 @@ export const ArticulosManufacturados = () => {
 								]}
 								onEdit={handleOpenEditModal}
 								onSeeDetails={handleSeeDetails}
+								onAlta={handleDeleteClick}
 								onDelete={handleDeleteClick}
 							/>
 						)}

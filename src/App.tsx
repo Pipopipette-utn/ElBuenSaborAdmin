@@ -4,6 +4,7 @@ import { EmpresaService } from "./services/EmpresaService";
 import { SucursalService } from "./services/SucursalService";
 import {
 	setCategoriasSucursal,
+	setPromocionesSucursal,
 	setSucursal,
 	setSucursalesEmpresa,
 } from "./redux/slices/SelectedData";
@@ -27,6 +28,7 @@ import {
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
+import { PromocionService } from "./services/PromocionService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
@@ -39,6 +41,7 @@ export const App: FC = () => {
 	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const empresaService = new EmpresaService("/empresas");
 	const sucursalService = new SucursalService("/sucursales");
+	const promocionService = new PromocionService("/promociones");
 	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
@@ -69,7 +72,8 @@ export const App: FC = () => {
 			const sucursales = await sucursalService.getAll();
 			dispatch(setSucursales(sucursales));
 
-			const articulosInsumos = await articuloInsumoService.getAllIncludeDeleted();
+			const articulosInsumos =
+				await articuloInsumoService.getAllIncludeDeleted();
 			dispatch(setArticulosInsumos(articulosInsumos));
 
 			const articulosManufacturados =
@@ -98,7 +102,19 @@ export const App: FC = () => {
 				dispatch(setCategoriasSucursal(await categoriasSucursal));
 			}
 		};
+
+		const findPromociones = async () => {
+			if (sucursal) {
+				const promociones = await promocionService.getAll();
+				const promocionesSucursal = promociones.filter(
+					(promocion) =>
+						promocion.sucursales.find((p) => p.id === sucursal.id) != undefined
+				);
+				dispatch(setPromocionesSucursal(promocionesSucursal));
+			}
+		};
 		filterCategorias();
+		findPromociones();
 	}, [sucursal]);
 
 	return (

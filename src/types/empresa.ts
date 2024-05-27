@@ -39,6 +39,7 @@ export interface IArticulo extends BaseEntity {
 	denominacion: string;
 	precioVenta: number | null;
 	imagenes?: IImagen[];
+	archivos?: FileList | null;
 	categoria?: ICategoria;
 	unidadMedida?: IUnidadMedida;
 }
@@ -55,12 +56,17 @@ export interface IArticuloManufacturado extends IArticulo {
 	descripcion: string;
 	tiempoEstimadoMinutos: number;
 	preparacion: string;
-	articuloManufacturadoDetalles?: IArticuloManufacturadoDetalle[];
+	articuloManufacturadoDetalles?: IDetalleArticuloManufacturado[];
 }
 
-export interface IArticuloManufacturadoDetalle extends BaseEntity {
+export interface IDetalleArticuloManufacturado extends BaseEntity {
 	cantidad: number;
 	articuloInsumo?: IArticuloInsumo;
+}
+
+export interface IDetalle extends BaseEntity {
+	cantidad: number;
+	articulo?: IArticuloManufacturado | IArticuloInsumo | IArticulo;
 }
 
 export interface IUnidadMedida extends BaseEntity {
@@ -76,4 +82,19 @@ export interface IImagen {
 	id: string;
 	url: string;
 	name: string;
+}
+
+export interface IPromocion extends BaseEntity {
+	denominacion: string;
+	fechaDesde: Date;
+	fechaHasta: Date;
+	horaDesde: string;
+	horaHasta: string;
+	descripcionDescuento: string;
+	precioPromocional: number;
+	tipoPromocion: "HAPPY_HOUR" | "PROMOCION" | "";
+	imagenes: IImagen[];
+	archivos?: FileList | null;
+	sucursales: ISucursalDTO[];
+	promocionDetalles: IDetalle[];
 }

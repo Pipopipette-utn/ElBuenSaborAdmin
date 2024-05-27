@@ -118,7 +118,7 @@ export const CategoriaAccordion: FC<{
 							</Stack>
 
 							<ActionButtons
-								categoria={categoria}
+								entity={categoria}
 								onEdit={(event: MouseEvent<HTMLButtonElement, MouseEvent>) =>
 									handleClick(event, categoria)
 								}
@@ -136,7 +136,7 @@ export const CategoriaAccordion: FC<{
 								)}
 							</Stack>
 							<ActionButtons
-								categoria={categoria}
+								entity={categoria}
 								onEdit={(
 									event: MouseEvent<
 										HTMLButtonElement,
@@ -191,7 +191,9 @@ export const CategoriaAccordion: FC<{
 				<AlertDialog
 					open={showAlert}
 					title={"¿Estás seguro de que querés dar de baja la categoría?"}
-					content={"La categoría y sus subcategorías se dará de baja sólo en la sucursal actual."}
+					content={
+						"La categoría y sus subcategorías se dará de baja sólo en la sucursal actual."
+					}
 					onAgreeClose={handleBaja}
 					onDisagreeClose={handleCloseAlert}
 				/>

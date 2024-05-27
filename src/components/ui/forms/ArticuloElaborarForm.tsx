@@ -1,11 +1,9 @@
 import * as Yup from "yup";
 import { FC } from "react";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import {
+	Autocomplete,
 	InputAdornment,
-	MenuItem,
-	Select,
 	Stack,
 	TextField,
 	Typography,
@@ -54,30 +52,23 @@ export const ArticuloElaborarForm: FC = () => {
 					</Stack>
 					<TextFieldStack alignItems="center" spacing={1} width="50%">
 						<Typography>Categoría</Typography>
-						<Select
+						<Autocomplete
 							fullWidth
-							name="categoria"
 							value={values["categoria"]}
-							onChange={(event) =>
-								setFieldValue("categoria", event.target.value)
+							onChange={(_event, newValue) =>
+								setFieldValue("categoria", newValue)
 							}
 							onBlur={handleBlur}
-							startAdornment={
-								<InputAdornment position="start">
-									<LocalOfferIcon />
-								</InputAdornment>
-							}
-						>
-							{mapCategories(categorias, values.esInsumo)
-								.filter((cat) =>
-									values.esParaElaborar ? cat.esInsumo : !cat.esInsumo
-								)
-								.map((categoria, index) => (
-									<MenuItem key={index} value={categoria.id}>
-										{categoria.denominacion}
-									</MenuItem>
-								))}
-						</Select>
+							options={mapCategories(categorias, values.esParaElaborar)}
+							getOptionLabel={(option) => option}
+							renderInput={(params) => (
+								<TextField
+									{...params}
+									variant="outlined"
+									value={values["categoria"]}
+								/>
+							)}
+						/>
 						{touched["categoria"] && errors["categoria"] && (
 							<ErrorTypography>{String(errors["categoria"])}</ErrorTypography>
 						)}

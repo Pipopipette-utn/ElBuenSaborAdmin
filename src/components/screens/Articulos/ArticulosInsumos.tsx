@@ -11,9 +11,7 @@ import { InsumoForm } from "../../ui/forms/InsumoForm";
 import { emptyInsumo } from "../../../types/emptyEntities";
 import { IArticuloInsumo, ICategoria } from "../../../types/empresa";
 import { AlertDialog } from "../../ui/shared/AlertDialog";
-import {
-	setArticulosInsumos,
-} from "../../../redux/slices/Business";
+import { setArticulosInsumos } from "../../../redux/slices/Business";
 import { ArticuloInsumoDetails } from "../../ui/details/ArticuloInsumoDetails";
 import FilterFields from "../../ui/shared/FilterFields";
 
@@ -28,14 +26,8 @@ export const ArticulosInsumos = () => {
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
 
 	useEffect(() => {
-		const traerUnidades = async () => {
-			const articulosInsumos =
-				await articuloInsumoService.getAllIncludeDeleted();
-			dispatch(setArticulosInsumos(articulosInsumos));
-		};
-		traerUnidades();
 		setFilteredInsumos(articulosInsumos);
-	}, []);
+	}, [articulosInsumos]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -145,7 +137,7 @@ export const ArticulosInsumos = () => {
 	const handleAlta = async () => {
 		const insumoService = new ArticuloInsumoService("/articulosInsumos");
 		await insumoService.alta(idArticulo!);
-		const newArticulo = { ...articulo, baja: false };
+		//const newArticulo = { ...articulo, baja: false };
 		//dispatch(editArticuloInsumo(newArticulo));
 		handleCloseAlertAlta();
 	};

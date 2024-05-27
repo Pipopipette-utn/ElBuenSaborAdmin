@@ -1,19 +1,17 @@
 import { IconButton, Stack, Tooltip } from "@mui/material";
 import "./AccordionStyles.css";
 import EditIcon from "@mui/icons-material/Edit";
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-import { ICategoria } from "../../../types/empresa";
-
 export const ActionButtons = ({
-	categoria,
+	entity,
 	color,
 	onEdit,
 	onBaja,
 	onDelete,
 }: {
-	categoria: ICategoria;
+	entity: any;
 	color: string;
 	onEdit: any;
 	onBaja: () => void;
@@ -22,7 +20,7 @@ export const ActionButtons = ({
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
 			<Tooltip title="Editar">
-				<IconButton onClick={(event) => onEdit(event, categoria)}>
+				<IconButton onClick={(event) => onEdit(event, entity)}>
 					<EditIcon fontSize="small" sx={{ color: color }} />
 				</IconButton>
 			</Tooltip>
@@ -33,7 +31,7 @@ export const ActionButtons = ({
 				</IconButton>
 			</Tooltip>
 
-			<Tooltip title="Eliminar categoría">
+			<Tooltip title="Eliminar">
 				<IconButton onClick={onDelete}>
 					<DeleteOutlineIcon fontSize="small" sx={{ color: color }} />
 				</IconButton>

@@ -105,7 +105,7 @@ export const ArticuloInsumoDetails: FC<ArticuloInsumoDetailsProps> = ({
 					sx={{ borderRadius: "20px" }}
 				>
 					<Box sx={{ width: "500px", flexGrow: 1 }}>
-						{articuloInsumo.imagenes && (
+						{articuloInsumo.imagenes && articuloInsumo.imagenes.length > 0 && (
 							<Box
 								component="img"
 								sx={{
@@ -163,7 +163,9 @@ export const ArticuloInsumoDetails: FC<ArticuloInsumoDetailsProps> = ({
 							labels={["Nombre", "Categoria"]}
 							content={[
 								articuloInsumo.denominacion,
-								articuloInsumo.categoria!.denominacion,
+								articuloInsumo.categoria
+									? articuloInsumo.categoria!.denominacion
+									: "",
 							]}
 							icons={[
 								<LiquorIcon

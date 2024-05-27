@@ -1,4 +1,4 @@
-import { IArticulo, IArticuloInsumo, IArticuloManufacturado, IArticuloManufacturadoDetalle, ICategoria, IEmpresa, ISucursal, IUnidadMedida } from "./empresa";
+import { IArticulo, IArticuloInsumo, IArticuloManufacturado, IDetalle, ICategoria, IEmpresa, IPromocion, ISucursal, IUnidadMedida } from "./empresa";
 import { IDomicilio, ILocalidad, IProvincia } from "./ubicacion";
 
 export const emptyEmpresa: IEmpresa = {
@@ -48,7 +48,7 @@ export const emptyArticuloManufacturado: IArticuloManufacturado =  {
 	articuloManufacturadoDetalles: [],
 }
 
-export const emptyArticuloManufacturadoDetalle: IArticuloManufacturadoDetalle = {
+export const emptyArticuloManufacturadoDetalle: IDetalle = {
 	baja: false,
 	cantidad: 0,
 }
@@ -71,4 +71,19 @@ export const emptyDomicilio: IDomicilio = {
 export const emptyUnidadDeMedida: IUnidadMedida = {
 	baja: false,
 	denominacion: "", 
+}
+
+export const emptyPromocion : IPromocion = {
+	baja: false,
+	denominacion: "",
+	fechaDesde: new Date(),
+	fechaHasta: new Date(),
+	horaDesde: "00:00:00",
+	horaHasta: "00:00:00",
+	descripcionDescuento: "",
+	precioPromocional: 0,
+	tipoPromocion: "",
+	imagenes: [],
+	sucursales: [],
+	promocionDetalles: [],
 }

@@ -38,3 +38,33 @@ export const mapAllCategories = (categorias: ICategoria[] | null) => {
 
 	return result.sort();
 };
+
+export const findCategory = (
+	categorias: ICategoria[] | null,
+	denominacion: string
+): ICategoria | undefined => {
+	if (!categorias) return undefined;
+
+	function findCategory(
+		categoryList: ICategoria[],
+		denominacion: string
+	): ICategoria | undefined {
+		for (const categoria of categoryList) {
+			if (categoria.denominacion === denominacion) {
+				return categoria;
+			}
+			if (categoria.subCategorias && categoria.subCategorias.length > 0) {
+				const subCategoria = findCategory(
+					categoria.subCategorias,
+					denominacion
+				);
+				if (subCategoria) {
+					return subCategoria;
+				}
+			}
+		}
+		return undefined;
+	}
+
+	return findCategory(categorias, denominacion);
+};

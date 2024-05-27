@@ -7,7 +7,6 @@ import {
 	IconButton,
 	MobileStepper,
 	Modal,
-	Paper,
 	Stack,
 } from "@mui/material";
 import { modalStyle } from "../shared/GenericModal";
@@ -66,19 +65,20 @@ export const ArticuloManufacturadoDetails: FC<
 					sx={{ borderRadius: "20px" }}
 				>
 					<Box sx={{ width: "500px", flexGrow: 1 }}>
-						{articuloManufacturado.imagenes && (
-							<Box
-								component="img"
-								sx={{
-									display: "block",
-									maxWidth: 400,
-									overflow: "hidden",
-									width: "100%",
-								}}
-								src={articuloManufacturado.imagenes[activeStep].url}
-								alt={articuloManufacturado.imagenes[activeStep].name}
-							/>
-						)}
+						{articuloManufacturado.imagenes &&
+							articuloManufacturado.imagenes.length > 0 && (
+								<Box
+									component="img"
+									sx={{
+										display: "block",
+										maxWidth: 400,
+										overflow: "hidden",
+										width: "100%",
+									}}
+									src={articuloManufacturado.imagenes[activeStep].url}
+									alt={articuloManufacturado.imagenes[activeStep].name}
+								/>
+							)}
 						<MobileStepper
 							steps={maxSteps}
 							position="static"
@@ -147,8 +147,12 @@ export const ArticuloManufacturadoDetails: FC<
 						<DetailsGroup
 							labels={["Unidad de medida", "Categoria"]}
 							content={[
-								articuloManufacturado.unidadMedida!.denominacion,
-								articuloManufacturado.categoria!.denominacion,
+								articuloManufacturado.unidadMedida
+									? articuloManufacturado.unidadMedida!.denominacion
+									: "",
+								articuloManufacturado.categoria
+									? articuloManufacturado.categoria!.denominacion
+									: "",
 							]}
 							icons={[
 								<ScaleIcon
@@ -224,10 +228,20 @@ export const ArticuloManufacturadoDetails: FC<
 											>
 												<Stack direction="row" spacing={1}>
 													<p>{detalle.cantidad}</p>
-													<p>
-														{detalle.articuloInsumo!.unidadMedida!.denominacion}
-													</p>
-													<p>{detalle.articuloInsumo!.denominacion}</p>
+													{detalle.articuloInsumo &&
+														"unidadMedida" in detalle.articuloInsumo && (
+															<p>
+																{
+																	detalle.articuloInsumo.unidadMedida!
+																		.denominacion
+																}
+															</p>
+														)}
+
+													{detalle.articuloInsumo &&
+														"denominacion" in detalle.articuloInsumo && (
+															<p>{detalle.articuloInsumo!.denominacion}</p>
+														)}
 												</Stack>
 											</Grid>
 										)

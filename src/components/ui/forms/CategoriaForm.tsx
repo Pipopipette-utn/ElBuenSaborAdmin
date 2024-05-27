@@ -26,7 +26,6 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 }) => {
 	const dispatch = useAppDispatch();
 	const [categoria, setCategoria] = useState(initialCategoria);
-	const [sucursalesAntiguas] = useState(categoria.sucursales ?? []);
 
 	const [activeStep, setActiveStep] = useState(0);
 
@@ -97,7 +96,6 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 					case 1:
 						return (
 							<SucursalesSelector
-								sucursalesAntiguas={sucursalesAntiguas}
 								selected={categoria.id ? categoria.sucursales! : []}
 								buttonTitle={buttonTitle}
 								onBack={handleBack}

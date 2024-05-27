@@ -12,6 +12,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { FC, ReactNode, useState } from "react";
 import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
@@ -26,7 +27,6 @@ interface FormProps {
 	submitButtonText: string;
 	children?: ReactNode;
 	childrenPosition?: "top" | "bottom";
-	handleFileChange?: any;
 }
 
 export const GenericForm: FC<FormProps> = ({
@@ -38,7 +38,6 @@ export const GenericForm: FC<FormProps> = ({
 	submitButtonText,
 	children,
 	childrenPosition,
-	handleFileChange
 }) => {
 	const [error, setError] = useState("");
 
@@ -146,17 +145,24 @@ export const GenericForm: FC<FormProps> = ({
 																/>
 															</LocalizationProvider>
 														);
-													case "image":
+													case "date":
 														return (
-															<TextField
-																variant="outlined"
-																type="file"
-																fullWidth
-																onChange={handleFileChange}
-																inputProps={{
-																	multiple: true,
-																}}
-															/>
+															<LocalizationProvider dateAdapter={AdapterDayjs}>
+																<DatePicker
+																	format="DD/MM/YYYY"
+																	name={f.name}
+																	value={values[f.name]}
+																	sx={{ width: "100%" }}
+																	onChange={(time: any) => {
+																		handleChange({
+																			target: {
+																				name: f.name,
+																				value: time,
+																			},
+																		});
+																	}}
+																/>
+															</LocalizationProvider>
 														);
 
 													default:

@@ -1,11 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ICategoria, IEmpresa, ISucursal } from "../../types/empresa";
+import {
+	ICategoria,
+	IEmpresa,
+	IPromocion,
+	ISucursal,
+} from "../../types/empresa";
 
 interface IInitialState {
 	empresa: IEmpresa | null;
 	sucursalesEmpresa: ISucursal[] | null;
 	sucursal: ISucursal | null;
 	categoriasSucursal: ICategoria[] | null;
+	promocionesSucursal: IPromocion[] | null;
 }
 
 const initialState: IInitialState = {
@@ -13,6 +19,7 @@ const initialState: IInitialState = {
 	sucursalesEmpresa: null,
 	sucursal: null,
 	categoriasSucursal: null,
+	promocionesSucursal: null,
 };
 
 //acá definimos el estado global
@@ -71,6 +78,27 @@ const SelectedDataSlice = createSlice({
 				);
 			}
 		},
+		setPromocionesSucursal: (
+			state,
+			action: PayloadAction<IPromocion[] | null>
+		) => {
+			state.promocionesSucursal = action.payload;
+		},
+		addPromocionesSucursal: (state, action: PayloadAction<IPromocion>) => {
+			if (state.promocionesSucursal) {
+				state.promocionesSucursal!.push(action.payload);
+			} else {
+				state.promocionesSucursal = [action.payload];
+			}
+		},
+		editPromocionesSucursal: (state, action: PayloadAction<IPromocion>) => {
+			const promocionEditada = action.payload;
+			if (state.promocionesSucursal) {
+				state.promocionesSucursal = state.promocionesSucursal.map((promocion) =>
+					promocion.id === promocionEditada.id ? promocionEditada : promocion
+				);
+			}
+		},
 	},
 });
 
@@ -83,6 +111,9 @@ export const {
 	setCategoriasSucursal,
 	addCategoriaSucursal,
 	editCategoriaSucursal,
+	setPromocionesSucursal,
+	addPromocionesSucursal,
+	editPromocionesSucursal,
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;
 
