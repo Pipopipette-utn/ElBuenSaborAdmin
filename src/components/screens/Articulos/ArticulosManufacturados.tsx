@@ -14,7 +14,6 @@ import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoF
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
 import FilterFields from "../../ui/shared/FilterFields";
 import { ArticuloManufacturadoDetails } from "../../ui/details/ArticuloManufacturadoDetails";
-import { setManufacturados } from "../../../redux/slices/Business";
 import { setManufacturadosSucursal } from "../../../redux/slices/SelectedData";
 
 export const ArticulosManufacturados = () => {
