@@ -111,13 +111,24 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 			setFiles((prev) => [...prev, ...newFiles]);
 		}
 		setPreviews(submittedPreviews);
+		if (promocion.imagenes) {
+			const newImagenes = promocion.imagenes.filter((imagen) =>
+				submittedPreviews.includes(imagen.url)
+			);
+			const newPromo = {
+				...promocion,
+				imagenes: newImagenes,
+			};
+			setPromocion(newPromo);
+		}
 	};
 
-	const handleNextDetalles = async (detalles: IDetalle[]) => {
+	const handleNextDetalles = async (detalles: IDetalle[], precio?: number) => {
 		try {
 			const newPromocion = {
 				...promocion,
 				promocionDetalles: detalles,
+				precioPromocional: precio ?? 0,
 			};
 			setPromocion(newPromocion);
 			handleNext();
@@ -140,8 +151,6 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 			};
 			setPromocion(newPromocion);
 
-			console.log(newPromocion);
-
 			let promocionNueva;
 			if (promocion.id) {
 				promocionNueva = await promocionService.update(
@@ -154,8 +163,12 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 				dispatch(addPromocionesSucursal(promocionNueva));
 			}
 
-			if (files != null) {
+			if (files != null && files.length > 0) {
 				imagenService.crearImagen(files, promocionNueva!.id!);
+				const newPromo = await promocionService.getById(promocionNueva.id!);
+				if (newPromo != null) {
+					dispatch(editPromocionesSucursal(newPromo));
+				}
 			}
 			onClose();
 		} catch (error: any) {

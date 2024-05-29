@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+	IArticuloInsumo,
+	IArticuloManufacturado,
 	ICategoria,
 	IEmpresa,
 	IPromocion,
@@ -12,6 +14,8 @@ interface IInitialState {
 	sucursal: ISucursal | null;
 	categoriasSucursal: ICategoria[] | null;
 	promocionesSucursal: IPromocion[] | null;
+	articulosInsumosSucursal: IArticuloInsumo[] | null;
+	articulosManufacturadosSucursal: IArticuloManufacturado[] | null;
 }
 
 const initialState: IInitialState = {
@@ -20,6 +24,8 @@ const initialState: IInitialState = {
 	sucursal: null,
 	categoriasSucursal: null,
 	promocionesSucursal: null,
+	articulosInsumosSucursal: null,
+	articulosManufacturadosSucursal: null,
 };
 
 //acá definimos el estado global
@@ -99,6 +105,54 @@ const SelectedDataSlice = createSlice({
 				);
 			}
 		},
+		setInsumosSucursal: (state, action: PayloadAction<IArticuloInsumo[] | null>) => {
+			state.articulosInsumosSucursal = action.payload;
+		},
+		editArticuloInsumoSucursal: (state, action: PayloadAction<IArticuloInsumo>) => {
+			const insumoEditado = action.payload;
+			if (state.articulosInsumosSucursal) {
+				state.articulosInsumosSucursal = state.articulosInsumosSucursal.map(
+					(insumo) => (insumo.id === insumoEditado.id ? insumoEditado : insumo)
+				);
+			}
+		},
+		addArticuloInsumoSucursal: (state, action: PayloadAction<IArticuloInsumo>) => {
+			if (state.articulosInsumosSucursal) {
+				state.articulosInsumosSucursal!.push(action.payload);
+			} else {
+				state.articulosInsumosSucursal = [action.payload];
+			}
+		},
+
+		setManufacturadosSucursal: (
+			state,
+			action: PayloadAction<IArticuloManufacturado[] | null>
+		) => {
+			state.articulosManufacturadosSucursal = action.payload;
+		},
+
+		editArticuloManufacturadoSucursal: (
+			state,
+			action: PayloadAction<IArticuloManufacturado>
+		) => {
+			const insumoEditado = action.payload;
+			if (state.articulosManufacturadosSucursal) {
+				state.articulosManufacturadosSucursal =
+					state.articulosManufacturadosSucursal.map((producto) =>
+						producto.id === insumoEditado.id ? insumoEditado : producto
+					);
+			}
+		},
+		addArticuloManufacturadoSucursal: (
+			state,
+			action: PayloadAction<IArticuloManufacturado>
+		) => {
+			if (state.articulosManufacturadosSucursal) {
+				state.articulosManufacturadosSucursal!.push(action.payload);
+			} else {
+				state.articulosManufacturadosSucursal = [action.payload];
+			}
+		},
 	},
 });
 
@@ -114,6 +168,12 @@ export const {
 	setPromocionesSucursal,
 	addPromocionesSucursal,
 	editPromocionesSucursal,
+	setInsumosSucursal,
+	editArticuloInsumoSucursal,
+	addArticuloInsumoSucursal,
+	setManufacturadosSucursal,
+	editArticuloManufacturadoSucursal,
+	addArticuloManufacturadoSucursal,
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;
 

@@ -17,20 +17,23 @@ import CloseIcon from "@mui/icons-material/Close";
 import { emptyArticulo, emptyInsumo } from "../../../types/emptyEntities";
 import { TextFieldStack } from "../styled/StyledForm";
 import GenericModal from "../shared/GenericModal";
-import { useAppSelector } from "../../../redux/hooks";
 import { InsumoForm } from "../forms/InsumoForm";
 import Pagination from "@mui/material/Pagination";
 import { ArticuloCard } from "./ArticuloCard";
+import { useAppSelector } from "../../../redux/hooks";
 
 interface DetalleFormCardProps {
 	detalle: IDetalle;
 	onRemove: () => void;
+	onUpdate: (d: IDetalle) => void;
 	esInsumo: boolean;
 }
+
 export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	detalle,
 	onRemove,
 	esInsumo,
+	onUpdate,
 }) => {
 	const insumos = useAppSelector((state) => state.business.articulosInsumos);
 	const manufacturados = useAppSelector(
@@ -73,14 +76,16 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	const handleIncrement = () => {
 		const newCantidad = cantidad + 1;
 		setCantidad(newCantidad);
-		detalle = { ...detalle, cantidad: newCantidad };
+		const updatedDetalle = { ...detalle, cantidad: newCantidad };
+		onUpdate(updatedDetalle);
 	};
 
 	const handleDecrement = () => {
 		if (cantidad > 0) {
 			const newCantidad = cantidad - 1;
 			setCantidad(newCantidad);
-			detalle = { ...detalle, cantidad: newCantidad };
+			const updatedDetalle = { ...detalle, cantidad: newCantidad };
+			onUpdate(updatedDetalle);
 		}
 	};
 
@@ -88,12 +93,14 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 		const newValue = event.target.value;
 		if (/^\d*\.?\d*$/.test(newValue)) {
 			setCantidad(parseFloat(newValue));
-			detalle.cantidad = parseFloat(newValue);
+			const updatedDetalle = { ...detalle, cantidad: parseFloat(newValue) };
+			onUpdate(updatedDetalle);
 		}
 	};
 
 	const handleSelectArticulo = (articulo: IArticulo) => {
-		detalle.articulo = articulo;
+		const updatedDetalle = { ...detalle, articulo };
+		onUpdate(updatedDetalle);
 		handleCloseModal();
 	};
 
@@ -103,7 +110,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 		(filteredArticulos ? filteredArticulos.length : 0) / itemsPerPage
 	);
 
-	const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+	const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value);
 	};
 
@@ -219,30 +226,21 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 						width="100%"
 						sx={{ marginX: "20px" }}
 					>
-						{filteredArticulos !== null ? (
+						{filteredArticulos && filteredArticulos.length > 0 ? (
 							filteredArticulos
-								.slice((page - 1) * itemsPerPage, page * itemsPerPage)
 								.sort((a, b) => a.denominacion.localeCompare(b.denominacion))
-								.map((articulo, index) => {
-									if (
-										(esInsumo &&
-											"esParaElaborar" in articulo &&
-											articulo.esParaElaborar) ||
-										!esInsumo
-									)
-										return (
-											<ArticuloCard
-												onSelectArticulo={handleSelectArticulo}
-												key={index}
-												articulo={articulo}
-											/>
-										);
-								})
+								.map((articulo, index) => (
+									<ArticuloCard
+										onSelectArticulo={handleSelectArticulo}
+										key={index}
+										articulo={articulo}
+									/>
+								))
 						) : (
 							<Typography>No hay artículos disponibles</Typography>
 						)}
 					</Stack>
-					<Pagination count={noOfPages} page={page} onChange={handleChange} />
+					<Pagination count={noOfPages} page={page} onChange={handlePageChange} />
 					{esInsumo && (
 						<Button
 							variant="contained"

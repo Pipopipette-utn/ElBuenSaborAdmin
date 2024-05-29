@@ -99,14 +99,15 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 							<Typography variant="h6">Hasta: {promocion.horaHasta}</Typography>
 						</Stack>
 						<Stack spacing={2} direction="row">
-							{promocion.promocionDetalles.map((detalle) => (
-								<Chip
-									color="primary"
-									label={`${detalle.cantidad}  ${
-										detalle.articulo!.denominacion
-									}`}
-								/>
-							))}
+							{promocion.promocionDetalles &&
+								promocion.promocionDetalles.map((detalle) => (
+									<Chip
+										color="primary"
+										label={`${detalle.cantidad}  ${
+											detalle.articulo!.denominacion
+										}`}
+									/>
+								))}
 						</Stack>
 					</Stack>
 				</Stack>

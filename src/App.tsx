@@ -19,9 +19,9 @@ import {
 import { Box } from "@mui/material";
 import { AppRouter } from "./routes/AppRouter";
 import {
-	setArticulosInsumos,
-	setArticulosManufacturados,
 	setEmpresas,
+	setInsumos,
+	setManufacturados,
 	setSucursales,
 	setUnidadMedidas,
 } from "./redux/slices/Business";
@@ -72,14 +72,13 @@ export const App: FC = () => {
 			const sucursales = await sucursalService.getAll();
 			dispatch(setSucursales(sucursales));
 
-			const articulosInsumos =
-				await articuloInsumoService.getAllIncludeDeleted();
-			dispatch(setArticulosInsumos(articulosInsumos));
+			const articulosInsumos = await articuloInsumoService.getAll();
+			dispatch(setInsumos(articulosInsumos));
 
 			const articulosManufacturados =
 				await articuloManufacturadoService.getAll();
 
-			dispatch(setArticulosManufacturados(articulosManufacturados));
+			dispatch(setManufacturados(articulosManufacturados));
 		};
 
 		traerEmpresas();

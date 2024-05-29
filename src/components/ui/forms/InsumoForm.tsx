@@ -17,6 +17,7 @@ import {
 import ImageUpload from "./ImagenUpload";
 import { findCategory } from "../../../utils/mapCategorias";
 import { ImagenService } from "../../../services/ImagenService";
+import { addArticuloInsumoSucursal, editArticuloInsumoSucursal } from "../../../redux/slices/SelectedData";
 
 interface InsumoFormProps {
 	initialArticuloInsumo: IArticuloInsumo;
@@ -117,6 +118,16 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			setFiles((prev) => [...prev, ...newFiles]);
 		}
 		setPreviews(submittedPreviews);
+		if (articuloInsumo.imagenes) {
+			const newImagenes = articuloInsumo.imagenes.filter((imagen) =>
+				submittedPreviews.includes(imagen.url)
+			);
+			const newArticulo = {
+				...articuloInsumo,
+				imagenes: newImagenes,
+			};
+			setArticuloInsumo(newArticulo);
+		}
 	};
 
 	const handleSubmitForm = async (values: { [key: string]: any }) => {
@@ -147,13 +158,20 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					newArticuloInsumo
 				);
 				dispatch(editArticuloInsumo(insumo));
+				dispatch(editArticuloInsumoSucursal(insumo));
 			} else {
 				insumo = await articuloInsumoService.create(newArticuloInsumo);
 				dispatch(addArticuloInsumo(insumo));
+				dispatch(addArticuloInsumoSucursal(insumo));
 			}
 
 			if (files != null) {
-				articuloImagenService.crearImagen(files, insumo!.id!);
+				await articuloImagenService.crearImagen(files, insumo!.id!);
+				const newProducto = await articuloInsumoService.getById(insumo.id!);
+				if (newProducto != null) {
+					dispatch(editArticuloInsumo(newProducto));
+					dispatch(editArticuloInsumoSucursal(newProducto));
+				}
 			}
 			onClose();
 		} catch (error: any) {

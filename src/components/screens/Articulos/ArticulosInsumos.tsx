@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, CircularProgress } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -11,35 +11,53 @@ import { InsumoForm } from "../../ui/forms/InsumoForm";
 import { emptyInsumo } from "../../../types/emptyEntities";
 import { IArticuloInsumo, ICategoria } from "../../../types/empresa";
 import { AlertDialog } from "../../ui/shared/AlertDialog";
-import { setArticulosInsumos } from "../../../redux/slices/Business";
 import { ArticuloInsumoDetails } from "../../ui/details/ArticuloInsumoDetails";
 import FilterFields from "../../ui/shared/FilterFields";
+import { setInsumosSucursal } from "../../../redux/slices/SelectedData";
 
 export const ArticulosInsumos = () => {
-	const dispatch = useAppDispatch();
-
 	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
-	const articulosInsumos = useAppSelector(
-		(state) => state.business.articulosInsumos
-	);
 	const categorias =
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
-
-	useEffect(() => {
-		setFilteredInsumos(articulosInsumos);
-	}, [articulosInsumos]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [showAlertAlta, setShowAlertAlta] = useState(false);
 	const [idArticulo, setIdArticulo] = useState<number>();
-
 	const [articulo, setArticulo] = useState<IArticuloInsumo | null>(null);
-
-	const [filteredInsumos, setFilteredInsumos] = useState(articulosInsumos);
+	const [articulosInsumos, setArticulosInsumos] = useState<IArticuloInsumo[]>(
+		[]
+	);
+	const [totalRows, setTotalRows] = useState(0);
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(6);
+	const [loading, setLoading] = useState(false);
 	const [filter, setFilter] = useState("");
 	const [categoryFilter, setCategoryFilter] = useState("");
+
+	const dispatch = useAppDispatch();
+	const articulosRedux = useAppSelector(
+		(state) => state.selectedData.articulosInsumosSucursal
+	);
+	useEffect(() => {
+		if (articulosRedux) setArticulosInsumos(articulosRedux);
+	}, [articulosRedux]);
+
+	useEffect(() => {
+		const findArticulos = async () => {
+			setLoading(true);
+			const response = await articuloInsumoService.getAllPagedIncludeDeleted(
+				page,
+				rowsPerPage
+			);
+			setArticulosInsumos(response.data);
+			dispatch(setInsumosSucursal(response.data));
+			setTotalRows(response.total);
+			setLoading(false);
+		};
+		findArticulos();
+	}, [page, rowsPerPage]);
 
 	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFilter(event.target.value);
@@ -75,7 +93,7 @@ export const ArticulosInsumos = () => {
 		if (categoryFilter !== "") {
 			filterByCategory(categoryFilter);
 		}
-		setFilteredInsumos(filtered);
+		setArticulosInsumos(filtered);
 	}, [filter, categoryFilter]);
 
 	const handleCategoryFilterChange = (value: string | null) => {
@@ -125,7 +143,7 @@ export const ArticulosInsumos = () => {
 		const insumoService = new ArticuloInsumoService("/articulosInsumos");
 		await insumoService.delete(idArticulo!);
 		const newInsumos = articulosInsumos!.filter((a) => a.id != idArticulo);
-		dispatch(setArticulosInsumos(newInsumos));
+		setArticulosInsumos(newInsumos);
 		handleCloseAlert();
 	};
 
@@ -140,6 +158,14 @@ export const ArticulosInsumos = () => {
 		//const newArticulo = { ...articulo, baja: false };
 		//dispatch(editArticuloInsumo(newArticulo));
 		handleCloseAlertAlta();
+	};
+
+	const handlePageChange = (newPage: number) => {
+		setPage(newPage);
+	};
+
+	const handleRowsPerPageChange = (newRowsPerPage: number) => {
+		setRowsPerPage(newRowsPerPage);
 	};
 
 	return (
@@ -169,15 +195,17 @@ export const ArticulosInsumos = () => {
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los insumos
 					</Typography>
-					<Stack direction="row">
-						{articulosInsumos && (
+					<Stack direction="row" width="100%" justifyContent="center">
+						{loading ? (
+							<CircularProgress sx={{ mt: 6 }} />
+						) : (
 							<GenericTable
 								onDelete={handleDeleteClick}
 								onSeeDetails={handleSeeDetails}
 								onEdit={handleOpenEditModal}
 								onAlta={handleAltaClick}
 								data={articuloInsumoService.articulosInsumosToDTO(
-									filteredInsumos!
+									articulosInsumos!
 								)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
@@ -191,6 +219,11 @@ export const ArticulosInsumos = () => {
 									{ label: "Categoria", key: "categoria" },
 									{ label: "Acciones", key: "acciones" },
 								]}
+								totalRows={totalRows}
+								page={page}
+								rowsPerPage={rowsPerPage}
+								onPageChange={handlePageChange}
+								onRowsPerPageChange={handleRowsPerPageChange}
 							/>
 						)}
 					</Stack>

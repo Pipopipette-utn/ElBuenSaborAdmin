@@ -6,7 +6,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { useEffect, useState } from "react";
 import { theme } from "../../../styles/theme";
 import ButtonGroup from "./GenericTableButtonGroup";
 
@@ -18,40 +17,39 @@ export interface TableColumn {
 export interface TableProps<T> {
 	data: T[];
 	columns: TableColumn[];
+	totalRows: number; // Add totalRows property
+	page: number; // Add page property
+	rowsPerPage: number; // Add rowsPerPage property
 	onEdit: (id: number) => void;
 	onDelete: (id: number) => void;
 	onAlta: (id: number) => void;
 	onSeeDetails?: (id: number) => void;
+	onPageChange: (page: number) => void; // Add onPageChange handler
+	onRowsPerPageChange: (rowsPerPage: number) => void; // Add onRowsPerPageChange handler
 }
 
 export const GenericTable = <T,>({
 	data,
 	columns,
+	totalRows,
+	page,
+	rowsPerPage,
 	onEdit,
 	onDelete,
 	onAlta,
 	onSeeDetails,
+	onPageChange,
+	onRowsPerPageChange,
 }: TableProps<T>) => {
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(8);
-
 	const handleChangePage = (_: unknown, newPage: number) => {
-		setPage(newPage);
+		onPageChange(newPage);
 	};
 
 	const handleChangeRowsPerPage = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
-		setRowsPerPage(+event.target.value);
-		setPage(0);
+		onRowsPerPageChange(+event.target.value);
 	};
-
-	const [rows, setRows] = useState<T[]>([]);
-
-	// Actualizar las filas cuando cambien los datos de la tabla
-	useEffect(() => {
-		setRows(data);
-	}, [data]);
 
 	return (
 		<div
@@ -82,48 +80,44 @@ export const GenericTable = <T,>({
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{rows
-								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-								.map((row: any, index: number) => {
-									return (
-										<TableRow
-											role="checkbox"
-											tabIndex={-1}
-											key={index}
-											sx={{
-												backgroundColor: theme.palette.bg.dark,
-												"&:hover": { backgroundColor: theme.palette.bg.main },
-											}}
-										>
-											{columns.map((column: any, i: number) => {
-												const cellValue = row[column.key];
-												return (
-													<TableCell
-														key={i}
-														align={"center"}
-														sx={{
-															backgroundColor: row["baja"]
-																? theme.palette.info.light
-																: theme.palette.bg.dark,
-														}}
-													>
-														{column.label === "Acciones" ? (
-															<ButtonGroup
-																idEntity={row["id"]}
-																onEdit={row["baja"] ? undefined : onEdit}
-																onDelete={row["baja"] ? undefined : onDelete}
-																onAlta={row["baja"] ? onAlta : undefined}
-																onSeeDetails={onSeeDetails!}
-															/>
-														) : (
-															cellValue
-														)}
-													</TableCell>
-												);
-											})}
-										</TableRow>
-									);
-								})}
+							{data.map((row: any, index: number) => (
+								<TableRow
+									role="checkbox"
+									tabIndex={-1}
+									key={index}
+									sx={{
+										backgroundColor: theme.palette.bg.dark,
+										"&:hover": { backgroundColor: theme.palette.bg.main },
+									}}
+								>
+									{columns.map((column: any, i: number) => {
+										const cellValue = row[column.key];
+										return (
+											<TableCell
+												key={i}
+												align={"center"}
+												sx={{
+													backgroundColor: row["baja"]
+														? theme.palette.info.light
+														: theme.palette.bg.dark,
+												}}
+											>
+												{column.label === "Acciones" ? (
+													<ButtonGroup
+														idEntity={row["id"]}
+														onEdit={row["baja"] ? undefined : onEdit}
+														onDelete={row["baja"] ? undefined : onDelete}
+														onAlta={row["baja"] ? onAlta : undefined}
+														onSeeDetails={onSeeDetails!}
+													/>
+												) : (
+													cellValue
+												)}
+											</TableCell>
+										);
+									})}
+								</TableRow>
+							))}
 						</TableBody>
 					</Table>
 				</TableContainer>
@@ -131,7 +125,7 @@ export const GenericTable = <T,>({
 					sx={{ backgroundColor: theme.palette.bg.dark }}
 					rowsPerPageOptions={[10, 25, 100]}
 					component="div"
-					count={rows.length}
+					count={totalRows}
 					rowsPerPage={rowsPerPage}
 					page={page}
 					onPageChange={handleChangePage}

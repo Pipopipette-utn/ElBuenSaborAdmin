@@ -10,10 +10,8 @@ export class ImagenService extends BackendClient<IImagen> {
 			const formData = new FormData();
 			Array.from(selectedFiles).forEach((file) => {
 				formData.append("uploads", file);
-				console.log({file});
 			});
 
-			console.log({selectedFiles});
 			// Realizar la petición POST para subir los archivos
 			const response = await fetch(`${this.baseUrl}/${idEntidad}`, {
 				method: "POST",
@@ -23,7 +21,7 @@ export class ImagenService extends BackendClient<IImagen> {
 			if (!response.ok) {
 				throw Error(response.statusText);
 			}
-			return response;
+			return response.text();
 		} catch (error) {
 			console.error("Error:", error);
 		}

@@ -1,4 +1,4 @@
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { CircularProgress, Stack, Typography, Pagination } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
@@ -8,40 +8,56 @@ import { emptyPromocion } from "../../../types/emptyEntities";
 import { IPromocion } from "../../../types/empresa";
 import { PromocionForm } from "../../ui/forms/PromocionForm";
 import { PromocionAccordion } from "../../ui/accordion/PromocionAccordion";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { PromocionService } from "../../../services/PromocionService";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setPromocionesSucursal } from "../../../redux/slices/SelectedData";
 
 export const Promociones = () => {
 	const dispatch = useAppDispatch();
-	const [showModal, setShowModal] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const handleOpenModal = () => setShowModal(true);
-	const handleCloseModal = () => setShowModal(false);
-	const promocionService = new PromocionService("/promociones");
-
-	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
-	const promos = useAppSelector(
+	const promocionesRedux = useAppSelector(
 		(state) => state.selectedData.promocionesSucursal
 	);
-	const [promociones, setPromociones] = useState<IPromocion[]>(promos ?? []);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 
 	useEffect(() => {
-		const findPromociones = async () => {
-			if (sucursal) {
-				setLoading(true);
-				const promociones = await promocionService.getAll();
-				const promocionesSucursal = promociones.filter(
-					(promocion) =>
-						promocion.sucursales.find((p) => p.id === sucursal.id) != undefined
-				);
-				dispatch(setPromocionesSucursal(promocionesSucursal));
-				setLoading(false);
-			}
-		};
-		findPromociones();
-		setPromociones(promos ?? []);
-	}, [sucursal]);
+		if (promocionesRedux) setPromocionesSucursal(promocionesRedux);
+	}, [promocionesRedux]);
+
+	const [showModal, setShowModal] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [promociones, setPromociones] = useState<IPromocion[]>([]);
+	const [page, setPage] = useState(1);
+	const [totalRows, setTotalRows] = useState(0);
+	const itemsPerPage = 4;
+	const promocionService = new PromocionService("/promociones");
+
+	const handleOpenModal = () => setShowModal(true);
+	const handleCloseModal = () => setShowModal(false);
+
+	const fetchPromociones = async () => {
+		setLoading(true);
+		const response = await promocionService.getAllPagedIncludeDeleted(
+			page - 1,
+			itemsPerPage
+		);
+		setPromociones(response.data);
+		dispatch(setPromocionesSucursal(response.data));
+		setTotalRows(response.total);
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		fetchPromociones();
+	}, [page]);
+
+	const noOfPages = Math.ceil(totalRows / itemsPerPage);
+
+	const handlePageChange = (
+		_event: React.ChangeEvent<unknown>,
+		value: number
+	) => {
+		setPage(value);
+	};
 
 	return (
 		<>
@@ -53,7 +69,7 @@ export const Promociones = () => {
 							sx={{ width: "40px", height: "40px" }}
 						/>
 					}
-					quantity={promociones?.length ?? 0}
+					quantity={totalRows}
 					activeEntities={"Promociones activas"}
 					buttonText={"Nueva promoción"}
 					onClick={handleOpenModal}
@@ -65,13 +81,26 @@ export const Promociones = () => {
 					<Stack direction="column" width="100%" sx={{ p: "12px" }} spacing={2}>
 						{loading ? (
 							<CircularProgress sx={{ alignSelf: "center" }} />
+						) : promociones && promociones.length == 0 ? (
+							<Typography>Ups! No hay ninguna promoción guardada.</Typography>
 						) : (
 							promociones &&
-							promociones.map((promocion, index) => (
-								<PromocionAccordion key={index} promocion={promocion} />
-							))
+							promociones.map((promocion, index) => {
+								if (promocion.sucursales.filter((s) => s.id === sucursal?.id))
+									return (
+										<PromocionAccordion key={index} promocion={promocion} />
+									);
+							})
 						)}
 					</Stack>
+					{promociones && promociones.length > 0 && (
+						<Pagination
+							count={noOfPages}
+							page={page}
+							onChange={handlePageChange}
+							sx={{ alignSelf: "center", mt: 2 }}
+						/>
+					)}
 				</Stack>
 			</GenericDoubleStack>
 			<GenericModal

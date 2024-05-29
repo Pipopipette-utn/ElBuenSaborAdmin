@@ -77,10 +77,7 @@ const BusinessSlice = createSlice({
 			}
 		},
 
-		setArticulosInsumos: (
-			state,
-			action: PayloadAction<IArticuloInsumo[] | null>
-		) => {
+		setInsumos: (state, action: PayloadAction<IArticuloInsumo[] | null>) => {
 			state.articulosInsumos = action.payload;
 		},
 		editArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
@@ -99,7 +96,7 @@ const BusinessSlice = createSlice({
 			}
 		},
 
-		setArticulosManufacturados: (
+		setManufacturados: (
 			state,
 			action: PayloadAction<IArticuloManufacturado[] | null>
 		) => {
@@ -140,10 +137,10 @@ export const {
 	setSucursales,
 	addSucursal,
 	editSucursal,
-	setArticulosInsumos,
+	setInsumos,
 	editArticuloInsumo,
 	addArticuloInsumo,
-	setArticulosManufacturados,
+	setManufacturados,
 	editArticuloManufacturado,
 	addArticuloManufacturado,
 } = BusinessSlice.actions;

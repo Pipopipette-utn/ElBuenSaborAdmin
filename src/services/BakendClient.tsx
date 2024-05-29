@@ -19,6 +19,27 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 		}
 	}
 
+	async getAllPagedIncludeDeleted(
+		page: number,
+		size: number
+	): Promise<{ data: T[]; total: number }> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/paged/includeDeleted?page=${page}&size=${size}`
+			);
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			const result = await response.json();
+			return {
+				data: result.content,
+				total: result.totalElements,
+			};
+		} catch (error) {
+			return Promise.reject(error); // Rechaza la promesa con el error
+		}
+	}
+
 	// Función generica para obtener datos mediante una solicitud GET
 	async getAll(): Promise<T[]> {
 		try {
@@ -27,6 +48,27 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 				throw Error(response.statusText);
 			}
 			return response.json(); // Retorna los datos en formato JSON
+		} catch (error) {
+			return Promise.reject(error); // Rechaza la promesa con el error
+		}
+	}
+
+	async getAllPaged(
+		page: number,
+		size: number
+	): Promise<{ data: T[]; total: number }> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/paged?page=${page}&size=${size}`
+			);
+			if (!response.ok) {
+				throw Error(response.statusText);
+			}
+			const result = await response.json();
+			return {
+				data: result.content,
+				total: result.totalElements,
+			};
 		} catch (error) {
 			return Promise.reject(error); // Rechaza la promesa con el error
 		}

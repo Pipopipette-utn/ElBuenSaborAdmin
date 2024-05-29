@@ -17,7 +17,7 @@ export const modalStyle = {
 	top: "48%",
 	left: "50%",
 	transform: "translate(-50%, -50%)",
-	width: { mobile: "90%", sm: "80%", lg: "70%", xl: "65%" },
+	width: { mobile: "90%", sm: "80%", lg: "70%", xl: "70%" },
 	maxHeight: 600,
 	bgcolor: "background.paper",
 	boxShadow: 24,

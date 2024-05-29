@@ -38,19 +38,15 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 	);
 
 	useEffect(() => {
-		if (!precioInicial) {
-
+		if (precioInicial == 0) {
 			const precio = detalles.reduce(
 				(precio, detalle) => {
-					console.log(detalle);
-					console.log(precio);
 					return (
 						precio + detalle.cantidad * (detalle.articulo?.precioVenta || 0)
 					);
 				},
 				0 // Valor inicial para 'precio'
 			);
-			console.log(precio);
 			setPrecioPromocional(precio);
 		}
 	}, [detalles]);
@@ -66,6 +62,12 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 
 	const handleRemoveDetalle = (index: number) => {
 		setDetalles(detalles.filter((_, i) => i !== index));
+	};
+
+	const handleUpdateDetalle = (index: number, updatedDetalle: IDetalle) => {
+		setDetalles(
+			detalles.map((detalle, i) => (i === index ? updatedDetalle : detalle))
+		);
 	};
 
 	return (
@@ -101,6 +103,9 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 						key={index}
 						detalle={detalle}
 						onRemove={() => handleRemoveDetalle(index)}
+						onUpdate={(updatedDetalle) =>
+							handleUpdateDetalle(index, updatedDetalle)
+						}
 						esInsumo={esInsumo}
 					/>
 				))}

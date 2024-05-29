@@ -2,7 +2,6 @@ import * as Yup from "yup";
 import { FC, useState } from "react";
 import {
 	IArticulo,
-	IArticuloInsumo,
 	IArticuloManufacturado,
 	IDetalle,
 } from "../../../types/empresa";
@@ -25,6 +24,7 @@ import dayjs from "dayjs";
 import { DetalleFormCardList } from "../cards/DetalleFormCardList";
 import ImagenUpload from "./ImagenUpload";
 import { ImagenService } from "../../../services/ImagenService";
+import { addArticuloManufacturadoSucursal, editArticuloManufacturadoSucursal } from "../../../redux/slices/SelectedData";
 
 interface InsumoFormProps {
 	initialArticuloManufacturado: IArticuloManufacturado;
@@ -91,6 +91,16 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			setFiles((prev) => [...prev, ...newFiles]);
 		}
 		setPreviews(submittedPreviews);
+		if (articuloManufacturado.imagenes) {
+			const newImagenes = articuloManufacturado.imagenes.filter((imagen) =>
+				submittedPreviews.includes(imagen.url)
+			);
+			const newArticulo = {
+				...articuloManufacturado,
+				imagenes: newImagenes,
+			};
+			setArticuloManufacturado(newArticulo);
+		}
 	};
 
 	const handleSubmitDescripcion = (values: { [key: string]: any }) => {
@@ -99,22 +109,14 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			...values,
 			tiempoEstimadoMinutos: values.tiempoEstimadoMinutos.format("mm"),
 		};
-		console.log({ newArticuloManufacturado });
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
 	};
 
 	const handleSubmitDetalles = (detalles: IDetalle[]) => {
-		const detallesArticulo = detalles.map((d) => {
-			return {
-				baja: false,
-				cantidad: d.cantidad,
-				articuloInsumo: d.articulo as IArticuloInsumo,
-			};
-		});
 		const newArticuloManufacturado = {
 			...articuloManufacturado,
-			articuloManufacturadoDetalles: detallesArticulo,
+			articuloManufacturadoDetalles: detalles,
 		};
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
@@ -130,7 +132,8 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			);
 			const articuloImagenService = new ImagenService("/images/uploads");
 
-			console.log(newArticuloManufacturado);
+			console.log({ articuloManufacturado });
+
 			let producto;
 			if (articuloManufacturado.id) {
 				producto = await articuloManufacturadoService.update(
@@ -138,15 +141,22 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 					newArticuloManufacturado
 				);
 				dispatch(editArticuloManufacturado(producto));
+				dispatch(editArticuloManufacturadoSucursal(producto));
 			} else {
 				producto = await articuloManufacturadoService.create(
 					newArticuloManufacturado
 				);
 				dispatch(addArticuloManufacturado(producto));
+				dispatch(addArticuloManufacturadoSucursal(producto));
 			}
 
-			if (files != null) {
-				articuloImagenService.crearImagen(files, producto!.id!);
+			if (files != null && files.length > 0) {
+				await articuloImagenService.crearImagen(files, producto!.id!);
+				const newProducto = await articuloManufacturadoService.getById(producto.id!);
+				if (newProducto != null) {
+					dispatch(editArticuloManufacturado(newProducto));
+					dispatch(editArticuloManufacturadoSucursal(newProducto));
+				}
 			}
 
 			onClose();

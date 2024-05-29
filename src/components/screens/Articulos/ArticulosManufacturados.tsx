@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
@@ -9,33 +9,60 @@ import GenericModal from "../../ui/shared/GenericModal";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { ArticuloManufacturadoService } from "../../../services/ArticuloManufacturadoService";
 import { IArticuloManufacturado, ICategoria } from "../../../types/empresa";
-import { setArticulosManufacturados } from "../../../redux/slices/Business";
 import { AlertDialog } from "../../ui/shared/AlertDialog";
 import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoForm";
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
 import FilterFields from "../../ui/shared/FilterFields";
 import { ArticuloManufacturadoDetails } from "../../ui/details/ArticuloManufacturadoDetails";
+import { setManufacturados } from "../../../redux/slices/Business";
+import { setManufacturadosSucursal } from "../../../redux/slices/SelectedData";
 
 export const ArticulosManufacturados = () => {
-	const dispatch = useAppDispatch();
-
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
-		"/articulosInsumos"
+		"/articulosManufacturados"
 	);
-	const articulosManufacturados = useAppSelector(
-		(state) => state.business.articulosManufacturados
-	);
-
-	useEffect(() => {
-		setFilteredArticulosManufacturados(articulosManufacturados ?? []);
-	}, [articulosManufacturados]);
-
+	const dispatch = useAppDispatch();
+	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [idArticulo, setIdArticulo] = useState<number>();
-
 	const [articulo, setArticulo] = useState<IArticuloManufacturado | null>(null);
+	const [articulosManufacturados, setArticulosManufacturados] = useState<
+		IArticuloManufacturado[]
+	>([]);
+	const [totalRows, setTotalRows] = useState(0);
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(6);
+
+	const [filter, setFilter] = useState("");
+	const [categoryFilter, setCategoryFilter] = useState("");
+	const categorias =
+		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
+
+	const articulosRedux = useAppSelector(
+		(state) => state.selectedData.articulosManufacturadosSucursal
+	);
+
+	useEffect(() => {
+		if (articulosRedux) setArticulosManufacturados(articulosRedux);
+	}, [articulosRedux]);
+
+	useEffect(() => {
+		const findArticulos = async () => {
+			setLoading(true);
+			const response =
+				await articuloManufacturadoService.getAllPagedIncludeDeleted(
+					page,
+					rowsPerPage
+				);
+			setArticulosManufacturados(response.data);
+			dispatch(setManufacturadosSucursal(response.data));
+			setTotalRows(response.total);
+			setLoading(false);
+		};
+		findArticulos();
+	}, [page, rowsPerPage]);
 
 	const handleOpenAlert = () => setShowAlert(true);
 	const handleCloseAlert = () => setShowAlert(false);
@@ -60,20 +87,37 @@ export const ArticulosManufacturados = () => {
 		setShowModal(true);
 	};
 
-	const [filteredArticulosManufacturados, setFilteredArticulosManufacturados] =
-		useState(articulosManufacturados ?? []);
-
-	const [filter, setFilter] = useState("");
-	const [categoryFilter, setCategoryFilter] = useState("");
-	const categorias =
-		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
-
 	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setFilter(event.target.value);
 	};
 
 	const handleCategoryFilterChange = (value: string | null) => {
 		setCategoryFilter(value ?? "");
+	};
+
+	const handleSeeDetails = (articuloId: number) => {
+		const articuloEncontrado = articulosManufacturados?.find(
+			(a) => a.id == articuloId
+		);
+		setArticulo(articuloEncontrado!);
+		handleOpenDetailsModal();
+	};
+
+	const handleDeleteClick = (articuloId: number) => {
+		handleOpenAlert();
+		setIdArticulo(articuloId);
+	};
+
+	const handleDelete = async () => {
+		const productoService = new ArticuloManufacturadoService(
+			"/articulosManufacturados"
+		);
+		await productoService.delete(idArticulo!);
+		const newProductos = articulosManufacturados!.filter(
+			(a) => a.id != idArticulo
+		);
+		setArticulosManufacturados(newProductos);
+		handleCloseAlert();
 	};
 
 	useEffect(() => {
@@ -110,32 +154,15 @@ export const ArticulosManufacturados = () => {
 		if (categoryFilter !== "") {
 			filterByCategory(categoryFilter);
 		}
-		setFilteredArticulosManufacturados(filtered ?? []);
+		setArticulosManufacturados(filtered ?? []);
 	}, [filter, categoryFilter]);
 
-	const handleSeeDetails = (articuloId: number) => {
-		const articuloEncontrado = articulosManufacturados?.find(
-			(a) => a.id == articuloId
-		);
-		setArticulo(articuloEncontrado!);
-		handleOpenDetailsModal();
+	const handlePageChange = (newPage: number) => {
+		setPage(newPage);
 	};
 
-	const handleDeleteClick = (articuloId: number) => {
-		handleOpenAlert();
-		setIdArticulo(articuloId);
-	};
-
-	const handleDelete = async () => {
-		const productoService = new ArticuloManufacturadoService(
-			"/articulosManufacturados"
-		);
-		await productoService.delete(idArticulo!);
-		const newProductos = articulosManufacturados!.filter(
-			(a) => a.id != idArticulo
-		);
-		dispatch(setArticulosManufacturados(newProductos));
-		handleCloseAlert();
+	const handleRowsPerPageChange = (newRowsPerPage: number) => {
+		setRowsPerPage(newRowsPerPage);
 	};
 
 	return (
@@ -165,11 +192,13 @@ export const ArticulosManufacturados = () => {
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los productos manufacturados
 					</Typography>
-					<Stack direction="row">
-						{articulosManufacturados && (
+					<Stack direction="row" width="100%" justifyContent="center">
+						{loading ? (
+							<CircularProgress sx={{ mt: 6 }} />
+						) : (
 							<GenericTable
 								data={articuloManufacturadoService.articulosManufacturadosToDTO(
-									filteredArticulosManufacturados
+									articulosManufacturados
 								)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
@@ -181,10 +210,15 @@ export const ArticulosManufacturados = () => {
 									{ label: "Categoria", key: "categoria" },
 									{ label: "Acciones", key: "acciones" },
 								]}
+								totalRows={totalRows}
+								page={page}
+								rowsPerPage={rowsPerPage}
 								onEdit={handleOpenEditModal}
 								onSeeDetails={handleSeeDetails}
 								onAlta={handleDeleteClick}
 								onDelete={handleDeleteClick}
+								onPageChange={handlePageChange}
+								onRowsPerPageChange={handleRowsPerPageChange}
 							/>
 						)}
 					</Stack>
