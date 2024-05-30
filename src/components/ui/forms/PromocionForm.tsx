@@ -67,13 +67,26 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 		sucursales: promocion.sucursales,
 		promocionDetalles: promocion.promocionDetalles,
 	};
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
 
 	let validationSchema: Yup.ObjectSchema<any, Yup.AnyObject, any, ""> =
 		Yup.object().shape({
 			denominacion: Yup.string().trim().required("Este campo es requerido."),
 			descripcionDescuento: Yup.string().required("Este campo es requerido."),
-			fechaDesde: Yup.string().required("Este campo es requerido."),
-			fechaHasta: Yup.string().required("Este campo es requerido."),
+			fechaDesde: Yup.date()
+				.required("Este campo es requerido.")
+				.min(today, "La fecha no puede ser anterior al día de hoy.")
+				.max(
+					Yup.ref("fechaHasta"),
+					"La fecha desde debe ser anterior a la fecha hasta."
+				),
+			fechaHasta: Yup.date()
+				.required("Este campo es requerido.")
+				.min(
+					Yup.ref("fechaDesde"),
+					"La fecha hasta debe ser posterior a la fecha desde."
+				),
 			horaDesde: Yup.string().required("Este campo es requerido."),
 			horaHasta: Yup.string().required("Este campo es requerido."),
 			tipoPromocion: Yup.string().required("Este campo es requerido."),
@@ -219,6 +232,8 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 						type: "date",
 						required: true,
 					},
+				],
+				[
 					{
 						label: "Hora desde",
 						name: "horaDesde",

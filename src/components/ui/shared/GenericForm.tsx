@@ -69,6 +69,7 @@ export const GenericForm: FC<FormProps> = ({
 					handleBlur,
 					handleSubmit,
 					isSubmitting,
+					setFieldValue,
 				}) => (
 					<>
 						{childrenPosition === "top" && children}
@@ -153,13 +154,8 @@ export const GenericForm: FC<FormProps> = ({
 																	name={f.name}
 																	value={values[f.name]}
 																	sx={{ width: "100%" }}
-																	onChange={(time: any) => {
-																		handleChange({
-																			target: {
-																				name: f.name,
-																				value: time,
-																			},
-																		});
+																	onChange={(date: any) => {
+																		setFieldValue(f.name, date);
 																	}}
 																/>
 															</LocalizationProvider>

@@ -20,7 +20,7 @@ export const Promociones = () => {
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 
 	useEffect(() => {
-		if (promocionesRedux) setPromocionesSucursal(promocionesRedux);
+		if (promocionesRedux) setPromociones(promocionesRedux);
 	}, [promocionesRedux]);
 
 	const [showModal, setShowModal] = useState(false);
@@ -28,7 +28,7 @@ export const Promociones = () => {
 	const [promociones, setPromociones] = useState<IPromocion[]>([]);
 	const [page, setPage] = useState(1);
 	const [totalRows, setTotalRows] = useState(0);
-	const itemsPerPage = 4;
+	const itemsPerPage = 5;
 	const promocionService = new PromocionService("/promociones");
 
 	const handleOpenModal = () => setShowModal(true);
@@ -40,15 +40,19 @@ export const Promociones = () => {
 			page - 1,
 			itemsPerPage
 		);
-		setPromociones(response.data);
-		dispatch(setPromocionesSucursal(response.data));
+		const promocionesSucursal = response.data.filter(
+			(p) => p.sucursales && p.sucursales.some((s) => s.id === sucursal?.id)
+		);
+
+		setPromociones(promocionesSucursal);
+		dispatch(setPromocionesSucursal(promocionesSucursal));
 		setTotalRows(response.total);
 		setLoading(false);
 	};
 
 	useEffect(() => {
 		fetchPromociones();
-	}, [page]);
+	}, [page, sucursal]);
 
 	const noOfPages = Math.ceil(totalRows / itemsPerPage);
 
@@ -85,12 +89,9 @@ export const Promociones = () => {
 							<Typography>Ups! No hay ninguna promoción guardada.</Typography>
 						) : (
 							promociones &&
-							promociones.map((promocion, index) => {
-								if (promocion.sucursales.filter((s) => s.id === sucursal?.id))
-									return (
-										<PromocionAccordion key={index} promocion={promocion} />
-									);
-							})
+							promociones.map((promocion, index) => (
+								<PromocionAccordion key={index} promocion={promocion} />
+							))
 						)}
 					</Stack>
 					{promociones && promociones.length > 0 && (

@@ -110,7 +110,10 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 		(filteredArticulos ? filteredArticulos.length : 0) / itemsPerPage
 	);
 
-	const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+	const handlePageChange = (
+		_event: React.ChangeEvent<unknown>,
+		value: number
+	) => {
 		setPage(value);
 	};
 
@@ -139,7 +142,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 						</Stack>
 					</Stack>
 
-					<Stack spacing={1} alignItems="center" width="100%">
+					<Stack spacing={1} alignItems="center" width="100%" >
 						<Typography variant="h6">Unidad de medida</Typography>
 						{detalle.articulo == emptyArticulo || !detalle.articulo ? (
 							<Button
@@ -229,6 +232,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 						{filteredArticulos && filteredArticulos.length > 0 ? (
 							filteredArticulos
 								.sort((a, b) => a.denominacion.localeCompare(b.denominacion))
+								.slice((page - 1) * itemsPerPage, page * itemsPerPage)
 								.map((articulo, index) => (
 									<ArticuloCard
 										onSelectArticulo={handleSelectArticulo}
@@ -240,7 +244,11 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 							<Typography>No hay artículos disponibles</Typography>
 						)}
 					</Stack>
-					<Pagination count={noOfPages} page={page} onChange={handlePageChange} />
+					<Pagination
+						count={noOfPages}
+						page={page}
+						onChange={handlePageChange}
+					/>
 					{esInsumo && (
 						<Button
 							variant="contained"
