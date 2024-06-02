@@ -3,25 +3,25 @@ import { IArticuloManufacturado } from "../../../types/empresa";
 import {
 	Box,
 	Button,
-	Grid,
+	Chip,
 	IconButton,
 	MobileStepper,
 	Modal,
 	Stack,
 } from "@mui/material";
 import { modalStyle } from "../shared/GenericModal";
-import { DetailsGroup, Header } from "../shared/DetailsGroup";
+import { Content, DetailsGroup, Header } from "../shared/DetailsGroup";
 
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 import FastfoodIcon from "@mui/icons-material/Fastfood";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import LiquorIcon from "@mui/icons-material/Liquor";
 import ScaleIcon from "@mui/icons-material/Scale";
 import SellIcon from "@mui/icons-material/Sell";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import NotesIcon from "@mui/icons-material/Notes";
-import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -64,7 +64,36 @@ export const ArticuloManufacturadoDetails: FC<
 					alignItems="center"
 					sx={{ borderRadius: "20px" }}
 				>
-					<Box sx={{ width: "500px", flexGrow: 1 }}>
+					<Box sx={{ width: "700px", flexGrow: 1 }}>
+						<Stack
+							direction="row"
+							justifyContent="center"
+							spacing={2}
+							sx={{ mb: 1 }}
+						>
+							<Stack direction="row" spacing={1}>
+								<FastfoodIcon
+									sx={{
+										color: theme.palette.bg.light,
+										backgroundColor: theme.palette.primary.main,
+										borderRadius: "50%",
+										padding: "3px",
+									}}
+								/>
+								<Content>{articuloManufacturado.denominacion}</Content>
+							</Stack>
+							<Stack direction="row" spacing={1}>
+								<MonetizationOnIcon
+									sx={{
+										color: theme.palette.bg.light,
+										backgroundColor: theme.palette.primary.main,
+										borderRadius: "50%",
+										padding: "3px",
+									}}
+								/>
+								<Content>${articuloManufacturado.precioVenta}</Content>
+							</Stack>
+						</Stack>
 						{articuloManufacturado.imagenes &&
 							articuloManufacturado.imagenes.length > 0 && (
 								<Box
@@ -118,32 +147,6 @@ export const ArticuloManufacturadoDetails: FC<
 						padding="16px 10px"
 						justifyContent="center"
 					>
-						<DetailsGroup
-							labels={["Nombre", "Precio venta"]}
-							content={[
-								articuloManufacturado.denominacion,
-								`$${articuloManufacturado.precioVenta}`,
-							]}
-							icons={[
-								<FastfoodIcon
-									sx={{
-										color: theme.palette.bg.light,
-										backgroundColor: theme.palette.primary.main,
-										borderRadius: "50%",
-										padding: "3px",
-									}}
-								/>,
-
-								<MonetizationOnIcon
-									sx={{
-										color: theme.palette.bg.light,
-										backgroundColor: theme.palette.primary.main,
-										borderRadius: "50%",
-										padding: "3px",
-									}}
-								/>,
-							]}
-						/>
 						<DetailsGroup
 							labels={["Unidad de medida", "Categoria"]}
 							content={[
@@ -214,39 +217,24 @@ export const ArticuloManufacturadoDetails: FC<
 								/>
 								<Header>Detalles</Header>
 							</Stack>
-							<Grid container sx={{ pl: 4 }} alignItems="center">
+							<Stack
+								direction="row"
+								spacing={1}
+								width="100%"
+								sx={{ overflow: "wrap" }}
+							>
 								{articuloManufacturado.articuloManufacturadoDetalles &&
 									articuloManufacturado.articuloManufacturadoDetalles.map(
 										(detalle, index) => (
-											<Grid
-												item
-												xs={12}
-												sm={6}
-												md={4}
+											<Chip
 												key={index}
-												height="100%"
-											>
-												<Stack direction="row" spacing={1}>
-													<p>{detalle.cantidad}</p>
-													{detalle.articuloInsumo &&
-														"unidadMedida" in detalle.articuloInsumo && (
-															<p>
-																{
-																	detalle.articuloInsumo.unidadMedida!
-																		.denominacion
-																}
-															</p>
-														)}
-
-													{detalle.articuloInsumo &&
-														"denominacion" in detalle.articuloInsumo && (
-															<p>{detalle.articuloInsumo!.denominacion}</p>
-														)}
-												</Stack>
-											</Grid>
+												label={`${detalle.cantidad} ${
+													detalle.articulo?.unidadMedida!.denominacion ?? ""
+												} de ${detalle.articulo!.denominacion}`}
+											/>
 										)
 									)}
-							</Grid>
+							</Stack>
 						</Stack>
 					</Stack>
 				</Stack>

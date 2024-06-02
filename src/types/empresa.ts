@@ -56,12 +56,7 @@ export interface IArticuloManufacturado extends IArticulo {
 	descripcion: string;
 	tiempoEstimadoMinutos: number;
 	preparacion: string;
-	articuloManufacturadoDetalles?: IDetalleArticuloManufacturado[];
-}
-
-export interface IDetalleArticuloManufacturado extends BaseEntity {
-	cantidad: number;
-	articuloInsumo?: IArticuloInsumo;
+	articuloManufacturadoDetalles?: IDetalle[];
 }
 
 export interface IDetalle extends BaseEntity {
