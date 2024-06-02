@@ -8,14 +8,6 @@ import {
 	setSucursal,
 	setSucursalesEmpresa,
 } from "./redux/slices/SelectedData";
-import { PaisService } from "./services/PaisService";
-import { ProvinciaService } from "./services/ProvinciaService";
-import { LocalidadService } from "./services/LocalidadService";
-import {
-	setLocalidades,
-	setPaises,
-	setProvincias,
-} from "./redux/slices/Location";
 import { Box } from "@mui/material";
 import { AppRouter } from "./routes/AppRouter";
 import {
@@ -34,9 +26,7 @@ import { PromocionService } from "./services/PromocionService";
 
 export const App: FC = () => {
 	const dispatch = useAppDispatch();
-	const paisService = new PaisService("/paises");
-	const provinciaService = new ProvinciaService("/provincias");
-	const localidadService = new LocalidadService("/localidades");
+
 	//const usuarioService = new UsuarioService("/usuario");
 	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const empresaService = new EmpresaService("/empresas");
@@ -53,24 +43,17 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
-			const paises = await paisService.getAll();
-			const provincias = await provinciaService.getAll();
-			const localidades = await localidadService.getAll();
-			dispatch(setPaises(paises));
-			dispatch(setProvincias(provincias));
-			dispatch(setLocalidades(localidades));
-
 			//const usuarios = await usuarioService.getAll();
 			//dispatch(setUsuarios(usuarios));
-
-			const unidadMedidas = await unidadMedidaService.getAll();
-			dispatch(setUnidadMedidas(unidadMedidas));
 
 			const empresasData = await empresaService.getAll();
 			dispatch(setEmpresas(empresasData));
 
 			const sucursales = await sucursalService.getAll();
 			dispatch(setSucursales(sucursales));
+
+			const unidadMedidas = await unidadMedidaService.getAll();
+			dispatch(setUnidadMedidas(unidadMedidas));
 
 			const articulosInsumos = await articuloInsumoService.getAll();
 			dispatch(setInsumos(articulosInsumos));

@@ -1,15 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "./slices/Auth.ts"
+import authSlice from "./slices/Auth.ts";
 import businessSlice from "./slices/Business.ts";
 import selectedDataSlice from "./slices/SelectedData.ts";
-import locationSlice from "./slices/Location.ts";
 
 export const store = configureStore({
 	reducer: {
 		auth: authSlice,
 		business: businessSlice,
 		selectedData: selectedDataSlice,
-		location: locationSlice
 	},
 });
 

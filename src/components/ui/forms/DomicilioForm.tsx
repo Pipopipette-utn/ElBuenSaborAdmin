@@ -23,6 +23,8 @@ export const DomicilioForm: FC<DomicilioFormProps> = ({
 	handleSubmitForm,
 	submitButtonText,
 }) => {
+
+
 	const pais = domicilio.localidad
 		? domicilio.localidad!.provincia!.pais!
 		: undefined;
@@ -56,7 +58,7 @@ export const DomicilioForm: FC<DomicilioFormProps> = ({
 
 	const handleSubmit = async (values: { [key: string]: any }) => {
 		let newDomicilio: IDomicilio = {
-			... domicilio,
+			...domicilio,
 			baja: false,
 			cp: values.cp,
 			calle: values.calle,

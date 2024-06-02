@@ -1,28 +1,47 @@
 import * as Yup from "yup";
 import { useContext, useEffect, useState } from "react";
-
-import { useAppSelector } from "../../../redux/hooks";
 import { MenuItem, Select, Stack, Typography } from "@mui/material";
 import { Formik } from "formik";
 import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
 import {
 	ILocalidad,
+	IPais,
 	IProvincia,
 	UbicacionContext,
 	UbicacionContextValues,
 } from "../../../types/ubicacion";
+import { PaisService } from "../../../services/PaisService";
+import { ProvinciaService } from "../../../services/ProvinciaService";
+import { LocalidadService } from "../../../services/LocalidadService";
 
 export const UbicacionForm = () => {
-	const paises = useAppSelector((state) => state.location.paises);
-	const todasProvincias = useAppSelector((state) => state.location.provincias);
-	const todasLocalidades = useAppSelector(
-		(state) => state.location.localidades
+	const paisService = new PaisService("/paises");
+	const provinciaService = new ProvinciaService("/provincias");
+	const localidadService = new LocalidadService("/localidades");
+
+	const [paises, setPaises] = useState<IPais[]>([]);
+	const [provincias, setProvincias] = useState<IProvincia[]>([]);
+	const [localidades, setLocalidades] = useState<ILocalidad[]>([]);
+	const [filteredProvincias, setFilteredProvincias] = useState<IProvincia[]>(
+		[]
+	);
+	const [filteredLocalidades, setFilteredLocalidades] = useState<ILocalidad[]>(
+		[]
 	);
 
-	const [provincias, setProvincias] = useState<IProvincia[]>(todasProvincias!);
-	const [localidades, setLocalidades] = useState<ILocalidad[]>(
-		todasLocalidades!
-	);
+	useEffect(() => {
+		const traerUbicacion = async () => {
+			const todosPaises = await paisService.getAll();
+			const todasProvincias = await provinciaService.getAll();
+			const todasLocalidades = await localidadService.getAll();
+
+			setPaises(todosPaises);
+			setProvincias(todasProvincias);
+			setLocalidades(todasLocalidades);
+		};
+
+		traerUbicacion();
+	}, []);
 
 	const {
 		pais,
@@ -36,20 +55,20 @@ export const UbicacionForm = () => {
 	// Filtrar las provincias según el país seleccionado
 	useEffect(() => {
 		if (pais) {
-			const filteredProvincias = todasProvincias!.filter((provincia: IProvincia) => {
+			const filteredProvincias = provincias.filter((provincia: IProvincia) => {
 				return provincia.pais?.id == pais.id;
 			});
-			setProvincias(filteredProvincias);
+			setFilteredProvincias(filteredProvincias);
 		}
 	}, [pais]);
 
 	// Filtrar las localidades según la provincia seleccionada
 	useEffect(() => {
 		if (provincia) {
-			const filteredLocalidades = todasLocalidades!.filter(
+			const filteredLocalidades = localidades.filter(
 				(localidad: ILocalidad) => localidad.provincia?.id == provincia.id
 			);
-			setLocalidades(filteredLocalidades);
+			setFilteredLocalidades(filteredLocalidades);
 		}
 	}, [provincia]);
 
@@ -90,11 +109,15 @@ export const UbicacionForm = () => {
 								onChangePais(selectedPais!);
 							}}
 						>
-							{paises!.map((option, index) => (
-								<MenuItem key={index} value={option.id}>
-									{option.nombre}
-								</MenuItem>
-							))}
+							{paises.length === 0 ? (
+								<MenuItem disabled>Cargando...</MenuItem>
+							) : (
+								paises!.map((option, index) => (
+									<MenuItem key={index} value={option.id}>
+										{option.nombre}
+									</MenuItem>
+								))
+							)}
 						</Select>
 						{touched["pais"] && errors["pais"] && (
 							<ErrorTypography>{String(errors["pais"])}</ErrorTypography>
@@ -110,7 +133,7 @@ export const UbicacionForm = () => {
 							value={values["provincia"]}
 							onChange={(e) => {
 								handleChange(e);
-								const selectedProvincia = provincias!.find(
+								const selectedProvincia = filteredProvincias!.find(
 									(provincia) => provincia.id! == e.target.value
 								);
 								onChangeProvincia(selectedProvincia!);
@@ -120,8 +143,10 @@ export const UbicacionForm = () => {
 								<MenuItem disabled value="">
 									Seleccione un país
 								</MenuItem>
+							) : filteredProvincias.length === 0 ? (
+								<MenuItem disabled>Cargando...</MenuItem>
 							) : (
-								provincias!.map((option, index) => (
+								filteredProvincias!.map((option, index) => (
 									<MenuItem key={index} value={option.id}>
 										{option.nombre}
 									</MenuItem>
@@ -142,7 +167,7 @@ export const UbicacionForm = () => {
 							value={values["localidad"]}
 							onChange={(e) => {
 								handleChange(e);
-								const selectedLocalidad = localidades!.find(
+								const selectedLocalidad = filteredLocalidades!.find(
 									(localidad) => localidad.id! == e.target.value
 								);
 								onChangeLocalidad(selectedLocalidad!);
@@ -152,8 +177,10 @@ export const UbicacionForm = () => {
 								<MenuItem disabled value="">
 									Seleccione una provincia
 								</MenuItem>
+							) : filteredLocalidades.length === 0 ? (
+								<MenuItem disabled>Cargando...</MenuItem>
 							) : (
-								localidades!.map((option, index) => (
+								filteredLocalidades!.map((option, index) => (
 									<MenuItem key={index} value={option.id}>
 										{option.nombre}
 									</MenuItem>
