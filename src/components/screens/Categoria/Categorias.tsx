@@ -6,13 +6,15 @@ import {
 	Stack,
 	TextField,
 	Typography,
+	IconButton,
 } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { CategoriaAccordion } from "../../ui/accordion/CategoriaAccordion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { CategoriaForm } from "../../ui/forms/CategoriaForm";
@@ -20,8 +22,12 @@ import { emptyCategoria } from "../../../types/emptyEntities";
 import { ICategoria } from "../../../types/empresa";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
+import { setCategoriasSucursal } from "../../../redux/slices/SelectedData";
+import { SucursalService } from "../../../services/SucursalService";
 
 export const Categorias = () => {
+	const dispatch = useAppDispatch();
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
@@ -39,8 +45,27 @@ export const Categorias = () => {
 		setFilter(event.target.value);
 	};
 
+	const traerCategorias = useCallback(async () => {
+		if (sucursal) {
+			const sucursalService = new SucursalService("/sucursales");
+			try {
+				dispatch(setCategoriasSucursal("loading"));
+				const categorias =
+					(await sucursalService.getCategorias(sucursal.id!)) ?? [];
+				dispatch(setCategoriasSucursal(categorias));
+			} catch (e) {
+				dispatch(setCategoriasSucursal(null));
+			}
+		}
+	}, [dispatch, sucursal]);
+
+	const handleReload = () => {
+		dispatch(setCategoriasSucursal(null));
+		traerCategorias();
+	};
+
 	useEffect(() => {
-		const filterCategorias = async () => {
+		const filterCategorias = () => {
 			if (categorias !== "loading") setFilteredCategorias(categorias);
 		};
 		setFilteredCategorias(null);
@@ -50,7 +75,6 @@ export const Categorias = () => {
 	useEffect(() => {
 		let filtered = categorias !== "loading" ? categorias : [];
 		const filterByDenominacion = (categoryList: ICategoria[]) => {
-			console.log(categoryList);
 			return categoryList.filter((categoria) => {
 				if (
 					categoria.denominacion.toLowerCase().includes(filter.toLowerCase())
@@ -154,9 +178,14 @@ export const Categorias = () => {
 					</Stack>
 				</GenericHeaderStack>
 				<Stack sx={{ p: "12px" }}>
-					<Typography variant="h5" sx={{ pb: "12px" }}>
-						Todas las categorias
-					</Typography>
+					<Stack direction="row" alignItems="center" justifyContent="space-between">
+						<Typography variant="h5" >
+							Todas las categorias
+						</Typography>
+						<IconButton onClick={handleReload}>
+							<RefreshIcon color="primary" />
+						</IconButton>
+					</Stack>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
 						{filteredCategorias !== null && filteredCategorias.length !== 0
 							? filteredCategorias.map((categoria, index) => {

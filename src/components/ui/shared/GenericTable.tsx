@@ -1,14 +1,14 @@
-import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import { theme } from "../../../styles/theme";
-import ButtonGroup from "./GenericTableButtonGroup";
-import { Typography } from "@mui/material";
+import React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import { theme } from '../../../styles/theme';
+import ButtonGroup from './GenericTableButtonGroup';
+import { Stack, Typography } from '@mui/material';
 
 export interface TableColumn {
 	label: string;
@@ -53,95 +53,89 @@ export const GenericTable = <T,>({
 	};
 
 	return (
-		<div
+		<Stack
+			direction="column"
+			width="100%"
+			height="100%"
 			style={{
-				width: "100%",
-				display: "flex",
 				justifyContent: "center",
 				alignItems: "center",
-				paddingRight: 8,
+				flex: 1, // Allow the Stack to grow
+				overflow: 'hidden', // Prevent overflow issues
 			}}
 		>
-			<Paper
-				sx={{
-					width: "100%",
-					borderRadius: "8px",
-					backgroundColor: theme.palette.bg.dark,
-				}}
-			>
-				<TableContainer sx={{ maxHeight: 300 }}>
-					<Table stickyHeader>
-						<TableHead>
-							<TableRow>
-								{columns.map((column: any, i: number) => (
-									<TableCell
-										key={i}
-										align={"center"}
-										sx={{
-											backgroundColor: theme.palette.bg.dark,
-										}}
-									>
-										{column.label}
-									</TableCell>
-								))}
-							</TableRow>
-						</TableHead>
-						<TableBody>
-							{data.map((row: any, index: number) => (
-								<TableRow
-									role="checkbox"
-									tabIndex={-1}
-									key={index}
+			<TableContainer style={{ flex: 1, overflow: 'auto' }}>
+				<Table stickyHeader>
+					<TableHead>
+						<TableRow>
+							{columns.map((column: any, i: number) => (
+								<TableCell
+									key={i}
+									align={"center"}
 									sx={{
 										backgroundColor: theme.palette.bg.dark,
-										"&:hover": { backgroundColor: theme.palette.bg.main },
 									}}
 								>
-									{columns.map((column: any, i: number) => {
-										const cellValue = row[column.key];
-										return (
-											<TableCell
-												key={i}
-												align={"center"}
-												sx={{
-													backgroundColor: row["baja"]
-														? theme.palette.info.light
-														: theme.palette.bg.dark,
-												}}
-											>
-												{column.label === "Acciones" ? (
-													<ButtonGroup
-														idEntity={row["id"]}
-														onEdit={row["baja"] ? undefined : onEdit}
-														onDelete={row["baja"] ? undefined : onDelete}
-														onAlta={row["baja"] ? onAlta : undefined}
-														onSeeDetails={onSeeDetails!}
-													/>
-												) : (
-													cellValue
-												)}
-											</TableCell>
-										);
-									})}
-								</TableRow>
+									{column.label}
+								</TableCell>
 							))}
-						</TableBody>
-					</Table>
-				</TableContainer>
-				{data.length === 0 && (
-					<Typography sx={{pl: 4}}>No hay nada para mostrar aquí</Typography>
-				)}
-				<TablePagination
-					sx={{ backgroundColor: theme.palette.bg.dark }}
-					rowsPerPageOptions={[10, 25, 100]}
-					component="div"
-					count={totalRows}
-					rowsPerPage={rowsPerPage}
-					page={page}
-					onPageChange={handleChangePage}
-					onRowsPerPageChange={handleChangeRowsPerPage}
-				/>
-			</Paper>
-		</div>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{data.map((row: any, index: number) => (
+							<TableRow
+								role="checkbox"
+								tabIndex={-1}
+								key={index}
+								sx={{
+									backgroundColor: theme.palette.bg.dark,
+									"&:hover": { backgroundColor: theme.palette.bg.main },
+								}}
+							>
+								{columns.map((column: any, i: number) => {
+									const cellValue = row[column.key];
+									return (
+										<TableCell
+											key={i}
+											align={"center"}
+											sx={{
+												backgroundColor: row["baja"]
+													? theme.palette.info.light
+													: theme.palette.bg.dark,
+											}}
+										>
+											{column.label === "Acciones" ? (
+												<ButtonGroup
+													idEntity={row["id"]}
+													onEdit={row["baja"] ? undefined : onEdit}
+													onDelete={row["baja"] ? undefined : onDelete}
+													onAlta={row["baja"] ? onAlta : undefined}
+													onSeeDetails={onSeeDetails!}
+												/>
+											) : (
+												cellValue
+											)}
+										</TableCell>
+									);
+								})}
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+			{data.length === 0 && (
+				<Typography sx={{ pl: 4 }}>No hay nada para mostrar aquí</Typography>
+			)}
+			<TablePagination
+				sx={{ backgroundColor: theme.palette.bg.dark, width: "100%" }}
+				rowsPerPageOptions={[10, 25, 100]}
+				component="div"
+				count={totalRows}
+				rowsPerPage={rowsPerPage}
+				page={page}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+			/>
+		</Stack>
 	);
 };

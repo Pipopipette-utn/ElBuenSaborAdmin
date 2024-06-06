@@ -15,9 +15,16 @@ import { IField } from "../../../types/business";
 interface EmpresaFormProps {
 	empresa: IEmpresa;
 	onClose: Function;
+	onShowSuccess: (message: string) => void;
+	onShowError: (message: string) => void;
 }
 
-export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
+export const EmpresaForm: FC<EmpresaFormProps> = ({
+	empresa,
+	onClose,
+	onShowSuccess,
+	onShowError,
+}) => {
 	const dispatch = useAppDispatch();
 
 	const initialValues = {
@@ -50,14 +57,16 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 
 			if (values.id) {
 				await empresaService.update(values.id, newEmpresa);
+				onShowSuccess("Empresa editada con éxito!");
 			} else {
 				await empresaService.create(newEmpresa);
+				onShowSuccess("Empresa creada con éxito!");
 			}
 			const empresas = await empresaService.getAll();
 			dispatch(setEmpresas(empresas));
 			onClose();
 		} catch (error: any) {
-			throw new Error(error);
+			onShowError("Error en el alta de empresa: " + error);
 		}
 	};
 

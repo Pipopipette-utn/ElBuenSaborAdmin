@@ -18,9 +18,15 @@ import { EmpresaForm } from "../forms/EmpresaForm";
 
 interface EmpresaCardProps {
 	empresa: IEmpresa;
+	onShowSuccess: (message: string) => void;
+	onShowError: (message: string) => void;
 }
 
-const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
+const EmpresaCard: FC<EmpresaCardProps> = ({
+	empresa,
+	onShowSuccess,
+	onShowError,
+}) => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
@@ -69,7 +75,12 @@ const EmpresaCard: FC<EmpresaCardProps> = ({ empresa }) => {
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<EmpresaForm empresa={empresa} onClose={handleCloseModal} />
+				<EmpresaForm
+					empresa={empresa}
+					onClose={handleCloseModal}
+					onShowSuccess={onShowSuccess}
+					onShowError={onShowError}
+				/>
 			</GenericModal>
 		</>
 	);

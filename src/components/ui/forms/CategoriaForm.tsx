@@ -41,7 +41,7 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 		handleNext();
 	};
 
-	const handleSubmitForm = async (sucursales: ISucursalDTO[] | ISucursal[]) => {
+	const handleSubmitForm = async ({sucursales}: {sucursales: ISucursalDTO[] | ISucursal[]}) => {
 		try {
 			const mappedSucursales = sucursales.map((s) => {
 				return { id: s.id, baja: s.baja, nombre: s.nombre };

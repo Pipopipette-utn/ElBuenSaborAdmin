@@ -24,9 +24,15 @@ import { AlertDialog } from "../shared/AlertDialog";
 
 interface SucursalCardProps {
 	sucursal: ISucursal;
+	onShowSuccess: (message: string) => void;
+	onShowError: (message: string) => void;
 }
 
-const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
+const SucursalCard: FC<SucursalCardProps> = ({
+	sucursal,
+	onShowSuccess,
+	onShowError,
+}) => {
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursalesEmpresa = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
@@ -60,15 +66,20 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	};
 
 	const handleDelete = async () => {
-		const sucursalService = new SucursalService("/sucursales");
-		await sucursalService.delete(sucursal.id!);
-		if (Array.isArray(sucursalesEmpresa)) {
-			const newSucursalesEmpresa = sucursalesEmpresa!.filter(
-				(s: ISucursal) => s.id != sucursal.id!
-			);
-			dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
+		try {
+			const sucursalService = new SucursalService("/sucursales");
+			await sucursalService.delete(sucursal.id!);
+			if (Array.isArray(sucursalesEmpresa)) {
+				const newSucursalesEmpresa = sucursalesEmpresa!.filter(
+					(s: ISucursal) => s.id != sucursal.id!
+				);
+				dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
+			}
+			handleCloseAlert();
+			onShowSuccess("Sucursal dada de baja con éxito!");
+		} catch (error: any) {
+			onShowError("Error al dar de baja sucursal: " + error);
 		}
-		handleCloseAlert();
 	};
 
 	const handleClick = () => {
@@ -122,7 +133,12 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
-				<SucursalForm initialSucursal={sucursal} onClose={handleCloseModal} />
+				<SucursalForm
+					initialSucursal={sucursal}
+					onClose={handleCloseModal}
+					onShowSuccess={onShowSuccess}
+					onShowError={onShowError}
+				/>
 			</GenericModal>
 			<AlertDialog
 				open={showAlert}

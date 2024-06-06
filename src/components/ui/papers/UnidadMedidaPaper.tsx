@@ -16,10 +16,14 @@ import { AlertDialog } from "../shared/AlertDialog";
 
 interface UnidadMedidaPaperProps {
 	unidadMedida: IUnidadMedida;
+	onShowSuccess: (message: string) => void;
+	onShowError: (message: string) => void;
 }
 
 export const UnidadMedidaPaper: FC<UnidadMedidaPaperProps> = ({
 	unidadMedida,
+	onShowSuccess,
+	onShowError,
 }) => {
 	const unidadesdMedida = useAppSelector(
 		(state) => state.business.unidadMedidas
@@ -36,13 +40,20 @@ export const UnidadMedidaPaper: FC<UnidadMedidaPaperProps> = ({
 	const handleCloseAlert = () => setShowAlert(false);
 
 	const handleDelete = async () => {
-		const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
-		await unidadMedidaService.delete(unidadMedida.id!);
-		const newUnidades = unidadesdMedida!.filter(
-			(u) => u.id != unidadMedida.id!
-		);
-		dispatch(setUnidadMedidas(newUnidades));
-		handleCloseAlert();
+		try {
+			const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
+			await unidadMedidaService.delete(unidadMedida.id!);
+			if (unidadesdMedida !== "loading") {
+				const newUnidades = unidadesdMedida!.filter(
+					(u) => u.id != unidadMedida.id!
+				);
+				dispatch(setUnidadMedidas(newUnidades));
+			}
+			handleCloseAlert();
+			onShowSuccess("Unidad de medida dada de baja con éxito!");
+		} catch (error: any) {
+			onShowError("Error al dar de baja unidad de medida: " + error);
+		}
 	};
 
 	return (
@@ -78,6 +89,8 @@ export const UnidadMedidaPaper: FC<UnidadMedidaPaperProps> = ({
 				<UnidadMedidaForm
 					unidadMedida={unidadMedida}
 					onClose={handleCloseModal}
+					onShowSuccess={onShowSuccess}
+					onShowError={onShowError}
 				/>
 			</GenericModal>
 		</>

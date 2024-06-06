@@ -29,6 +29,8 @@ import { AlertDialog } from "../shared/AlertDialog";
 interface SucursalFormProps {
 	initialSucursal: ISucursal;
 	onClose: Function;
+	onShowSuccess: (message: string) => void;
+	onShowError: (message: string) => void;
 }
 
 // En este componente uso un stepper ya que tiene 2 pasos el formulario: el de los datos de la sucursal
@@ -36,6 +38,8 @@ interface SucursalFormProps {
 export const SucursalForm: FC<SucursalFormProps> = ({
 	initialSucursal,
 	onClose,
+	onShowSuccess,
+	onShowError,
 }) => {
 	const [sucursal, setSucursal] = useState(initialSucursal);
 	const [activeStep, setActiveStep] = useState(0);
@@ -113,17 +117,19 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 					newSucursal
 				);
 				dispatch(editSucursalEmpresa(updatedSucursal));
+				onShowSuccess("Sucursal editada con éxito!");
 			} else {
 				const createdSucursal = await sucursalService.create(newSucursal);
 				dispatch(addSucursalEmpresa(createdSucursal));
 				if (sucursales?.length === 0) {
 					dispatch(setSelectedSucursal(createdSucursal));
 				}
+				onShowSuccess("Sucursal creada con éxito!");
 			}
 
 			onClose();
 		} catch (error: any) {
-			throw new Error(error);
+			onShowError("Error en el alta de sucursal: " + error);
 		}
 	};
 

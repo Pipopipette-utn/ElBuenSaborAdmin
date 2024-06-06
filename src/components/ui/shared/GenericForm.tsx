@@ -22,7 +22,7 @@ interface FormProps {
 	fields: IField[][];
 	initialValues: { [key: string]: any };
 	validationSchema: Yup.ObjectSchema<any>;
-	onSubmit: (values: { [key: string]: any }) => void | Promise<any>;
+	onSubmit: (values: { [key: string]: any } | any) => void | Promise<any>;
 	onBack?: () => void;
 	submitButtonText: string;
 	children?: ReactNode;

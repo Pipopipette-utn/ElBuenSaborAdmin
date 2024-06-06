@@ -13,13 +13,16 @@ import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
 import { Switch } from "../styled/StyledSwitch";
 import { useAppSelector } from "../../../redux/hooks";
 import { mapCategories } from "../../../utils/mapCategorias";
-
 export const ArticuloElaborarForm: FC = () => {
 	const { values, setFieldValue, errors } = useFormikContext<FormikValues>();
 
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
+	let mappedCategorias =
+		categorias && categorias !== "loading" ? categorias : [];
+	if (categorias !== "loading")
+		mappedCategorias = mapCategories(categorias, true);
 
 	let articuloSchema = Yup.object().shape({
 		esParaElaborar: Yup.boolean().required("Este campo es requerido."),
@@ -54,24 +57,14 @@ export const ArticuloElaborarForm: FC = () => {
 						<Typography>Categoría</Typography>
 						<Autocomplete
 							fullWidth
+							onBlur={handleBlur}
+							options={mappedCategorias}
 							value={values["categoria"]}
 							onChange={(_event, newValue) =>
 								setFieldValue("categoria", newValue)
 							}
-							onBlur={handleBlur}
-							options={
-								categorias !== "loading"
-									? mapCategories(categorias, true)
-									: []
-							}
-							getOptionLabel={(option) => option}
-							renderInput={(params) => (
-								<TextField
-									{...params}
-									variant="outlined"
-									value={values["categoria"]}
-								/>
-							)}
+							getOptionLabel={(option) => option.denominacion}
+							renderInput={(params) => <TextField {...params} variant="outlined" />}
 						/>
 						{touched["categoria"] && errors["categoria"] && (
 							<ErrorTypography>{String(errors["categoria"])}</ErrorTypography>

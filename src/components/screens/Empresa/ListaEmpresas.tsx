@@ -15,13 +15,22 @@ import GenericModal from "../../ui/shared/GenericModal";
 import { EmpresaForm } from "../../ui/forms/EmpresaForm";
 import { emptyEmpresa } from "../../../types/emptyEntities";
 import { Loader } from "../../ui/shared/Loader";
+import { SuccessMessage } from "../../ui/shared/SuccessMessage";
+import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 export const ListaEmpresas = () => {
-
 	const empresas = useAppSelector((state) => state.business.empresas);
 	const [showModal, setShowModal] = useState(false);
 
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => setShowModal(false);
+
+	const [showSuccess, setShowSuccess] = useState("");
+	const handleShowSuccess = (message: string) => setShowSuccess(message);
+	const handleCloseSuccess = () => setShowSuccess("");
+
+	const [showError, setShowError] = useState("");
+	const handleShowError = (message: string) => setShowError(message);
+	const handleCloseError = () => setShowError("");
 
 	return (
 		<Stack
@@ -41,9 +50,15 @@ export const ListaEmpresas = () => {
 					flexWrap: "wrap",
 				}}
 			>
-				{empresas !== null && empresas !== "loading" &&
+				{empresas !== null &&
+					empresas !== "loading" &&
 					empresas.map((empresa, index) => (
-						<EmpresaCard key={index} empresa={empresa} />
+						<EmpresaCard
+							key={index}
+							empresa={empresa}
+							onShowSuccess={handleShowSuccess}
+							onShowError={handleShowError}
+						/>
 					))}
 				<AddCard
 					onClick={handleOpenModal}
@@ -57,15 +72,30 @@ export const ListaEmpresas = () => {
 					</AddCardActions>
 				</AddCard>
 				{empresas === "loading" && <Loader />}
-				<GenericModal
-					title={"Crear empresa"}
-					icon={<AddBusinessIcon fontSize="large" />}
-					open={showModal}
-					handleClose={handleCloseModal}
-				>
-					<EmpresaForm empresa={emptyEmpresa} onClose={handleCloseModal} />
-				</GenericModal>
 			</Stack>
+			<GenericModal
+				title={"Crear empresa"}
+				icon={<AddBusinessIcon fontSize="large" />}
+				open={showModal}
+				handleClose={handleCloseModal}
+			>
+				<EmpresaForm
+					empresa={emptyEmpresa}
+					onClose={handleCloseModal}
+					onShowSuccess={handleShowSuccess}
+					onShowError={handleShowError}
+				/>
+			</GenericModal>
+			<SuccessMessage
+				open={!!showSuccess}
+				onClose={handleCloseSuccess}
+				message={showSuccess}
+			/>
+			<ErrorMessage
+				open={!!showError}
+				onClose={handleCloseError}
+				message={showError}
+			/>
 		</Stack>
 	);
 };

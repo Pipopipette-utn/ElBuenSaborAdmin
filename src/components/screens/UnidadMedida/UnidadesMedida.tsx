@@ -1,9 +1,10 @@
-import { LinearProgress, Stack, Typography } from "@mui/material";
+import { LinearProgress, Stack, Typography, IconButton } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import ScaleIcon from "@mui/icons-material/Scale";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppSelector } from "../../../redux/hooks";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import { UnidadMedidaPaper } from "../../ui/papers/UnidadMedidaPaper";
 import { UnidadMedidaForm } from "../../ui/forms/UnidadMedidaForm";
@@ -11,6 +12,8 @@ import { emptyUnidadDeMedida } from "../../../types/emptyEntities";
 import { useDispatch } from "react-redux";
 import { UnidadMedidaService } from "../../../services/UnidadMedidaService";
 import { setUnidadMedidas } from "../../../redux/slices/Business";
+import { SuccessMessage } from "../../ui/shared/SuccessMessage";
+import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
 export const UnidadesMedida = () => {
 	const unidadesdMedida = useAppSelector(
@@ -25,14 +28,29 @@ export const UnidadesMedida = () => {
 
 	const handleClick = () => handleOpenModal();
 
-	useEffect(() => {
-		const traerUnidades = async () => {
-			const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
+	const traerUnidades = useCallback(async () => {
+		const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
+		try {
+			dispatch(setUnidadMedidas("loading"));
 			const unidadMedidas = await unidadMedidaService.getAll();
 			dispatch(setUnidadMedidas(unidadMedidas));
-		};
+		} catch (e) {
+			dispatch(setUnidadMedidas(null));
+		}
+	}, [dispatch]);
+
+	const handleReload = () => {
+		dispatch(setUnidadMedidas(null));
 		traerUnidades();
-	}, []);
+	};
+
+	const [showSuccess, setShowSuccess] = useState("");
+	const handleShowSuccess = (message: string) => setShowSuccess(message);
+	const handleCloseSuccess = () => setShowSuccess("");
+
+	const [showError, setShowError] = useState("");
+	const handleShowError = (message: string) => setShowError(message);
+	const handleCloseError = () => setShowError("");
 
 	return (
 		<>
@@ -47,21 +65,35 @@ export const UnidadesMedida = () => {
 					onClick={handleClick}
 				/>
 				<>
-					<Typography variant="h5" sx={{ pb: "12px" }}>
-						Todas las unidades de medida
-					</Typography>
+					<Stack
+						direction="row"
+						alignItems="center"
+						justifyContent="space-between"
+					>
+						<Typography variant="h5">Todas las unidades de medida</Typography>
+						<IconButton onClick={handleReload}>
+							<RefreshIcon color="primary" />
+						</IconButton>
+					</Stack>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
 						{unidadesdMedida &&
 							unidadesdMedida !== "loading" &&
 							unidadesdMedida.map((unidad, index) => (
-								<UnidadMedidaPaper key={index} unidadMedida={unidad} />
+								<UnidadMedidaPaper
+									key={index}
+									unidadMedida={unidad}
+									onShowSuccess={handleShowSuccess}
+									onShowError={handleShowError}
+								/>
 							))}
 					</Stack>
 					{unidadesdMedida === "loading" && (
 						<LinearProgress sx={{ width: "100%" }} />
 					)}
 					{unidadesdMedida === null && (
-						<Typography>Ups! No hay unidades de medida para mostrar.</Typography>
+						<Typography>
+							Ups! No hay unidades de medida para mostrar.
+						</Typography>
 					)}
 				</>
 			</GenericDoubleStack>
@@ -74,8 +106,20 @@ export const UnidadesMedida = () => {
 				<UnidadMedidaForm
 					unidadMedida={emptyUnidadDeMedida}
 					onClose={handleCloseModal}
+					onShowSuccess={handleShowSuccess}
+					onShowError={handleShowError}
 				/>
 			</GenericModal>
+			<SuccessMessage
+				open={!!showSuccess}
+				onClose={handleCloseSuccess}
+				message={showSuccess}
+			/>
+			<ErrorMessage
+				open={!!showError}
+				onClose={handleCloseError}
+				message={showError}
+			/>
 		</>
 	);
 };

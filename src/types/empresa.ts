@@ -95,3 +95,21 @@ export interface IPromocion extends BaseEntity {
 	promocionDetalles: IDetalle[];
 }
 
+export interface IPedido {
+	horaEstimadaFinalizacion: string;
+	total: number;
+	totalCosto: number;
+	estado: "PREPARACION" | "PENDIENTE" | "CANCELADO" | "RECHAZADO" | "ENTREGADO";
+	tipoEnvio: "DELIVERY" | "TAKE_AWAY";
+    formaPago: "EFECTIVO" | "MERCADO_PAGO";
+	fechaPedido: Date;
+	domicilio?: IDomicilio;
+	sucursal: ISucursalDTO;
+	detallePedidos: IDetallePedido[];
+}
+
+export interface IDetallePedido{
+	cantidad: number;
+	subTotal: number;
+	articulo: IArticulo;
+}

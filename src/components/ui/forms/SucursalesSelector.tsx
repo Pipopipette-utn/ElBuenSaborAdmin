@@ -17,7 +17,13 @@ import { ISucursalDTO } from "../../../types/dto";
 interface SucursalSelectorProps {
 	selected: ISucursalDTO[];
 	onBack: () => void;
-	handleSubmit: (sucursales: ISucursal[] | ISucursalDTO[]) => void;
+	handleSubmit: ({
+		values,
+		selectedSucursales,
+	}: {
+		values?: { [key: string]: any } | undefined;
+		selectedSucursales?: ISucursalDTO[] | undefined;
+	}) => void;
 	buttonTitle: string;
 }
 
@@ -66,7 +72,7 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 									key={index}
 									title={
 										estaActiva && estaDeshabilitada
-											? `Para dar de baja una categoría en una sucursal, hacerlo desde el botón "Dar de baja"`
+											? `Para dar de baja en una sucursal, hacerlo desde el botón "Dar de baja"`
 											: ""
 									}
 									arrow
@@ -104,7 +110,7 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 					sx={{ py: 1.5, px: 4, textTransform: "uppercase" }}
 					onClick={() => {
 						setDisabled(true);
-						handleSubmit(selectedSucursales);
+						handleSubmit({ selectedSucursales });
 					}}
 				>
 					{buttonTitle}

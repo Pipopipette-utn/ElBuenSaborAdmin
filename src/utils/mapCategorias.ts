@@ -4,12 +4,12 @@ export const mapCategories = (
 	categorias: ICategoria[] | null,
 	esInsumo: boolean
 ) => {
-	const result: string[] = [];
+	const result: any[] = [];
 
 	function traverseAndFilter(categoryList: ICategoria[] | null) {
 		categoryList!.forEach((categoria) => {
 			if (categoria.esInsumo == esInsumo) {
-				result.push(categoria.denominacion);
+				result.push(categoria);
 				if (categoria.subCategorias && categoria.subCategorias.length > 0) {
 					traverseAndFilter(categoria.subCategorias);
 				}

@@ -11,7 +11,6 @@ import { GenericForm } from "../shared/GenericForm";
 import { ArticuloElaborarForm } from "./ArticuloElaborarForm";
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import ImageUpload from "./ImagenUpload";
-import { findCategory } from "../../../utils/mapCategorias";
 import { ImagenService } from "../../../services/ImagenService";
 import {
 	addArticuloInsumoSucursal,
@@ -31,13 +30,10 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 	initialArticuloInsumo,
 	onClose,
 	onShowSuccess,
-	onShowError
+	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
-	const categorias = useAppSelector(
-		(state) => state.selectedData.categoriasSucursal
-	);
 	const [activeStep, setActiveStep] = useState(0);
 	const [articuloInsumo, setArticuloInsumo] = useState(initialArticuloInsumo);
 	const [files, setFiles] = useState<File[]>([]);
@@ -56,8 +52,8 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			? initialArticuloInsumo.unidadMedida.denominacion
 			: "",
 		categoria: initialArticuloInsumo.categoria
-			? initialArticuloInsumo.categoria.denominacion
-			: "",
+			? initialArticuloInsumo.categoria
+			: null,
 		imagen: initialArticuloInsumo.imagenes ?? [],
 	};
 
@@ -137,10 +133,6 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 	};
 
 	const handleSubmitArticuloElaborar = (values: { [key: string]: any }) => {
-		let categoria;
-		if (categorias && categorias !== "loading")
-			categoria = findCategory(categorias, values.categoria);
-
 		const newArticuloInsumo = {
 			...articuloInsumo,
 			stockActual: values.stockActual,
@@ -150,7 +142,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			precioVenta:
 				values.precioVenta !== 0 ? parseFloat(values.precioVenta) : null,
 			esParaElaborar: values.esParaElaborar,
-			categoria: categoria,
+			categoria: values.categoria,
 			unidadMedida: articuloInsumo.unidadMedida,
 		};
 
@@ -158,24 +150,37 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		handleNext();
 	};
 
-	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
+	const handleSubmitForm = async ({
+		values = {},
+		selectedSucursales = [],
+	}: {
+		values?: { [key: string]: any };
+		selectedSucursales?: ISucursalDTO[];
+	}) => {
 		try {
 			const articuloInsumoService = new ArticuloInsumoService(
 				"/articulosInsumos"
 			);
 			const articuloImagenService = new ImagenService("/images/uploads");
 
-			const mappedSucursales = sucursales.map((s) => {
-				return { id: s.id, baja: s.baja, nombre: s.nombre };
-			});
+			let mappedSucursales = undefined;
+			console.log(selectedSucursales);
+			if (selectedSucursales) {
+				console.log(selectedSucursales);
+				mappedSucursales = selectedSucursales.map((s) => {
+					return { id: s.id, baja: s.baja, nombre: s.nombre };
+				});
+			}
 
 			const newArticuloInsumo = {
 				...articuloInsumo,
+				...values,
 				sucursales: mappedSucursales,
 			};
 
 			console.log(newArticuloInsumo);
 			let insumo;
+			let insumos;
 
 			if (articuloInsumo.id) {
 				insumo = await articuloInsumoService.update(
@@ -185,24 +190,30 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				dispatch(editArticuloInsumoSucursal(insumo));
 				onShowSuccess("Artículo insumo modificado con éxito.");
 			} else {
-				const insumos = await articuloInsumoService.createWithSucursal(
+				insumos = await articuloInsumoService.createWithSucursal(
 					newArticuloInsumo
 				);
 				insumo = insumos.find((i) => i.sucursal!.id === sucursal!.id);
 				dispatch(addArticuloInsumoSucursal(insumo!));
 				onShowSuccess("Artículo insumo creado con éxito.");
 			}
-			
+
 			if (files != null) {
-				await articuloImagenService.crearImagen(files, insumo!.id!);
+				console.log(insumos);
+				console.log(insumos?.map((i) => i.id!));
+				await articuloImagenService.crearImagen(
+					files,
+					insumos ? insumos.map((i) => i.id!) : [insumo!.id!]
+				);
 				const newProducto = await articuloInsumoService.getById(insumo!.id!);
+				console.log(newProducto);
 				if (newProducto != null) {
 					dispatch(editArticuloInsumoSucursal(newProducto));
 				}
 			}
 			onClose();
 		} catch (error: any) {
-			onShowError("Error en el alta de artículo insumo: "+ error);
+			onShowError("Error en el alta de artículo insumo: " + error);
 		}
 	};
 
@@ -249,11 +260,16 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				],
 			],
 		},
-		{
-			title: "Sucursales",
-			fields: [],
-		},
+		...(articuloInsumo.id
+			? []
+			: [
+					{
+						title: "Sucursales",
+						fields: [],
+					},
+			  ]),
 	];
+
 	return (
 		<Stack width="100%" alignItems="center" spacing={3}>
 			<Stack width="80%" marginBottom={2}>
@@ -286,9 +302,15 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 								initialValues={initialValues}
 								validationSchema={articuloInsumoSchema}
 								onBack={handleBack}
-								onSubmit={handleSubmitArticuloElaborar}
+								onSubmit={
+									articuloInsumo.id
+										? handleSubmitForm
+										: handleSubmitArticuloElaborar
+								}
 								childrenPosition="top"
-								submitButtonText="Siguiente"
+								submitButtonText={
+									articuloInsumo.id ? "Editar insumo" : "Siguiente"
+								}
 							>
 								<ArticuloElaborarForm />
 							</GenericForm>

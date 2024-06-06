@@ -221,7 +221,14 @@ export const ArticulosInsumos = () => {
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los insumos
 					</Typography>
-					<Stack direction="row" width="100%" justifyContent="center">
+					<Stack
+						className="tableContainer"
+						direction="row"
+						width="100%"
+						height="100%"
+						justifyContent="center"
+						sx={{ flex: 1, overflow: "auto" }} 
+					>
 						{loading ? (
 							<CircularProgress sx={{ mt: 6 }} />
 						) : (

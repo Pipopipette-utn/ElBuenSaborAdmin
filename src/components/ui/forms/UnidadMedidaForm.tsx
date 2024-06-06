@@ -14,11 +14,15 @@ import { GenericForm } from "../shared/GenericForm";
 interface unidadMedidaFormProps {
 	unidadMedida: IUnidadMedida;
 	onClose: Function;
+	onShowSuccess: (message: string) => void;
+	onShowError: (message: string) => void;
 }
 
 export const UnidadMedidaForm: FC<unidadMedidaFormProps> = ({
 	unidadMedida,
 	onClose,
+	onShowSuccess,
+	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
 
@@ -44,13 +48,15 @@ export const UnidadMedidaForm: FC<unidadMedidaFormProps> = ({
 					newUnidadMedida
 				);
 				dispatch(editUnidadMedida(updatedUnidad));
+				onShowSuccess("Unidad de medida editada con éxito!");
 			} else {
 				const updatedUnidad = await unidadMedidaService.create(newUnidadMedida);
 				dispatch(addUnidadMedida(updatedUnidad));
+				onShowSuccess("Unidad de medida creada con éxito!");
 			}
 			onClose();
 		} catch (error: any) {
-			throw new Error(error);
+			onShowError("Error en el alta de unidad de medida: " + error);
 		}
 	};
 
