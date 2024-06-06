@@ -14,10 +14,9 @@ import { Card } from "../styled/StyledDetalleCard";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from "@mui/icons-material/Close";
-import { emptyArticulo, emptyInsumo } from "../../../types/emptyEntities";
+import { emptyArticulo } from "../../../types/emptyEntities";
 import { TextFieldStack } from "../styled/StyledForm";
 import GenericModal from "../shared/GenericModal";
-import { InsumoForm } from "../forms/InsumoForm";
 import Pagination from "@mui/material/Pagination";
 import { ArticuloCard } from "./ArticuloCard";
 import { useAppSelector } from "../../../redux/hooks";
@@ -35,14 +34,15 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	esInsumo,
 	onUpdate,
 }) => {
-	const insumos = useAppSelector((state) => state.business.articulosInsumos);
+	const insumos = useAppSelector(
+		(state) => state.selectedData.articulosInsumosSucursal
+	);
 	const manufacturados = useAppSelector(
-		(state) => state.business.articulosManufacturados
+		(state) => state.selectedData.articulosManufacturadosSucursal
 	);
 
 	const [cantidad, setCantidad] = useState(detalle.cantidad);
 	const [openModal, setOpenModal] = useState(false);
-	const [openInsumoModal, setOpenInsumoModal] = useState(false);
 
 	const [filter, setFilter] = useState("");
 
@@ -68,10 +68,6 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	const handleOpenModal = () => setOpenModal(true);
 
 	const handleCloseModal = () => setOpenModal(false);
-
-	const handleOpenInsumoModal = () => setOpenInsumoModal(true);
-
-	const handleCloseInsumoModal = () => setOpenInsumoModal(false);
 
 	const handleIncrement = () => {
 		const newCantidad = cantidad + 1;
@@ -142,7 +138,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 						</Stack>
 					</Stack>
 
-					<Stack spacing={1} alignItems="center" width="100%" >
+					<Stack spacing={1} alignItems="center" width="100%">
 						<Typography variant="h6">Unidad de medida</Typography>
 						{detalle.articulo == emptyArticulo || !detalle.articulo ? (
 							<Button
@@ -249,27 +245,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 						page={page}
 						onChange={handlePageChange}
 					/>
-					{esInsumo && (
-						<Button
-							variant="contained"
-							sx={{ width: "40%", alignSelf: "center", mt: 3 }}
-							onClick={handleOpenInsumoModal}
-						>
-							Nuevo insumo
-						</Button>
-					)}
 				</Stack>
-			</GenericModal>
-			<GenericModal
-				title={"Crear insumo"}
-				icon={<></>}
-				open={openInsumoModal}
-				handleClose={handleCloseInsumoModal}
-			>
-				<InsumoForm
-					initialArticuloInsumo={emptyInsumo}
-					onClose={handleCloseInsumoModal}
-				/>
 			</GenericModal>
 		</>
 	);

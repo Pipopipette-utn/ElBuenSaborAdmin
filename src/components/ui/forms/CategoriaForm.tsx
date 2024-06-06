@@ -17,12 +17,16 @@ interface CategoriaFormProps {
 	initialCategoria: ICategoria;
 	onClose: Function;
 	buttonTitle: string;
+	onShowSuccess: (m: string) => void;
+	onShowError: (m: string) => void;
 }
 
 export const CategoriaForm: FC<CategoriaFormProps> = ({
 	initialCategoria,
 	onClose,
 	buttonTitle,
+	onShowSuccess,
+	onShowError
 }) => {
 	const dispatch = useAppDispatch();
 	const [categoria, setCategoria] = useState(initialCategoria);
@@ -57,12 +61,15 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 					newCategoria
 				);
 				dispatch(editCategoriaSucursal(updatedCategoria));
+				onShowSuccess("Categoría editada con éxito");
 			} else {
 				const createdCategoria = await categoriaService.create(newCategoria);
 				dispatch(addCategoriaSucursal(createdCategoria));
+				onShowSuccess("Categoría creada con éxito");
 			}
 			onClose();
 		} catch (error: any) {
+			onShowError("Error en el alta de la categoría: "+error);
 			throw new Error(error);
 		}
 	};

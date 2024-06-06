@@ -25,12 +25,15 @@ import {
 export const CategoriaAccordion: FC<{
 	categoria: ICategoria;
 	order: number;
-}> = ({ categoria, order }) => {
+	onShowSuccess: (m: string) => void;
+	onShowError: (m: string) => void;
+}> = ({ categoria, order, onShowSuccess, onShowError }) => {
 	const dispatch = useDispatch();
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const categoriasSucursal = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
+	const categorias = categoriasSucursal !== "loading" ? categoriasSucursal : [];
 
 	const [showModal, setShowModal] = useState<ICategoria | null>(null);
 	const [showAlert, setShowAlert] = useState(false);
@@ -65,43 +68,53 @@ export const CategoriaAccordion: FC<{
 	);
 
 	const handleBaja = async () => {
-		const categoriaService = new CategoriaService("/categorias");
-		await categoriaService.baja(categoria.id!, {
-			id: sucursal!.id!,
-			baja: sucursal!.baja,
-			nombre: sucursal!.nombre,
-		});
-		//Si es una subcategoria, debo editar la categoria padre y borrarle la subcategoria borrada
-		if (order > 0) {
-			let categoriaPadre = categoriasSucursal?.find(
-				(c) => c.id! === categoria.id
-			)?.categoriaPadre;
-			if (categoriaPadre) {
-				categoriaPadre = categoriasSucursal!.find(
-					(c) => c.id! === categoriaPadre!.id
-				)!;
-				const subCategorias = categoriaPadre.subCategorias!.filter(
-					(s) => s.id != categoria.id!
-				);
-				categoriaPadre = { ...categoriaPadre, subCategorias };
-				dispatch(editCategoriaSucursal(categoriaPadre));
+		try {
+			const categoriaService = new CategoriaService("/categorias");
+			await categoriaService.baja(categoria.id!, {
+				id: sucursal!.id!,
+				baja: sucursal!.baja,
+				nombre: sucursal!.nombre,
+			});
+			//Si es una subcategoria, debo editar la categoria padre y borrarle la subcategoria borrada
+			if (order > 0) {
+				let categoriaPadre = categorias?.find(
+					(c) => c.id! === categoria.id
+				)?.categoriaPadre;
+				if (categoriaPadre) {
+					categoriaPadre = categorias!.find(
+						(c) => c.id! === categoriaPadre!.id
+					)!;
+					const subCategorias = categoriaPadre.subCategorias!.filter(
+						(s) => s.id != categoria.id!
+					);
+					categoriaPadre = { ...categoriaPadre, subCategorias };
+					dispatch(editCategoriaSucursal(categoriaPadre));
+				}
 			}
+			const newCategoriasSucursal = categorias!.filter(
+				(c) => c.id != categoria.id!
+			);
+			dispatch(setCategoriasSucursal(newCategoriasSucursal));
+			handleCloseAlert();
+			onShowSuccess("Categoría dada de baja exitosamente!");
+		} catch (e) {
+			onShowError("Error al dar de baja categoría: " + e);
 		}
-		const newCategoriasSucursal = categoriasSucursal!.filter(
-			(c) => c.id != categoria.id!
-		);
-		dispatch(setCategoriasSucursal(newCategoriasSucursal));
-		handleCloseAlert();
 	};
 
 	const handleDelete = async () => {
-		const categoriaService = new CategoriaService("/categorias");
-		await categoriaService.delete(categoria.id!);
-		const newCategoriasSucursal = categoriasSucursal!.filter(
-			(c) => c.id != categoria.id!
-		);
-		dispatch(setCategoriasSucursal(newCategoriasSucursal));
-		handleCloseDeleteAlert();
+		try {
+			const categoriaService = new CategoriaService("/categorias");
+			await categoriaService.delete(categoria.id!);
+			const newCategoriasSucursal = categorias!.filter(
+				(c) => c.id != categoria.id!
+			);
+			dispatch(setCategoriasSucursal(newCategoriasSucursal));
+			handleCloseDeleteAlert();
+			onShowSuccess("Categoría eliminada exitosamente!");
+		} catch (e) {
+			onShowError("Error al eliminar categoría: " + e);
+		}
 	};
 
 	if (categoria && !categoria.baja)
@@ -162,6 +175,8 @@ export const CategoriaAccordion: FC<{
 											key={index}
 											categoria={subcategoria}
 											order={order + 1}
+											onShowSuccess={onShowSuccess}
+											onShowError={onShowError}
 										/>
 									);
 							})}
@@ -170,7 +185,11 @@ export const CategoriaAccordion: FC<{
 				</Accordion>
 				{showModal && (
 					<GenericModal
-						title={showModal.id ? "Editar categoría" : "Crear subcategoría"}
+						title={
+							showModal.id
+								? `Editar categoria: ${categoria.denominacion}`
+								: "Crear subcategoría"
+						}
 						icon={
 							showModal.id ? (
 								<LocalOfferIcon fontSize="large" />
@@ -185,6 +204,8 @@ export const CategoriaAccordion: FC<{
 							buttonTitle="Editar categoria"
 							initialCategoria={categoria}
 							onClose={handleCloseModal}
+							onShowSuccess={onShowSuccess}
+							onShowError={onShowError}
 						/>
 					</GenericModal>
 				)}

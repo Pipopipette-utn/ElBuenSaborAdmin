@@ -15,8 +15,8 @@ import GenericModal from "../../ui/shared/GenericModal";
 import { EmpresaForm } from "../../ui/forms/EmpresaForm";
 import { emptyEmpresa } from "../../../types/emptyEntities";
 import { Loader } from "../../ui/shared/Loader";
-
 export const ListaEmpresas = () => {
+
 	const empresas = useAppSelector((state) => state.business.empresas);
 	const [showModal, setShowModal] = useState(false);
 
@@ -41,7 +41,7 @@ export const ListaEmpresas = () => {
 					flexWrap: "wrap",
 				}}
 			>
-				{empresas &&
+				{empresas !== null && empresas !== "loading" &&
 					empresas.map((empresa, index) => (
 						<EmpresaCard key={index} empresa={empresa} />
 					))}
@@ -56,7 +56,7 @@ export const ListaEmpresas = () => {
 						</AddIconButton>
 					</AddCardActions>
 				</AddCard>
-				{!empresas && <Loader />}
+				{empresas === "loading" && <Loader />}
 				<GenericModal
 					title={"Crear empresa"}
 					icon={<AddBusinessIcon fontSize="large" />}

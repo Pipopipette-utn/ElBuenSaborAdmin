@@ -13,10 +13,17 @@ import { IArticuloInsumo, ICategoria } from "../../../types/empresa";
 import { AlertDialog } from "../../ui/shared/AlertDialog";
 import { ArticuloInsumoDetails } from "../../ui/details/ArticuloInsumoDetails";
 import FilterFields from "../../ui/shared/FilterFields";
-import { setInsumosSucursal } from "../../../redux/slices/SelectedData";
+import {
+	editArticuloInsumoSucursal,
+	setInsumosSucursal,
+} from "../../../redux/slices/SelectedData";
+import { SuccessMessage } from "../../ui/shared/SuccessMessage";
+import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
 export const ArticulosInsumos = () => {
+	const insumoService = new ArticuloInsumoService("/articulosInsumos");
 	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal) ?? [];
 	const categorias =
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
 
@@ -33,72 +40,67 @@ export const ArticulosInsumos = () => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(6);
 	const [loading, setLoading] = useState(false);
-	const [filter, setFilter] = useState("");
-	const [categoryFilter, setCategoryFilter] = useState("");
+	const [nameFilter, setNameFilter] = useState<string | null>(null);
+	const [categoryFilter, setCategoryFilter] = useState<ICategoria | null>(null);
 
 	const dispatch = useAppDispatch();
 	const articulosRedux = useAppSelector(
 		(state) => state.selectedData.articulosInsumosSucursal
 	);
+
 	useEffect(() => {
 		if (articulosRedux) setArticulosInsumos(articulosRedux);
 	}, [articulosRedux]);
 
-	useEffect(() => {
-		const findArticulos = async () => {
-			setLoading(true);
-			const response = await articuloInsumoService.getAllPagedIncludeDeleted(
-				page,
-				rowsPerPage
-			);
-			setArticulosInsumos(response.data);
-			dispatch(setInsumosSucursal(response.data));
-			setTotalRows(response.total);
-			setLoading(false);
-		};
-		findArticulos();
-	}, [page, rowsPerPage]);
+	const handleNameFilterChange = (filtro: string | null) => {
+		setNameFilter(filtro);
+	};
 
-	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setFilter(event.target.value);
+	const handleCategoryFilterChange = (value: ICategoria | null) => {
+		setCategoryFilter(value);
 	};
 
 	useEffect(() => {
 		let filtered = articulosInsumos;
-		const filterByDenominacion = () => {
-			filtered = filtered!.filter((insumo) =>
-				insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
-			);
-		};
-		const filterByCategory = (cf: string) => {
-			const isCategoryOrSubcategory = (categoria: ICategoria) => {
-				if (categoria.denominacion == cf) {
-					return true;
-				}
-				if (categoria.categoriaPadre) {
-					return categoria.categoriaPadre.denominacion == cf;
-				}
-				return false;
-			};
-
-			filtered = filtered!.filter(
-				(insumo) =>
-					insumo.categoria && isCategoryOrSubcategory(insumo.categoria)
-			);
+		const findArticulos = async () => {
+			if (sucursal !== null && !Array.isArray(sucursal)) {
+				setLoading(true);
+				const response = await articuloInsumoService.getAllPagedBySucursal(
+					sucursal!.id!,
+					page,
+					rowsPerPage
+				);
+				filtered = response.data;
+				dispatch(setInsumosSucursal(response.data));
+				setTotalRows(response.total);
+				setLoading(false);
+			}
 		};
 
-		if (filter !== "") {
-			filterByDenominacion();
-		}
-		if (categoryFilter !== "") {
-			filterByCategory(categoryFilter);
-		}
+		const filterInsumos = async () => {
+			console.log(categoryFilter);
+			console.log(nameFilter);
+			if (sucursal && !Array.isArray(sucursal)) {
+				setLoading(true);
+				const filteredArticulos =
+					await articuloInsumoService.getAllPagedFiltered(
+						sucursal!.id!,
+						page,
+						rowsPerPage,
+						categoryFilter !== null ? categoryFilter.id! : undefined,
+						nameFilter !== null ? nameFilter : undefined
+					);
+				filtered = filteredArticulos.data;
+				dispatch(setInsumosSucursal(filteredArticulos.data));
+				setTotalRows(filteredArticulos.total);
+				setLoading(false);
+			}
+		};
+		if (categoryFilter == null && nameFilter == null) findArticulos();
+		else filterInsumos();
+
 		setArticulosInsumos(filtered);
-	}, [filter, categoryFilter]);
-
-	const handleCategoryFilterChange = (value: string | null) => {
-		setCategoryFilter(value ?? "");
-	};
+	}, [sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
 
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => {
@@ -140,24 +142,36 @@ export const ArticulosInsumos = () => {
 	};
 
 	const handleDelete = async () => {
-		const insumoService = new ArticuloInsumoService("/articulosInsumos");
-		await insumoService.delete(idArticulo!);
-		const newInsumos = articulosInsumos!.filter((a) => a.id != idArticulo);
-		setArticulosInsumos(newInsumos);
-		handleCloseAlert();
+		try {
+			await insumoService.delete(idArticulo!);
+			const newInsumos = articulosInsumos!.filter((a) => a.id != idArticulo);
+			setArticulosInsumos(newInsumos);
+			handleCloseAlert();
+			handleShowSuccess("Artículo dado de baja con éxito");
+		} catch (e: any) {
+			handleShowError("Error al dar de baja artículo: " + e);
+		}
 	};
 
 	const handleAltaClick = (articuloId: number) => {
+		const articuloEncontrado = articulosInsumos?.find(
+			(a) => a.id == articuloId
+		);
 		handleOpenAlertAlta();
 		setIdArticulo(articuloId);
+		setArticulo(articuloEncontrado!);
 	};
 
 	const handleAlta = async () => {
-		const insumoService = new ArticuloInsumoService("/articulosInsumos");
-		await insumoService.alta(idArticulo!);
-		//const newArticulo = { ...articulo, baja: false };
-		//dispatch(editArticuloInsumo(newArticulo));
-		handleCloseAlertAlta();
+		try {
+			await insumoService.alta(idArticulo!);
+			const newArticulo = { ...articulo!, baja: false };
+			dispatch(editArticuloInsumoSucursal(newArticulo));
+			handleCloseAlertAlta();
+			handleShowSuccess("Artículo dado de alta con éxito");
+		} catch (e: any) {
+			handleShowError("Error al dar de alta artículo: " + e);
+		}
 	};
 
 	const handlePageChange = (newPage: number) => {
@@ -167,6 +181,14 @@ export const ArticulosInsumos = () => {
 	const handleRowsPerPageChange = (newRowsPerPage: number) => {
 		setRowsPerPage(newRowsPerPage);
 	};
+
+	const [showSuccess, setShowSuccess] = useState("");
+	const handleShowSuccess = (message: string) => setShowSuccess(message);
+	const handleCloseSuccess = () => setShowSuccess("");
+
+	const [showError, setShowError] = useState("");
+	const handleShowError = (message: string) => setShowError(message);
+	const handleCloseError = () => setShowError("");
 
 	return (
 		<>
@@ -178,15 +200,19 @@ export const ArticulosInsumos = () => {
 							sx={{ width: "35px", height: "35px" }}
 						/>
 					}
-					quantity={articulosInsumos?.length ?? 0}
+					quantity={totalRows}
 					activeEntities={"Insumos activos"}
 					buttonText={"Nuevo insumo"}
 					onClick={handleOpenModal}
 				>
 					<FilterFields
-						filter={filter}
-						onFilterChange={handleFilterChange}
-						categorias={categorias}
+						nameFilter={nameFilter ?? ""}
+						onNameFilterChange={handleNameFilterChange}
+						categorias={
+							categorias !== "loading"
+								? categorias.filter((c) => c.esInsumo)
+								: []
+						}
 						categoryFilter={categoryFilter}
 						onCategoryFilterChange={handleCategoryFilterChange}
 					/>
@@ -238,6 +264,8 @@ export const ArticulosInsumos = () => {
 				<InsumoForm
 					initialArticuloInsumo={articulo ? articulo : emptyInsumo}
 					onClose={handleCloseModal}
+					onShowSuccess={handleShowSuccess}
+					onShowError={handleShowError}
 				/>
 			</GenericModal>
 			{articulo && (
@@ -255,7 +283,6 @@ export const ArticulosInsumos = () => {
 				onAgreeClose={handleAlta}
 				onDisagreeClose={handleCloseAlertAlta}
 			/>
-
 			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar el artículo"}
@@ -264,6 +291,16 @@ export const ArticulosInsumos = () => {
 				}
 				onAgreeClose={handleDelete}
 				onDisagreeClose={handleCloseAlert}
+			/>
+			<SuccessMessage
+				open={!!showSuccess}
+				onClose={handleCloseSuccess}
+				message={showSuccess}
+			/>
+			<ErrorMessage
+				open={!!showError}
+				onClose={handleCloseError}
+				message={showError}
 			/>
 		</>
 	);

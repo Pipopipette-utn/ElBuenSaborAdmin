@@ -59,7 +59,11 @@ export const ArticuloElaborarForm: FC = () => {
 								setFieldValue("categoria", newValue)
 							}
 							onBlur={handleBlur}
-							options={mapCategories(categorias, values.esParaElaborar)}
+							options={
+								categorias !== "loading"
+									? mapCategories(categorias, true)
+									: []
+							}
 							getOptionLabel={(option) => option}
 							renderInput={(params) => (
 								<TextField

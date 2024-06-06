@@ -1,5 +1,5 @@
 import {
-	CircularProgress,
+	LinearProgress,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
@@ -18,12 +18,16 @@ import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import { CategoriaForm } from "../../ui/forms/CategoriaForm";
 import { emptyCategoria } from "../../../types/emptyEntities";
 import { ICategoria } from "../../../types/empresa";
+import { SuccessMessage } from "../../ui/shared/SuccessMessage";
+import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
 export const Categorias = () => {
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
-	const [filteredCategorias, setFilteredCategorias] = useState(categorias);
+	const [filteredCategorias, setFilteredCategorias] = useState<
+		ICategoria[] | null
+	>(categorias !== "loading" ? categorias : []);
 	const [filter, setFilter] = useState("");
 	const [filterEsInsumo, setFilterEsInsumo] = useState("");
 
@@ -37,14 +41,14 @@ export const Categorias = () => {
 
 	useEffect(() => {
 		const filterCategorias = async () => {
-			setFilteredCategorias(categorias);
+			if (categorias !== "loading") setFilteredCategorias(categorias);
 		};
 		setFilteredCategorias(null);
 		filterCategorias();
 	}, [categorias]);
 
 	useEffect(() => {
-		let filtered = categorias;
+		let filtered = categorias !== "loading" ? categorias : [];
 		const filterByDenominacion = (categoryList: ICategoria[]) => {
 			console.log(categoryList);
 			return categoryList.filter((categoria) => {
@@ -86,6 +90,14 @@ export const Categorias = () => {
 
 	const handleClick = () => handleOpenModal();
 
+	const [showSuccess, setShowSuccess] = useState("");
+	const handleShowSuccess = (message: string) => setShowSuccess(message);
+	const handleCloseSuccess = () => setShowSuccess("");
+
+	const [showError, setShowError] = useState("");
+	const handleShowError = (message: string) => setShowError(message);
+	const handleCloseError = () => setShowError("");
+
 	return (
 		<>
 			<GenericDoubleStack>
@@ -96,7 +108,9 @@ export const Categorias = () => {
 							sx={{ width: "40px", height: "40px" }}
 						/>
 					}
-					quantity={filteredCategorias?.length ?? 0}
+					quantity={
+						!categorias || categorias === "loading" ? 0 : categorias.length
+					}
 					activeEntities={"Categorias activas"}
 					buttonText={"Nueva categoria"}
 					onClick={handleClick}
@@ -115,7 +129,7 @@ export const Categorias = () => {
 								variant="outlined"
 								value={filter}
 								onChange={handleFilterChange}
-								sx={{ width: "90px", "& input": { fontSize: "14px" } }}
+								sx={{ width: "160px", "& input": { fontSize: "14px" } }}
 							/>
 						</Stack>
 						<Stack
@@ -130,7 +144,7 @@ export const Categorias = () => {
 								size="small"
 								value={filterEsInsumo}
 								onChange={handleCategoryChange}
-								sx={{ width: "140px", fontSize: "14px" }}
+								sx={{ width: "200px", fontSize: "14px" }}
 							>
 								<MenuItem value="">Ninguna</MenuItem>
 								<MenuItem value="esInsumo">Es insumo</MenuItem>
@@ -144,21 +158,27 @@ export const Categorias = () => {
 						Todas las categorias
 					</Typography>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
-						{filteredCategorias !== null ? (
-							filteredCategorias.map((categoria, index) => {
-								if (!categoria.categoriaPadre) {
-									return (
-										<CategoriaAccordion
-											key={index}
-											categoria={categoria}
-											order={0}
-										/>
-									);
-								}
-								return null;
-							})
-						) : (
-							<CircularProgress sx={{ alignSelf: "center" }} />
+						{filteredCategorias !== null && filteredCategorias.length !== 0
+							? filteredCategorias.map((categoria, index) => {
+									if (!categoria.categoriaPadre) {
+										return (
+											<CategoriaAccordion
+												key={index}
+												categoria={categoria}
+												order={0}
+												onShowSuccess={handleShowSuccess}
+												onShowError={handleShowError}
+											/>
+										);
+									}
+									return null;
+							  })
+							: categorias &&
+							  categorias.length == 0 && (
+									<Typography>Ups! No hay ninguna categoría aún.</Typography>
+							  )}
+						{categorias === "loading" && (
+							<LinearProgress sx={{ width: "100%" }} />
 						)}
 					</Stack>
 				</Stack>
@@ -174,9 +194,21 @@ export const Categorias = () => {
 						initialCategoria={emptyCategoria}
 						onClose={handleCloseModal}
 						buttonTitle="Crear categoría"
+						onShowSuccess={handleShowSuccess}
+						onShowError={handleShowError}
 					/>
 				</Stack>
 			</GenericModal>
+			<SuccessMessage
+				open={!!showSuccess}
+				onClose={handleCloseSuccess}
+				message={showSuccess}
+			/>
+			<ErrorMessage
+				open={!!showError}
+				onClose={handleCloseError}
+				message={showError}
+			/>
 		</>
 	);
 };

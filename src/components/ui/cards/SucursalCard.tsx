@@ -12,7 +12,7 @@ import {
 	IconButton,
 } from "../../ui/styled/StyledCard";
 import {
-	setSucursal,
+	setSelectedSucursal,
 	setSucursalesEmpresa,
 } from "../../../redux/slices/SelectedData";
 import StoreIcon from "@mui/icons-material/Store";
@@ -20,7 +20,6 @@ import GenericModal from "../shared/GenericModal";
 import { Chip, Tooltip } from "@mui/material";
 import { SucursalForm } from "../forms/SucursalForm";
 import { SucursalService } from "../../../services/SucursalService";
-import { setSucursales } from "../../../redux/slices/Business";
 import { AlertDialog } from "../shared/AlertDialog";
 
 interface SucursalCardProps {
@@ -29,7 +28,6 @@ interface SucursalCardProps {
 
 const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
-	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const sucursalesEmpresa = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
@@ -64,19 +62,17 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 	const handleDelete = async () => {
 		const sucursalService = new SucursalService("/sucursales");
 		await sucursalService.delete(sucursal.id!);
-		const newSucursales = sucursales!.filter(
-			(s: ISucursal) => s.id != sucursal.id!
-		);
-		dispatch(setSucursales(newSucursales));
-		const newSucursalesEmpresa = sucursalesEmpresa!.filter(
-			(s: ISucursal) => s.id != sucursal.id!
-		);
-		dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
+		if (Array.isArray(sucursalesEmpresa)) {
+			const newSucursalesEmpresa = sucursalesEmpresa!.filter(
+				(s: ISucursal) => s.id != sucursal.id!
+			);
+			dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
+		}
 		handleCloseAlert();
 	};
 
 	const handleClick = () => {
-		dispatch(setSucursal(sucursal));
+		dispatch(setSelectedSucursal(sucursal));
 		navigate("/inicio");
 	};
 
@@ -131,7 +127,7 @@ const SucursalCard: FC<SucursalCardProps> = ({ sucursal }) => {
 			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar la sucursal?"}
-				content={"Esta acción no es reversible"}
+				content={"Esta acción no es reversible."}
 				onAgreeClose={handleDelete}
 				onDisagreeClose={handleCloseAlert}
 			/>

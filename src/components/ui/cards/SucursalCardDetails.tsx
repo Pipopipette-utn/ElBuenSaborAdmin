@@ -23,13 +23,12 @@ import {
 import GenericModal from "../shared/GenericModal";
 import { useDispatch } from "react-redux";
 import {
-	setSucursal,
+	setSelectedSucursal,
 	setSucursalesEmpresa,
 } from "../../../redux/slices/SelectedData";
 import { SucursalForm } from "../forms/SucursalForm";
 import { AlertDialog } from "../shared/AlertDialog";
 import { SucursalService } from "../../../services/SucursalService";
-import { setSucursales } from "../../../redux/slices/Business";
 import { useAppSelector } from "../../../redux/hooks";
 import { SucursalDetails } from "../details/SucursalDetails";
 
@@ -39,7 +38,6 @@ interface SucursalCardProps {
 
 const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
-	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const sucursalesEmpresa = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
@@ -49,7 +47,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	const [showAlert, setShowAlert] = useState(false);
 
 	const dispatch = useDispatch();
-	const onSelectSucursal = () => dispatch(setSucursal(sucursal));
+	const onSelectSucursal = () => dispatch(setSelectedSucursal(sucursal));
 
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => setShowModal(false);
@@ -70,12 +68,12 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({ sucursal }) => {
 	const handleDelete = async () => {
 		const sucursalService = new SucursalService("/sucursales");
 		await sucursalService.delete(sucursal.id!);
-		const newSucursales = sucursales!.filter((s) => s.id != sucursal.id!);
-		dispatch(setSucursales(newSucursales));
-		const newSucursalesEmpresa = sucursalesEmpresa!.filter(
-			(s) => s.id != sucursal.id!
-		);
-		dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
+		if (Array.isArray(sucursalesEmpresa)) {
+			const newSucursalesEmpresa = sucursalesEmpresa!.filter(
+				(s) => s.id != sucursal.id!
+			);
+			dispatch(setSucursalesEmpresa(newSucursalesEmpresa));
+		}
 		handleCloseAlert();
 	};
 

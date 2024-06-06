@@ -20,8 +20,8 @@ import { SucursalService } from "../../../services/SucursalService";
 import {
 	addSucursalEmpresa,
 	editSucursalEmpresa,
+	setSelectedSucursal,
 } from "../../../redux/slices/SelectedData";
-import { addSucursal, editSucursal } from "../../../redux/slices/Business";
 import { emptyDomicilio } from "../../../types/emptyEntities";
 import { DomicilioForm } from "./DomicilioForm";
 import { AlertDialog } from "../shared/AlertDialog";
@@ -46,7 +46,9 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
-	const casaMatriz = sucursales!.find((s) => s.esCasaMatriz === true);
+	const casaMatriz = Array.isArray(sucursales)
+		? sucursales!.find((s) => s.esCasaMatriz === true)
+		: undefined;
 	const casaMatrizDisponible =
 		casaMatriz === undefined || casaMatriz.id! === sucursal.id;
 
@@ -110,12 +112,13 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 					sucursal.id,
 					newSucursal
 				);
-				dispatch(editSucursal(updatedSucursal));
 				dispatch(editSucursalEmpresa(updatedSucursal));
 			} else {
 				const createdSucursal = await sucursalService.create(newSucursal);
-				dispatch(addSucursal(createdSucursal));
 				dispatch(addSucursalEmpresa(createdSucursal));
+				if (sucursales?.length === 0) {
+					dispatch(setSelectedSucursal(createdSucursal));
+				}
 			}
 
 			onClose();

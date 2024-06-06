@@ -24,7 +24,6 @@ export const DomicilioForm: FC<DomicilioFormProps> = ({
 	submitButtonText,
 }) => {
 
-
 	const pais = domicilio.localidad
 		? domicilio.localidad!.provincia!.pais!
 		: undefined;

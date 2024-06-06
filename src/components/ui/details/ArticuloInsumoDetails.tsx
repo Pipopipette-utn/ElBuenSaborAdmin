@@ -7,6 +7,7 @@ import {
 	MobileStepper,
 	Modal,
 	Stack,
+	Typography,
 } from "@mui/material";
 import { modalStyle } from "../shared/GenericModal";
 import { DetailsGroup } from "../shared/DetailsGroup";
@@ -158,7 +159,9 @@ export const ArticuloInsumoDetails: FC<ArticuloInsumoDetailsProps> = ({
 						spacing={2}
 						padding="16px 10px"
 						justifyContent="center"
+						alignItems="center"
 					>
+						<Typography variant="h4" sx={{fontSize: 18}}>Detalles del insumo</Typography>
 						<DetailsGroup
 							labels={["Nombre", "Categoria"]}
 							content={[

@@ -9,33 +9,39 @@ import AttachMoneyRoundedIcon from "@mui/icons-material/AttachMoneyRounded";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import NotesIcon from "@mui/icons-material/Notes";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { IStep } from "../../../types/business";
 import { Stack } from "@mui/material";
 import FormStepper from "../shared/FormStepper";
 import { ArticuloForm } from "./ArticuloForm";
 import { GenericForm } from "../shared/GenericForm";
 import { ArticuloManufacturadoService } from "../../../services/ArticuloManufacturadoService";
-import {
-	addArticuloManufacturado,
-	editArticuloManufacturado,
-} from "../../../redux/slices/Business";
 import dayjs from "dayjs";
 import { DetalleFormCardList } from "../cards/DetalleFormCardList";
 import ImagenUpload from "./ImagenUpload";
 import { ImagenService } from "../../../services/ImagenService";
-import { addArticuloManufacturadoSucursal, editArticuloManufacturadoSucursal } from "../../../redux/slices/SelectedData";
+import {
+	addArticuloManufacturadoSucursal,
+	editArticuloManufacturadoSucursal,
+} from "../../../redux/slices/SelectedData";
+import { SucursalesSelector } from "./SucursalesSelector";
+import { ISucursalDTO } from "../../../types/dto";
 
 interface InsumoFormProps {
 	initialArticuloManufacturado: IArticuloManufacturado;
 	onClose: Function;
+	onShowSuccess: (m: string) => void;
+	onShowError: (m: string) => void;
 }
 
 export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	initialArticuloManufacturado,
 	onClose,
+	onShowSuccess,
+	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const [articuloManufacturado, setArticuloManufacturado] = useState(
 		initialArticuloManufacturado
 	);
@@ -120,17 +126,23 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		};
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
-		handleSubmitForm(newArticuloManufacturado);
 	};
 
-	const handleSubmitForm = async (
-		newArticuloManufacturado: IArticuloManufacturado
-	) => {
+	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
 		try {
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
 			const articuloImagenService = new ImagenService("/images/uploads");
+
+			const mappedSucursales = sucursales.map((s) => {
+				return { id: s.id, baja: s.baja, nombre: s.nombre };
+			});
+
+			const newArticuloManufacturado = {
+				...articuloManufacturado,
+				sucursales: mappedSucursales,
+			};
 
 			console.log({ articuloManufacturado });
 
@@ -140,28 +152,30 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 					articuloManufacturado.id,
 					newArticuloManufacturado
 				);
-				dispatch(editArticuloManufacturado(producto));
 				dispatch(editArticuloManufacturadoSucursal(producto));
+				onShowSuccess("Artículo manufacturado modificado con éxito.");
 			} else {
-				producto = await articuloManufacturadoService.create(
+				const productos = await articuloManufacturadoService.createWithSucursal(
 					newArticuloManufacturado
 				);
-				dispatch(addArticuloManufacturado(producto));
-				dispatch(addArticuloManufacturadoSucursal(producto));
+				producto = productos.find((i) => i.sucursal!.id === sucursal!.id);
+				dispatch(addArticuloManufacturadoSucursal(producto!));
+				onShowSuccess("Artículo manufacturado creado con éxito.");
 			}
 
 			if (files != null && files.length > 0) {
 				await articuloImagenService.crearImagen(files, producto!.id!);
-				const newProducto = await articuloManufacturadoService.getById(producto.id!);
+				const newProducto = await articuloManufacturadoService.getById(
+					producto!.id!
+				);
 				if (newProducto != null) {
-					dispatch(editArticuloManufacturado(newProducto));
 					dispatch(editArticuloManufacturadoSucursal(newProducto));
 				}
 			}
 
 			onClose();
 		} catch (error: any) {
-			throw new Error(error);
+			onShowError("Error en el alta de artículo manufacturado: " + error);
 		}
 	};
 
@@ -219,6 +233,10 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			title: "Detalles",
 			fields: [],
 		},
+		{
+			title: "Sucursales",
+			fields: [],
+		},
 	];
 	return (
 		<Stack width={"100%"} alignItems="center" spacing={3}>
@@ -267,6 +285,19 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								onSubmit={handleSubmitDetalles}
 								submitButtonText={"Continuar"}
 								esInsumo={true}
+							/>
+						);
+					case 4:
+						return (
+							<SucursalesSelector
+								selected={[]}
+								onBack={handleBack}
+								handleSubmit={handleSubmitForm}
+								buttonTitle={
+									articuloManufacturado.id
+										? "Editar artículo manufacturado"
+										: "Crear artículo manufacturado"
+								}
 							/>
 						);
 					default:

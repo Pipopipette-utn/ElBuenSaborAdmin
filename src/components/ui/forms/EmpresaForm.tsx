@@ -29,8 +29,9 @@ export const EmpresaForm: FC<EmpresaFormProps> = ({ empresa, onClose }) => {
 	let empresaSchema = Yup.object().shape({
 		nombre: Yup.string().trim().required("Este campo es requerido."),
 		razonSocial: Yup.string().required("Este campo es requerido."),
-		cuil: Yup.number()
-			.typeError("El campo sólo puede tener números")
+		cuil: Yup.string()
+			.matches(/^[0-9]+$/, "El campo sólo puede tener números")
+			.min(10, "El CUIL debe tener al menos 10 caracteres.")
 			.required("Este campo es requerido."),
 		logo: Yup.string(),
 	});

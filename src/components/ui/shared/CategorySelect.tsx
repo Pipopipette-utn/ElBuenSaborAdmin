@@ -1,10 +1,11 @@
 import { FC } from "react";
 import { Autocomplete, TextField } from "@mui/material";
+import { ICategoria } from "../../../types/empresa";
 
 export const CategorySelect: FC<{
-	value: string;
-	onChange: (e: string | null) => void;
-	categorias: string[];
+	value: ICategoria | null;
+	onChange: (e: ICategoria | null) => void;
+	categorias: ICategoria[];
 }> = ({ value, onChange, categorias }) => {
 	return (
 		<Autocomplete
@@ -13,9 +14,9 @@ export const CategorySelect: FC<{
 			onChange={(_event, newValue) => {
 				onChange(newValue);
 			}}
-			sx={{ width: "200px", fontSize: "14px" }}
+			sx={{ width: "180px", fontSize: "14px" }}
 			options={categorias}
-			getOptionLabel={(option) => option}
+			getOptionLabel={(option) => option.denominacion}
 			renderInput={(params) => (
 				<TextField {...params} label="Categoría" variant="outlined" />
 			)}

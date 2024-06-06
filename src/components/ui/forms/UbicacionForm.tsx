@@ -5,43 +5,29 @@ import { Formik } from "formik";
 import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
 import {
 	ILocalidad,
-	IPais,
 	IProvincia,
 	UbicacionContext,
 	UbicacionContextValues,
 } from "../../../types/ubicacion";
-import { PaisService } from "../../../services/PaisService";
-import { ProvinciaService } from "../../../services/ProvinciaService";
-import { LocalidadService } from "../../../services/LocalidadService";
+import { useAppSelector } from "../../../redux/hooks";
 
 export const UbicacionForm = () => {
-	const paisService = new PaisService("/paises");
-	const provinciaService = new ProvinciaService("/provincias");
-	const localidadService = new LocalidadService("/localidades");
-
-	const [paises, setPaises] = useState<IPais[]>([]);
-	const [provincias, setProvincias] = useState<IProvincia[]>([]);
-	const [localidades, setLocalidades] = useState<ILocalidad[]>([]);
+	const paises = useAppSelector((state) => state.location.paises);
+	const provincias = useAppSelector((state) => state.location.provincias);
+	const localidades = useAppSelector((state) => state.location.localidades);
 	const [filteredProvincias, setFilteredProvincias] = useState<IProvincia[]>(
-		[]
+		provincias ?? []
 	);
 	const [filteredLocalidades, setFilteredLocalidades] = useState<ILocalidad[]>(
-		[]
+		localidades ?? []
 	);
 
 	useEffect(() => {
-		const traerUbicacion = async () => {
-			const todosPaises = await paisService.getAll();
-			const todasProvincias = await provinciaService.getAll();
-			const todasLocalidades = await localidadService.getAll();
-
-			setPaises(todosPaises);
-			setProvincias(todasProvincias);
-			setLocalidades(todasLocalidades);
-		};
-
-		traerUbicacion();
-	}, []);
+		if (provincias)
+			setFilteredProvincias(provincias);
+		if (localidades)
+		setFilteredLocalidades(localidades);
+	}, [provincias, localidades]);
 
 	const {
 		pais,
@@ -54,21 +40,21 @@ export const UbicacionForm = () => {
 
 	// Filtrar las provincias según el país seleccionado
 	useEffect(() => {
-		if (pais) {
+		if (pais && provincias) {
 			const filteredProvincias = provincias.filter((provincia: IProvincia) => {
 				return provincia.pais?.id == pais.id;
 			});
-			setFilteredProvincias(filteredProvincias);
+			setFilteredProvincias(filteredProvincias ?? []);
 		}
 	}, [pais]);
 
 	// Filtrar las localidades según la provincia seleccionada
 	useEffect(() => {
-		if (provincia) {
+		if (provincia && localidades) {
 			const filteredLocalidades = localidades.filter(
 				(localidad: ILocalidad) => localidad.provincia?.id == provincia.id
 			);
-			setFilteredLocalidades(filteredLocalidades);
+			setFilteredLocalidades(filteredLocalidades ?? []);
 		}
 	}, [provincia]);
 
@@ -109,7 +95,7 @@ export const UbicacionForm = () => {
 								onChangePais(selectedPais!);
 							}}
 						>
-							{paises.length === 0 ? (
+							{paises === null || paises.length === 0 ? (
 								<MenuItem disabled>Cargando...</MenuItem>
 							) : (
 								paises!.map((option, index) => (

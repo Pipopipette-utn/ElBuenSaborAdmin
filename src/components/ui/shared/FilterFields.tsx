@@ -1,28 +1,44 @@
 import {
+	Button,
 	Stack,
 	TextField,
 	Typography,
+	IconButton,
+	InputAdornment
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { ICategoria } from "../../../types/empresa";
 import { CategorySelect } from "./CategorySelect";
 import { mapAllCategories } from "../../../utils/mapCategorias";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 
 interface FilterFieldsProps {
-	filter: string;
-	onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	nameFilter: string;
+	onNameFilterChange: (filtro: string | null) => void;
 	categorias: ICategoria[];
-	categoryFilter: string;
-	onCategoryFilterChange: (v: string | null) => void;
+	categoryFilter: ICategoria | null;
+	onCategoryFilterChange: (v: ICategoria | null) => void;
 }
 
 const FilterFields: FC<FilterFieldsProps> = ({
-	filter,
-	onFilterChange,
+	nameFilter,
+	onNameFilterChange,
 	categorias,
 	categoryFilter,
 	onCategoryFilterChange,
 }) => {
+	const [filtro, setFiltro] = useState(nameFilter);
+
+	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setFiltro(event.target.value);
+	};
+
+	const handleClear = () => {
+		setFiltro("");
+		onNameFilterChange(null);
+	};
+
 	return (
 		<Stack direction="row">
 			<Stack
@@ -30,15 +46,35 @@ const FilterFields: FC<FilterFieldsProps> = ({
 				direction="row"
 				justifyContent="flex-start"
 				alignItems="center"
-				paddingLeft={3}
+				paddingLeft={2}
 			>
-				<Typography variant="h6">Buscar:</Typography>
 				<TextField
 					size="small"
 					variant="outlined"
-					value={filter}
-					onChange={onFilterChange}
-					sx={{ width: "120px", "& input": { fontSize: "14px" } }}
+					value={filtro}
+					onChange={handleFilterChange}
+					sx={{ width: "184px", "& input": { fontSize: "14px" } }}
+					placeholder="Buscar por nombre"
+					InputProps={{
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton
+									aria-label="clear search"
+									onClick={handleClear}
+									edge="end"
+									size="small"
+								>
+									<ClearIcon fontSize="small"/>
+								</IconButton>
+							</InputAdornment>
+						)
+					}}
+				/>
+				<Button
+					variant="contained"
+					onClick={() => onNameFilterChange(filtro)}
+					startIcon={<SearchIcon sx={{marginRight: -1}}/>}
+					sx={{paddingY: 1}}
 				/>
 			</Stack>
 			<Stack

@@ -8,6 +8,7 @@ import {
 	MobileStepper,
 	Modal,
 	Stack,
+	Typography,
 } from "@mui/material";
 import { modalStyle } from "../shared/GenericModal";
 import { Content, DetailsGroup, Header } from "../shared/DetailsGroup";
@@ -68,9 +69,13 @@ export const ArticuloManufacturadoDetails: FC<
 						<Stack
 							direction="row"
 							justifyContent="center"
+							alignItems="center"
 							spacing={2}
 							sx={{ mb: 1 }}
 						>
+							<Typography variant="h4" sx={{ fontSize: 18 }}>
+								Detalles del artículo manufacturado
+							</Typography>
 							<Stack direction="row" spacing={1}>
 								<FastfoodIcon
 									sx={{

@@ -8,6 +8,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { theme } from "../../../styles/theme";
 import ButtonGroup from "./GenericTableButtonGroup";
+import { Typography } from "@mui/material";
 
 export interface TableColumn {
 	label: string;
@@ -61,7 +62,13 @@ export const GenericTable = <T,>({
 				paddingRight: 8,
 			}}
 		>
-			<Paper sx={{ width: "100%", borderRadius: "8px" }}>
+			<Paper
+				sx={{
+					width: "100%",
+					borderRadius: "8px",
+					backgroundColor: theme.palette.bg.dark,
+				}}
+			>
 				<TableContainer sx={{ maxHeight: 300 }}>
 					<Table stickyHeader>
 						<TableHead>
@@ -121,6 +128,9 @@ export const GenericTable = <T,>({
 						</TableBody>
 					</Table>
 				</TableContainer>
+				{data.length === 0 && (
+					<Typography sx={{pl: 4}}>No hay nada para mostrar aquí</Typography>
+				)}
 				<TablePagination
 					sx={{ backgroundColor: theme.palette.bg.dark }}
 					rowsPerPageOptions={[10, 25, 100]}

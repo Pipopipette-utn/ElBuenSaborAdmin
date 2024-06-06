@@ -23,11 +23,11 @@ export const mapCategories = (
 };
 
 export const mapAllCategories = (categorias: ICategoria[] | null) => {
-	const result: string[] = [];
+	const result: ICategoria[] = [];
 
 	function traverseAndFilter(categoryList: ICategoria[] | null) {
 		categoryList!.forEach((categoria) => {
-			result.push(categoria.denominacion);
+			result.push(categoria);
 			if (categoria.subCategorias && categoria.subCategorias.length > 0) {
 				traverseAndFilter(categoria.subCategorias);
 			}

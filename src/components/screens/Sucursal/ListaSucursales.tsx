@@ -14,10 +14,12 @@ import { useEffect, useState } from "react";
 import { SucursalForm } from "../../ui/forms/SucursalForm";
 import { emptySucursal } from "../../../types/emptyEntities";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../../ui/shared/Loader";
 
 export const ListaSucursales = () => {
-	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const navigate = useNavigate();
+
+	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
@@ -52,7 +54,7 @@ export const ListaSucursales = () => {
 					flexWrap: "wrap",
 				}}
 			>
-				{sucursales &&
+				{sucursales && sucursales !== "loading" &&
 					sucursales.map((sucursal, index) => (
 						<SucursalCard key={index} sucursal={sucursal} />
 					))}
@@ -64,6 +66,7 @@ export const ListaSucursales = () => {
 						</AddIconButton>
 					</AddCardActions>
 				</AddCard>
+				{sucursales === "loading" && <Loader />}
 				<GenericModal
 					title={`Crear sucursal para ${empresa?.nombre}`}
 					icon={<StoreIcon fontSize="large" />}

@@ -1,26 +1,26 @@
 import { FC, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { EmpresaService } from "./services/EmpresaService";
 import { SucursalService } from "./services/SucursalService";
 import {
 	setCategoriasSucursal,
+	setInsumosSucursal,
+	setManufacturadosSucursal,
 	setPromocionesSucursal,
-	setSucursal,
+	setSelectedSucursal,
 	setSucursalesEmpresa,
 } from "./redux/slices/SelectedData";
 import { Box } from "@mui/material";
 import { AppRouter } from "./routes/AppRouter";
 import {
+	setArticulosInsumos,
+	setArticulosManufacturados,
 	setEmpresas,
-	setInsumos,
-	setManufacturados,
-	setSucursales,
 	setUnidadMedidas,
 } from "./redux/slices/Business";
 import { UnidadMedidaService } from "./services/UnidadMedidaService";
+import { EmpresaService } from "./services/EmpresaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
-import { PromocionService } from "./services/PromocionService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
@@ -28,16 +28,14 @@ export const App: FC = () => {
 	const dispatch = useAppDispatch();
 
 	//const usuarioService = new UsuarioService("/usuario");
-	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const empresaService = new EmpresaService("/empresas");
+	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const sucursalService = new SucursalService("/sucursales");
-	const promocionService = new PromocionService("/promociones");
-	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
-	const articuloManufacturadoService = new ArticuloManufacturadoService(
+	const insumoService = new ArticuloInsumoService("/articulosInsumos");
+	const manufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
 	);
 
-	const sucursales = useAppSelector((state) => state.business.sucursales);
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 
@@ -45,58 +43,85 @@ export const App: FC = () => {
 		const traerEmpresas = async () => {
 			//const usuarios = await usuarioService.getAll();
 			//dispatch(setUsuarios(usuarios));
+			try {
+				dispatch(setEmpresas("loading"));
+				const empresas = await empresaService.getAll();
+				dispatch(setEmpresas(empresas));
+			} catch (e) {
+				dispatch(setEmpresas(null));
+			}
 
-			const empresasData = await empresaService.getAll();
-			dispatch(setEmpresas(empresasData));
-
-			const sucursales = await sucursalService.getAll();
-			dispatch(setSucursales(sucursales));
-
-			const unidadMedidas = await unidadMedidaService.getAll();
-			dispatch(setUnidadMedidas(unidadMedidas));
-
-			const articulosInsumos = await articuloInsumoService.getAll();
-			dispatch(setInsumos(articulosInsumos));
-
-			const articulosManufacturados =
-				await articuloManufacturadoService.getAll();
-
-			dispatch(setManufacturados(articulosManufacturados));
+			try {
+				dispatch(setUnidadMedidas("loading"));
+				const unidadMedidas = await unidadMedidaService.getAll();
+				dispatch(setUnidadMedidas(unidadMedidas));
+			} catch (e) {
+				dispatch(setUnidadMedidas(null));
+			}
 		};
 
 		traerEmpresas();
 	}, []);
 
 	useEffect(() => {
-		if (empresa && sucursales) {
-			const sucursalesFiltradas =
-				sucursalService.filterByEmpresaId(sucursales!, empresa.id!) ?? [];
-			dispatch(setSucursalesEmpresa(sucursalesFiltradas));
-			dispatch(setSucursal(sucursalesFiltradas[0] ?? null));
-		}
-	}, [empresa, sucursales]);
+		const traerSucursales = async () => {
+			dispatch(setSucursalesEmpresa(null));
+			dispatch(setSelectedSucursal(null));
+			if (empresa) {
+				try {
+					dispatch(setSucursalesEmpresa("loading"));
+					const sucursalesFiltradas = await sucursalService.getAllByEmpresa(
+						empresa.id!
+					);
+					dispatch(setSucursalesEmpresa(sucursalesFiltradas));
+					if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
+						dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
+				} catch (e) {
+					dispatch(setUnidadMedidas(null));
+					dispatch(setSelectedSucursal(null));
+				}
+			}
+		};
+
+		traerSucursales();
+	}, [empresa]);
 
 	useEffect(() => {
 		dispatch(setCategoriasSucursal(null));
-		const filterCategorias = async () => {
-			if (sucursal) {
-				const categoriasSucursal = sucursalService.getCategorias(sucursal.id!);
-				dispatch(setCategoriasSucursal(await categoriasSucursal));
-			}
-		};
+		dispatch(setPromocionesSucursal(null));
+		dispatch(setInsumosSucursal(null));
+		dispatch(setManufacturadosSucursal(null));
 
-		const findPromociones = async () => {
-			if (sucursal) {
-				const promociones = await promocionService.getAll();
-				const promocionesSucursal = promociones.filter(
-					(promocion) =>
-						promocion.sucursales.find((p) => p.id === sucursal.id) != undefined
-				);
-				dispatch(setPromocionesSucursal(promocionesSucursal));
+		const traerDatosSucursal = async () => {
+			if (empresa && sucursal) {
+				try {
+					dispatch(setCategoriasSucursal("loading"));
+					const categorias =
+						(await sucursalService.getCategorias(sucursal.id!)) ?? [];
+					dispatch(setCategoriasSucursal(categorias));
+				} catch (e) {
+					dispatch(setCategoriasSucursal(null));
+				}
+
+				try {
+					const articulosInsumos =
+						(await insumoService.getAllActiveBySucursal(sucursal.id!)) ?? [];
+					dispatch(setArticulosInsumos(articulosInsumos));
+				} catch (e) {
+					dispatch(setArticulosInsumos(null));
+				}
+
+				try {
+					const articulosManufacturados =
+						(await manufacturadoService.getAllActiveBySucursal(sucursal.id!)) ??
+						[];
+					dispatch(setArticulosManufacturados(articulosManufacturados));
+				} catch (e) {
+					dispatch(setArticulosManufacturados(null));
+				}
 			}
 		};
-		filterCategorias();
-		findPromociones();
+		traerDatosSucursal();
 	}, [sucursal]);
 
 	return (

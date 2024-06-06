@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { ISucursal } from "../../../types/empresa";
-import { IconButton, Modal, Stack } from "@mui/material";
+import { IconButton, Modal, Stack, Typography } from "@mui/material";
 import { modalStyle } from "../shared/GenericModal";
 import { DetailsGroup } from "../shared/DetailsGroup";
 
@@ -55,7 +55,15 @@ export const SucursalDetails: FC<SucursalDetailstProps> = ({
 							minWidth: "340px",
 						}}
 					/>
-					<Stack width="100%" padding="16px 10px" justifyContent="center">
+					<Stack
+						width="100%"
+						padding="16px 10px"
+						justifyContent="center"
+						alignItems="center"
+					>
+						<Typography variant="h4" sx={{ fontSize: 18 }}>
+							Detalles de la sucursal
+						</Typography>
 						<DetailsGroup
 							labels={["Nombre"]}
 							content={[sucursal.nombre]}
@@ -65,7 +73,7 @@ export const SucursalDetails: FC<SucursalDetailstProps> = ({
 										color: theme.palette.bg.light,
 										backgroundColor: theme.palette.primary.main,
 										borderRadius: "50%",
-										padding: "3px"
+										padding: "3px",
 									}}
 								/>,
 							]}

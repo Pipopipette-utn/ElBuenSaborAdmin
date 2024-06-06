@@ -42,6 +42,7 @@ export interface IArticulo extends BaseEntity {
 	archivos?: FileList | null;
 	categoria?: ICategoria;
 	unidadMedida?: IUnidadMedida;
+	sucursal?: ISucursalDTO;
 }
 
 export interface IArticuloInsumo extends IArticulo {
@@ -93,3 +94,4 @@ export interface IPromocion extends BaseEntity {
 	sucursales: ISucursalDTO[];
 	promocionDetalles: IDetalle[];
 }
+

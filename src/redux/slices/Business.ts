@@ -3,25 +3,22 @@ import {
 	IArticuloInsumo,
 	IArticuloManufacturado,
 	IEmpresa,
-	ISucursal,
 	IUnidadMedida,
 	IUsuario,
 } from "../../types/empresa";
 
 interface IInitialState {
-	usuarios: IUsuario[] | null;
-	unidadMedidas: IUnidadMedida[] | null;
-	empresas: IEmpresa[] | null;
-	sucursales: ISucursal[] | null;
-	articulosInsumos: IArticuloInsumo[] | null;
-	articulosManufacturados: IArticuloManufacturado[] | null;
+	usuarios: IUsuario[] | null | "loading";
+	unidadMedidas: IUnidadMedida[] | null | "loading";
+	empresas: IEmpresa[] | null | "loading";
+	articulosInsumos : IArticuloInsumo[] | null;
+	articulosManufacturados : IArticuloManufacturado[] | null;
 }
 
 const initialState: IInitialState = {
 	usuarios: null,
 	unidadMedidas: null,
 	empresas: null,
-	sucursales: null,
 	articulosInsumos: null,
 	articulosManufacturados: null,
 };
@@ -36,12 +33,12 @@ const BusinessSlice = createSlice({
 		},
 		setUnidadMedidas: (
 			state,
-			action: PayloadAction<IUnidadMedida[] | null>
+			action: PayloadAction<IUnidadMedida[] | null | "loading">
 		) => {
 			state.unidadMedidas = action.payload;
 		},
 		addUnidadMedida: (state, action: PayloadAction<IUnidadMedida>) => {
-			if (state.unidadMedidas) {
+			if (state.unidadMedidas && state.unidadMedidas != "loading") {
 				state.unidadMedidas!.push(action.payload);
 			} else {
 				state.unidadMedidas = [action.payload];
@@ -49,81 +46,20 @@ const BusinessSlice = createSlice({
 		},
 		editUnidadMedida: (state, action: PayloadAction<IUnidadMedida>) => {
 			const unidadEditada = action.payload;
-			if (state.unidadMedidas) {
+			if (state.unidadMedidas && state.unidadMedidas != "loading") {
 				state.unidadMedidas = state.unidadMedidas.map((unidad) =>
 					unidad.id === unidadEditada.id ? unidadEditada : unidad
 				);
 			}
 		},
-		setEmpresas: (state, action: PayloadAction<IEmpresa[] | null>) => {
+		setEmpresas: (state, action: PayloadAction<IEmpresa[] | null | "loading">) => {
 			state.empresas = action.payload;
 		},
-		setSucursales: (state, action: PayloadAction<ISucursal[] | null>) => {
-			state.sucursales = action.payload;
-		},
-		addSucursal: (state, action: PayloadAction<ISucursal>) => {
-			if (state.sucursales) {
-				state.sucursales!.push(action.payload);
-			} else {
-				state.sucursales = [action.payload];
-			}
-		},
-		editSucursal: (state, action: PayloadAction<ISucursal>) => {
-			const sucursalEditada = action.payload;
-			if (state.sucursales) {
-				state.sucursales = state.sucursales.map((sucursal) =>
-					sucursal.id === sucursalEditada.id ? sucursalEditada : sucursal
-				);
-			}
-		},
-
-		setInsumos: (state, action: PayloadAction<IArticuloInsumo[] | null>) => {
+		setArticulosInsumos: (state, action: PayloadAction<IArticuloInsumo[] | null>) => {
 			state.articulosInsumos = action.payload;
 		},
-		editArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
-			const insumoEditado = action.payload;
-			if (state.articulosInsumos) {
-				state.articulosInsumos = state.articulosInsumos.map((insumo) =>
-					insumo.id === insumoEditado.id ? insumoEditado : insumo
-				);
-			}
-		},
-		addArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
-			if (state.articulosInsumos) {
-				state.articulosInsumos!.push(action.payload);
-			} else {
-				state.articulosInsumos = [action.payload];
-			}
-		},
-
-		setManufacturados: (
-			state,
-			action: PayloadAction<IArticuloManufacturado[] | null>
-		) => {
+		setArticulosManufacturados: (state, action: PayloadAction<IArticuloManufacturado[] | null>) => {
 			state.articulosManufacturados = action.payload;
-		},
-
-		editArticuloManufacturado: (
-			state,
-			action: PayloadAction<IArticuloManufacturado>
-		) => {
-			const insumoEditado = action.payload;
-			if (state.articulosManufacturados) {
-				state.articulosManufacturados = state.articulosManufacturados.map(
-					(producto) =>
-						producto.id === insumoEditado.id ? insumoEditado : producto
-				);
-			}
-		},
-		addArticuloManufacturado: (
-			state,
-			action: PayloadAction<IArticuloManufacturado>
-		) => {
-			if (state.articulosManufacturados) {
-				state.articulosManufacturados!.push(action.payload);
-			} else {
-				state.articulosManufacturados = [action.payload];
-			}
 		},
 	},
 });
@@ -134,14 +70,7 @@ export const {
 	addUnidadMedida,
 	editUnidadMedida,
 	setEmpresas,
-	setSucursales,
-	addSucursal,
-	editSucursal,
-	setInsumos,
-	editArticuloInsumo,
-	addArticuloInsumo,
-	setManufacturados,
-	editArticuloManufacturado,
-	addArticuloManufacturado,
+	setArticulosInsumos,
+	setArticulosManufacturados,
 } = BusinessSlice.actions;
 export default BusinessSlice.reducer;

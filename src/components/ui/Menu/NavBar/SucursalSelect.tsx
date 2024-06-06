@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import MuiSelect from "@mui/material/Select";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
 import { ISucursal } from "../../../../types/empresa";
-import { setSucursal } from "../../../../redux/slices/SelectedData";
+import { setSelectedSucursal } from "../../../../redux/slices/SelectedData";
 
 const Select = styled(MuiSelect)(({ theme }) => ({
 	height: "42px",
@@ -26,9 +26,11 @@ export const SucursalSelect = () => {
 		useState<ISucursal | null>(sucursal);
 
 	const handleChange = (event: SelectChangeEvent<unknown>) => {
-		const s = sucursales?.find((suc) => suc.id! === event.target.value);
-		dispatch(setSucursal(s!));
-		setSucursalSeleccionada(s || null);
+		if (Array.isArray(sucursales)){
+			const s = sucursales?.find((suc) => suc.id! === event.target.value);
+			dispatch(setSelectedSucursal(s!));
+			setSucursalSeleccionada(s || null);
+		}
 	};
 
 	useEffect(() => {
@@ -37,7 +39,7 @@ export const SucursalSelect = () => {
 
 	return (
 		<Select value={sucursalSeleccionada?.id || ""} onChange={handleChange}>
-			{sucursales?.map((s, index) => (
+			{Array.isArray(sucursales) && sucursales.map((s, index) => (
 				<MenuItem value={s.id!} key={index}>
 					{s.nombre}
 				</MenuItem>

@@ -14,17 +14,22 @@ import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoF
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
 import FilterFields from "../../ui/shared/FilterFields";
 import { ArticuloManufacturadoDetails } from "../../ui/details/ArticuloManufacturadoDetails";
-import { setManufacturadosSucursal } from "../../../redux/slices/SelectedData";
+import { editArticuloManufacturadoSucursal, setManufacturadosSucursal } from "../../../redux/slices/SelectedData";
+import { SuccessMessage } from "../../ui/shared/SuccessMessage";
+import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
 export const ArticulosManufacturados = () => {
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
 	);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal) ?? [];
 	const dispatch = useAppDispatch();
 	const [loading, setLoading] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
+	const [showAlertAlta, setShowAlertAlta] = useState(false);
+
 	const [idArticulo, setIdArticulo] = useState<number>();
 	const [articulo, setArticulo] = useState<IArticuloManufacturado | null>(null);
 	const [articulosManufacturados, setArticulosManufacturados] = useState<
@@ -34,8 +39,8 @@ export const ArticulosManufacturados = () => {
 	const [page, setPage] = useState(0);
 	const [rowsPerPage, setRowsPerPage] = useState(6);
 
-	const [filter, setFilter] = useState("");
-	const [categoryFilter, setCategoryFilter] = useState("");
+	const [nameFilter, setNameFilter] = useState<string | null>(null);
+	const [categoryFilter, setCategoryFilter] = useState<ICategoria | null>(null);
 	const categorias =
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
 
@@ -49,22 +54,53 @@ export const ArticulosManufacturados = () => {
 
 	useEffect(() => {
 		const findArticulos = async () => {
-			setLoading(true);
-			const response =
-				await articuloManufacturadoService.getAllPagedIncludeDeleted(
-					page,
-					rowsPerPage
-				);
-			setArticulosManufacturados(response.data);
-			dispatch(setManufacturadosSucursal(response.data));
-			setTotalRows(response.total);
-			setLoading(false);
+			if (sucursal !== null && !Array.isArray(sucursal)) {
+				setLoading(true);
+				const response =
+					await articuloManufacturadoService.getAllPagedBySucursal(
+						sucursal!.id!,
+						page,
+						rowsPerPage
+					);
+				setArticulosManufacturados(response.data);
+				dispatch(setManufacturadosSucursal(response.data));
+				setTotalRows(response.total);
+				setLoading(false);
+			}
 		};
 		findArticulos();
 	}, [page, rowsPerPage]);
 
+	useEffect(() => {
+		let filtered = articulosManufacturados;
+		const filterManufacturados = async () => {
+			if (sucursal && !Array.isArray(sucursal)) {
+				setLoading(true);
+				const filteredArticulos =
+					await articuloManufacturadoService.getAllPagedFiltered(
+						sucursal!.id!,
+						page,
+						rowsPerPage,
+						categoryFilter !== null ? categoryFilter.id! : undefined,
+						nameFilter !== null ? nameFilter : undefined
+					);
+				filtered = filteredArticulos.data;
+				dispatch(setManufacturadosSucursal(filteredArticulos.data));
+				setTotalRows(filteredArticulos.total);
+				setLoading(false);
+			}
+		};
+		if (nameFilter !== null || categoryFilter !== null) {
+			filterManufacturados();
+		}
+		setArticulosManufacturados(filtered);
+	}, [nameFilter, categoryFilter]);
+
 	const handleOpenAlert = () => setShowAlert(true);
 	const handleCloseAlert = () => setShowAlert(false);
+
+	const handleOpenAlertAlta = () => setShowAlertAlta(true);
+	const handleCloseAlertAlta = () => setShowAlertAlta(false);
 
 	const handleOpenDetailsModal = () => setShowDetailsModal(true);
 	const handleCloseDetailsModal = () => {
@@ -86,12 +122,12 @@ export const ArticulosManufacturados = () => {
 		setShowModal(true);
 	};
 
-	const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setFilter(event.target.value);
+	const handleFilterChange = (filtro: string | null) => {
+		setNameFilter(filtro);
 	};
 
-	const handleCategoryFilterChange = (value: string | null) => {
-		setCategoryFilter(value ?? "");
+	const handleCategoryFilterChange = (value: ICategoria | null) => {
+		setCategoryFilter(value);
 	};
 
 	const handleSeeDetails = (articuloId: number) => {
@@ -108,53 +144,42 @@ export const ArticulosManufacturados = () => {
 	};
 
 	const handleDelete = async () => {
-		const productoService = new ArticuloManufacturadoService(
-			"/articulosManufacturados"
-		);
-		await productoService.delete(idArticulo!);
-		const newProductos = articulosManufacturados!.filter(
-			(a) => a.id != idArticulo
-		);
-		setArticulosManufacturados(newProductos);
-		handleCloseAlert();
+		try {
+			const productoService = new ArticuloManufacturadoService(
+				"/articulosManufacturados"
+			);
+			await productoService.delete(idArticulo!);
+			const newProductos = articulosManufacturados!.filter(
+				(a) => a.id != idArticulo
+			);
+			setArticulosManufacturados(newProductos);
+			handleCloseAlert();
+			handleShowSuccess("Artículo dado de baja con éxito");
+		} catch (e: any) {
+			handleShowError("Error al dar de baja artículo: " + e);
+		}
 	};
 
-	useEffect(() => {
-		let filtered = articulosManufacturados;
-		const filterByDenominacion = () => {
-			filtered = filtered!.filter((insumo) =>
-				insumo.denominacion.toLowerCase().includes(filter.toLowerCase())
-			);
-		};
-		const filterByCategory = (cf: string) => {
-			const isCategoryOrSubcategory = (categoria: ICategoria): boolean => {
-				if (categoria.denominacion == cf) {
-					return true;
-				}
-				if (categoria.subCategorias) {
-					const subcategories = categoria.subCategorias.filter((sub) =>
-						isCategoryOrSubcategory(sub)
-					);
-					return subcategories.length > 0;
-				}
-				return false;
-			};
+	const handleAltaClick = (articuloId: number) => {
+		const articuloEncontrado = articulosManufacturados?.find(
+			(a) => a.id == articuloId
+		);
+		handleOpenAlertAlta();
+		setIdArticulo(articuloId);
+		setArticulo(articuloEncontrado!);
+	};
 
-			filtered = filtered!.filter(
-				(insumo) =>
-					insumo.categoria && isCategoryOrSubcategory(insumo.categoria)
-			);
-			console.log(filtered);
-		};
-
-		if (filter !== "") {
-			filterByDenominacion();
+	const handleAlta = async () => {
+		try {
+			await articuloManufacturadoService.alta(idArticulo!);
+			const newArticulo = { ...articulo!, baja: false };
+			dispatch(editArticuloManufacturadoSucursal(newArticulo));
+			handleCloseAlertAlta();
+			handleShowSuccess("Artículo dado de alta con éxito");
+		} catch (e: any) {
+			handleShowError("Error al dar de alta artículo: " + e);
 		}
-		if (categoryFilter !== "") {
-			filterByCategory(categoryFilter);
-		}
-		setArticulosManufacturados(filtered ?? []);
-	}, [filter, categoryFilter]);
+	};
 
 	const handlePageChange = (newPage: number) => {
 		setPage(newPage);
@@ -163,6 +188,14 @@ export const ArticulosManufacturados = () => {
 	const handleRowsPerPageChange = (newRowsPerPage: number) => {
 		setRowsPerPage(newRowsPerPage);
 	};
+
+	const [showSuccess, setShowSuccess] = useState("");
+	const handleShowSuccess = (message: string) => setShowSuccess(message);
+	const handleCloseSuccess = () => setShowSuccess("");
+
+	const [showError, setShowError] = useState("");
+	const handleShowError = (message: string) => setShowError(message);
+	const handleCloseError = () => setShowError("");
 
 	return (
 		<>
@@ -174,15 +207,15 @@ export const ArticulosManufacturados = () => {
 							sx={{ width: "40px", height: "40px" }}
 						/>
 					}
-					quantity={articulosManufacturados?.length ?? 0}
+					quantity={totalRows}
 					activeEntities={"Productos activos"}
 					buttonText={"Nuevo producto"}
 					onClick={handleOpenModal}
 				>
 					<FilterFields
-						filter={filter}
-						onFilterChange={handleFilterChange}
-						categorias={categorias}
+						nameFilter={nameFilter ?? ""}
+						onNameFilterChange={handleFilterChange}
+						categorias={categorias !== "loading" ? categorias : []}
 						categoryFilter={categoryFilter}
 						onCategoryFilterChange={handleCategoryFilterChange}
 					/>
@@ -214,7 +247,7 @@ export const ArticulosManufacturados = () => {
 								rowsPerPage={rowsPerPage}
 								onEdit={handleOpenEditModal}
 								onSeeDetails={handleSeeDetails}
-								onAlta={handleDeleteClick}
+								onAlta={handleAltaClick}
 								onDelete={handleDeleteClick}
 								onPageChange={handlePageChange}
 								onRowsPerPageChange={handleRowsPerPageChange}
@@ -238,6 +271,8 @@ export const ArticulosManufacturados = () => {
 						articulo != null ? articulo : emptyArticuloManufacturado
 					}
 					onClose={handleCloseModal}
+					onShowSuccess={handleShowSuccess}
+					onShowError={handleShowError}
 				/>
 			</GenericModal>
 			{articulo && (
@@ -248,6 +283,13 @@ export const ArticulosManufacturados = () => {
 				/>
 			)}
 			<AlertDialog
+				open={showAlertAlta}
+				title={"¿Estás seguro de que querés dar de alta el artículo"}
+				content={""}
+				onAgreeClose={handleAlta}
+				onDisagreeClose={handleCloseAlertAlta}
+			/>
+			<AlertDialog
 				open={showAlert}
 				title={"¿Estás seguro de que querés eliminar el artículo"}
 				content={
@@ -255,6 +297,16 @@ export const ArticulosManufacturados = () => {
 				}
 				onAgreeClose={handleDelete}
 				onDisagreeClose={handleCloseAlert}
+			/>
+			<SuccessMessage
+				open={!!showSuccess}
+				onClose={handleCloseSuccess}
+				message={showSuccess}
+			/>
+			<ErrorMessage
+				open={!!showError}
+				onClose={handleCloseError}
+				message={showError}
 			/>
 		</>
 	);

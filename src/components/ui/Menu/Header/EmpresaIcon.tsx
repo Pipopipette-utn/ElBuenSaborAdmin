@@ -85,7 +85,7 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 				transformOrigin={{ horizontal: "right", vertical: "top" }}
 				anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
 			>
-				{empresas?.map((e, index) => {
+				{empresas && empresas !== "loading" && empresas?.map((e, index) => {
 					if (e.id !== empresa?.id) {
 						return (
 							<MenuItem key={index} onClick={() => handleSelect(e)}>

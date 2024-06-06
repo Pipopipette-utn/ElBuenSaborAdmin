@@ -8,6 +8,7 @@ import {
 	Button,
 	Stack,
 	Typography,
+	Tooltip,
 } from "@mui/material";
 import { useAppSelector } from "../../../redux/hooks";
 import { ISucursal } from "../../../types/empresa";
@@ -51,26 +52,40 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 					</Typography>
 				</FormLabel>
 				<FormGroup>
-					{sucursales &&
-						sucursales.map((sucursal, index) => (
-							<FormControlLabel
-								key={index}
-								control={
-									<Checkbox
-										checked={
-											selectedSucursales.find((s) => s.id! === sucursal.id!) !==
-											undefined
+					{Array.isArray(sucursales) &&
+						sucursales.map((sucursal, index) => {
+							const estaActiva =
+								selectedSucursales.find((s) => s.id! === sucursal.id!) !==
+								undefined;
+
+							const estaDeshabilitada =
+								selected.find((s) => s.id! === sucursal.id!) !== undefined;
+
+							return (
+								<Tooltip
+									key={index}
+									title={
+										estaActiva && estaDeshabilitada
+											? `Para dar de baja una categoría en una sucursal, hacerlo desde el botón "Dar de baja"`
+											: ""
+									}
+									arrow
+								>
+									<FormControlLabel
+										key={index}
+										control={
+											<Checkbox
+												checked={estaActiva}
+												disabled={estaDeshabilitada}
+												onChange={() => handleToggle(sucursal)}
+												name={sucursal.nombre}
+											/>
 										}
-										disabled={
-											selected.find((s) => s.id! === sucursal.id!) !== undefined
-										}
-										onChange={() => handleToggle(sucursal)}
-										name={sucursal.nombre}
+										label={sucursal.nombre}
 									/>
-								}
-								label={sucursal.nombre}
-							/>
-						))}
+								</Tooltip>
+							);
+						})}
 				</FormGroup>
 			</FormControl>
 			<Stack direction="row" width="80%" spacing={2}>

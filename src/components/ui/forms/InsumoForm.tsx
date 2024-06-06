@@ -10,25 +10,31 @@ import { ArticuloForm } from "./ArticuloForm";
 import { GenericForm } from "../shared/GenericForm";
 import { ArticuloElaborarForm } from "./ArticuloElaborarForm";
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
-import {
-	addArticuloInsumo,
-	editArticuloInsumo,
-} from "../../../redux/slices/Business";
 import ImageUpload from "./ImagenUpload";
 import { findCategory } from "../../../utils/mapCategorias";
 import { ImagenService } from "../../../services/ImagenService";
-import { addArticuloInsumoSucursal, editArticuloInsumoSucursal } from "../../../redux/slices/SelectedData";
+import {
+	addArticuloInsumoSucursal,
+	editArticuloInsumoSucursal,
+} from "../../../redux/slices/SelectedData";
+import { SucursalesSelector } from "./SucursalesSelector";
+import { ISucursalDTO } from "../../../types/dto";
 
 interface InsumoFormProps {
 	initialArticuloInsumo: IArticuloInsumo;
 	onClose: Function;
+	onShowSuccess: (m: string) => void;
+	onShowError: (m: string) => void;
 }
 
 export const InsumoForm: FC<InsumoFormProps> = ({
 	initialArticuloInsumo,
 	onClose,
+	onShowSuccess,
+	onShowError
 }) => {
 	const dispatch = useAppDispatch();
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
@@ -130,52 +136,73 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		}
 	};
 
-	const handleSubmitForm = async (values: { [key: string]: any }) => {
+	const handleSubmitArticuloElaborar = (values: { [key: string]: any }) => {
+		let categoria;
+		if (categorias && categorias !== "loading")
+			categoria = findCategory(categorias, values.categoria);
+
+		const newArticuloInsumo = {
+			...articuloInsumo,
+			stockActual: values.stockActual,
+			stockMinimo: values.stockMinimo,
+			stockMaximo: values.stockMaximo,
+			precioCompra: values.precioCompra,
+			precioVenta:
+				values.precioVenta !== 0 ? parseFloat(values.precioVenta) : null,
+			esParaElaborar: values.esParaElaborar,
+			categoria: categoria,
+			unidadMedida: articuloInsumo.unidadMedida,
+		};
+
+		setArticuloInsumo(newArticuloInsumo);
+		handleNext();
+	};
+
+	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
 		try {
 			const articuloInsumoService = new ArticuloInsumoService(
 				"/articulosInsumos"
 			);
 			const articuloImagenService = new ImagenService("/images/uploads");
 
-			const categoria = findCategory(categorias, values.categoria);
+			const mappedSucursales = sucursales.map((s) => {
+				return { id: s.id, baja: s.baja, nombre: s.nombre };
+			});
 
 			const newArticuloInsumo = {
 				...articuloInsumo,
-				stockActual: values.stockActual,
-				stockMinimo: values.stockMinimo,
-				stockMaximo: values.stockMaximo,
-				precioCompra: values.precioCompra,
-				precioVenta:
-					values.precioVenta !== 0 ? parseFloat(values.precioVenta) : null,
-				esParaElaborar: values.esParaElaborar,
-				categoria: categoria,
-				unidadMedida: articuloInsumo.unidadMedida,
+				sucursales: mappedSucursales,
 			};
+
+			console.log(newArticuloInsumo);
 			let insumo;
+
 			if (articuloInsumo.id) {
 				insumo = await articuloInsumoService.update(
 					articuloInsumo.id,
 					newArticuloInsumo
 				);
-				dispatch(editArticuloInsumo(insumo));
 				dispatch(editArticuloInsumoSucursal(insumo));
+				onShowSuccess("Artículo insumo modificado con éxito.");
 			} else {
-				insumo = await articuloInsumoService.create(newArticuloInsumo);
-				dispatch(addArticuloInsumo(insumo));
-				dispatch(addArticuloInsumoSucursal(insumo));
+				const insumos = await articuloInsumoService.createWithSucursal(
+					newArticuloInsumo
+				);
+				insumo = insumos.find((i) => i.sucursal!.id === sucursal!.id);
+				dispatch(addArticuloInsumoSucursal(insumo!));
+				onShowSuccess("Artículo insumo creado con éxito.");
 			}
-
+			
 			if (files != null) {
 				await articuloImagenService.crearImagen(files, insumo!.id!);
-				const newProducto = await articuloInsumoService.getById(insumo.id!);
+				const newProducto = await articuloInsumoService.getById(insumo!.id!);
 				if (newProducto != null) {
-					dispatch(editArticuloInsumo(newProducto));
 					dispatch(editArticuloInsumoSucursal(newProducto));
 				}
 			}
 			onClose();
 		} catch (error: any) {
-			throw new Error(error);
+			onShowError("Error en el alta de artículo insumo: "+ error);
 		}
 	};
 
@@ -222,6 +249,10 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				],
 			],
 		},
+		{
+			title: "Sucursales",
+			fields: [],
+		},
 	];
 	return (
 		<Stack width="100%" alignItems="center" spacing={3}>
@@ -255,14 +286,24 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 								initialValues={initialValues}
 								validationSchema={articuloInsumoSchema}
 								onBack={handleBack}
-								onSubmit={handleSubmitForm}
+								onSubmit={handleSubmitArticuloElaborar}
 								childrenPosition="top"
-								submitButtonText={
-									articuloInsumo.id ? "Editar insumo" : "Crear insumo"
-								}
+								submitButtonText="Siguiente"
 							>
 								<ArticuloElaborarForm />
 							</GenericForm>
+						);
+
+					case 3:
+						return (
+							<SucursalesSelector
+								selected={[]}
+								onBack={handleBack}
+								handleSubmit={handleSubmitForm}
+								buttonTitle={
+									articuloInsumo.id ? "Editar insumo" : "Crear insumo"
+								}
+							/>
 						);
 
 					default:

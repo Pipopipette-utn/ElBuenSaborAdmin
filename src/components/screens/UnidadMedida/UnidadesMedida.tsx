@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { LinearProgress, Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import ScaleIcon from "@mui/icons-material/Scale";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
@@ -52,10 +52,17 @@ export const UnidadesMedida = () => {
 					</Typography>
 					<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
 						{unidadesdMedida &&
+							unidadesdMedida !== "loading" &&
 							unidadesdMedida.map((unidad, index) => (
 								<UnidadMedidaPaper key={index} unidadMedida={unidad} />
 							))}
 					</Stack>
+					{unidadesdMedida === "loading" && (
+						<LinearProgress sx={{ width: "100%" }} />
+					)}
+					{unidadesdMedida === null && (
+						<Typography>Ups! No hay unidades de medida para mostrar.</Typography>
+					)}
 				</>
 			</GenericDoubleStack>
 			<GenericModal

@@ -10,10 +10,10 @@ import {
 
 interface IInitialState {
 	empresa: IEmpresa | null;
-	sucursalesEmpresa: ISucursal[] | null;
+	sucursalesEmpresa: ISucursal[] | null | "loading";
 	sucursal: ISucursal | null;
-	categoriasSucursal: ICategoria[] | null;
-	promocionesSucursal: IPromocion[] | null;
+	categoriasSucursal: ICategoria[] | null | "loading";
+	promocionesSucursal: IPromocion[] | null | "loading";
 	articulosInsumosSucursal: IArticuloInsumo[] | null;
 	articulosManufacturadosSucursal: IArticuloManufacturado[] | null;
 }
@@ -38,13 +38,12 @@ const SelectedDataSlice = createSlice({
 		},
 		setSucursalesEmpresa: (
 			state,
-			action: PayloadAction<ISucursal[] | null>
+			action: PayloadAction<ISucursal[] | null | "loading">
 		) => {
 			state.sucursalesEmpresa = action.payload;
 		},
 		addSucursalEmpresa: (state, action: PayloadAction<ISucursal>) => {
-			console.log(action.payload);
-			if (state.sucursalesEmpresa) {
+			if (state.sucursalesEmpresa && state.sucursalesEmpresa !== "loading") {
 				state.sucursalesEmpresa!.push(action.payload);
 			} else {
 				state.sucursalesEmpresa = [action.payload];
@@ -52,24 +51,23 @@ const SelectedDataSlice = createSlice({
 		},
 		editSucursalEmpresa: (state, action: PayloadAction<ISucursal>) => {
 			const sucursalEditada = action.payload;
-			if (state.sucursalesEmpresa) {
+			if (state.sucursalesEmpresa && state.sucursalesEmpresa !== "loading") {
 				state.sucursalesEmpresa = state.sucursalesEmpresa.map((sucursal) =>
 					sucursal.id === sucursalEditada.id ? sucursalEditada : sucursal
 				);
 			}
 		},
-		setSucursal: (state, action: PayloadAction<ISucursal | null>) => {
+		setSelectedSucursal: (state, action: PayloadAction<ISucursal | null>) => {
 			state.sucursal = action.payload;
 		},
 		setCategoriasSucursal: (
 			state,
-			action: PayloadAction<ICategoria[] | null>
+			action: PayloadAction<ICategoria[] | null | "loading">
 		) => {
 			state.categoriasSucursal = action.payload;
 		},
-
 		addCategoriaSucursal: (state, action: PayloadAction<ICategoria>) => {
-			if (state.categoriasSucursal) {
+			if (state.categoriasSucursal && state.categoriasSucursal !== "loading") {
 				state.categoriasSucursal!.push(action.payload);
 			} else {
 				state.categoriasSucursal = [action.payload];
@@ -77,7 +75,7 @@ const SelectedDataSlice = createSlice({
 		},
 		editCategoriaSucursal: (state, action: PayloadAction<ICategoria>) => {
 			const categoriaEditada = action.payload;
-			if (state.categoriasSucursal) {
+			if (state.categoriasSucursal && state.categoriasSucursal !== "loading") {
 				state.categoriasSucursal = actualizarCategoriaEnLista(
 					state.categoriasSucursal,
 					categoriaEditada
@@ -86,12 +84,12 @@ const SelectedDataSlice = createSlice({
 		},
 		setPromocionesSucursal: (
 			state,
-			action: PayloadAction<IPromocion[] | null>
+			action: PayloadAction<IPromocion[] | null | "loading">
 		) => {
 			state.promocionesSucursal = action.payload;
 		},
 		addPromocionesSucursal: (state, action: PayloadAction<IPromocion>) => {
-			if (state.promocionesSucursal) {
+			if (state.promocionesSucursal && state.promocionesSucursal !== "loading") {
 				state.promocionesSucursal!.push(action.payload);
 			} else {
 				state.promocionesSucursal = [action.payload];
@@ -99,7 +97,7 @@ const SelectedDataSlice = createSlice({
 		},
 		editPromocionesSucursal: (state, action: PayloadAction<IPromocion>) => {
 			const promocionEditada = action.payload;
-			if (state.promocionesSucursal) {
+			if (state.promocionesSucursal && state.promocionesSucursal !== "loading") {
 				state.promocionesSucursal = state.promocionesSucursal.map((promocion) =>
 					promocion.id === promocionEditada.id ? promocionEditada : promocion
 				);
@@ -161,7 +159,7 @@ export const {
 	setSucursalesEmpresa,
 	addSucursalEmpresa,
 	editSucursalEmpresa,
-	setSucursal,
+	setSelectedSucursal,
 	setCategoriasSucursal,
 	addCategoriaSucursal,
 	editCategoriaSucursal,
