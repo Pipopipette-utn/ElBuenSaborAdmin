@@ -150,13 +150,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		handleNext();
 	};
 
-	const handleSubmitForm = async ({
-		values = {},
-		selectedSucursales = [],
-	}: {
-		values?: { [key: string]: any };
-		selectedSucursales?: ISucursalDTO[];
-	}) => {
+	const handleSubmitForm = async (selectedSucursales?: ISucursalDTO[]) => {
 		try {
 			const articuloInsumoService = new ArticuloInsumoService(
 				"/articulosInsumos"
@@ -164,7 +158,9 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			const articuloImagenService = new ImagenService("/images/uploads");
 
 			let mappedSucursales = undefined;
+
 			console.log(selectedSucursales);
+	
 			if (selectedSucursales) {
 				console.log(selectedSucursales);
 				mappedSucursales = selectedSucursales.map((s) => {
@@ -174,7 +170,6 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 
 			const newArticuloInsumo = {
 				...articuloInsumo,
-				...values,
 				sucursales: mappedSucursales,
 			};
 
@@ -260,14 +255,10 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				],
 			],
 		},
-		...(articuloInsumo.id
-			? []
-			: [
-					{
-						title: "Sucursales",
-						fields: [],
-					},
-			  ]),
+		{
+			title: "Sucursales",
+			fields: [],
+		},
 	];
 
 	return (

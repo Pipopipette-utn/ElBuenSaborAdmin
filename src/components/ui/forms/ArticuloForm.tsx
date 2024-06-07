@@ -46,12 +46,18 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 
 	const handleSubmit = async (values: { [key: string]: any }) => {
 		try {
-			const unidadMedida = unidadesMedida!.find(
-				(unidad) => unidad.denominacion! == values.unidadMedida
-			);
+			const unidadMedida =
+				unidadesMedida && unidadesMedida != "loading"
+					? unidadesMedida!.find(
+							(unidad) => unidad.denominacion! == values.unidadMedida
+					  )
+					: undefined;
 			let newArticulo;
 			if (values.categoria) {
-				const categoria = findCategory(categorias, values.categoria);
+				const categoria =
+					categorias && categorias != "loading"
+						? findCategory(categorias, values.categoria)
+						: undefined;
 				newArticulo = {
 					...articulo,
 					denominacion: values.denominacion,
@@ -86,7 +92,10 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				label: "Unidad de medida",
 				name: "unidadMedida",
 				type: "select",
-				options: unidadesMedida?.map((unidad) => unidad.denominacion),
+				options:
+					unidadesMedida && unidadesMedida != "loading"
+						? unidadesMedida?.map((unidad) => unidad.denominacion)
+						: [],
 				icon: <ScaleIcon />,
 				required: true,
 			},
@@ -108,7 +117,10 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				label: "Unidad de medida",
 				name: "unidadMedida",
 				type: "select",
-				options: unidadesMedida?.map((unidad) => unidad.denominacion),
+				options:
+					unidadesMedida && unidadesMedida != "loading"
+						? unidadesMedida?.map((unidad) => unidad.denominacion)
+						: [],
 				icon: <ScaleIcon />,
 				required: true,
 			},
@@ -116,7 +128,10 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				label: "Categoría",
 				name: "categoria",
 				type: "select",
-				options: mapCategories(categorias, false),
+				options:
+					categorias && categorias != "loading"
+						? mapCategories(categorias, false)
+						: [],
 				icon: <LocalOfferIcon />,
 				required: true,
 			},

@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useAppDispatch } from "../../../redux/hooks";
 import { CategoriaService } from "../../../services/CategoriaService";
-import { ICategoria, ISucursal } from "../../../types/empresa";
+import { ICategoria } from "../../../types/empresa";
 import { Stack } from "@mui/material";
 import { IStep } from "../../../types/business";
 import FormStepper from "../shared/FormStepper";
@@ -26,7 +26,7 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 	onClose,
 	buttonTitle,
 	onShowSuccess,
-	onShowError
+	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
 	const [categoria, setCategoria] = useState(initialCategoria);
@@ -41,8 +41,9 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 		handleNext();
 	};
 
-	const handleSubmitForm = async ({sucursales}: {sucursales: ISucursalDTO[] | ISucursal[]}) => {
+	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
 		try {
+			console.log(sucursales);
 			const mappedSucursales = sucursales.map((s) => {
 				return { id: s.id, baja: s.baja, nombre: s.nombre };
 			});
@@ -69,7 +70,7 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 			}
 			onClose();
 		} catch (error: any) {
-			onShowError("Error en el alta de la categoría: "+error);
+			onShowError("Error en el alta de la categoría: " + error);
 			throw new Error(error);
 		}
 	};
