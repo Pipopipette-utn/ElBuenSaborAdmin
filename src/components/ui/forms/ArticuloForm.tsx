@@ -1,20 +1,22 @@
 import * as Yup from "yup";
-import { FC } from "react";
-import { IArticulo } from "../../../types/empresa";
+import { FC, useState } from "react";
+import { IArticulo, ICategoria } from "../../../types/empresa";
 
 import FastfoodIcon from "@mui/icons-material/Fastfood";
 import ScaleIcon from "@mui/icons-material/Scale";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 import { GenericForm } from "../shared/GenericForm";
 import { IField } from "../../../types/business";
 import { useAppSelector } from "../../../redux/hooks";
-import { findCategory, mapCategories } from "../../../utils/mapCategorias";
+import { mapCategories } from "../../../utils/mapCategorias";
+import { ErrorTypography, TextFieldStack } from "../styled/StyledForm";
+import { Autocomplete, TextField, Typography } from "@mui/material";
 
 interface ArticuloFormProps {
 	articulo: IArticulo;
 	handleSubmitForm: (d: IArticulo) => void;
 	isManufacturado?: boolean;
+	categoria?: ICategoria | null;
 	submitButtonText: string;
 }
 
@@ -22,6 +24,7 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 	articulo,
 	handleSubmitForm,
 	isManufacturado,
+	categoria,
 	submitButtonText,
 }) => {
 	const categorias = useAppSelector(
@@ -30,6 +33,13 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 	const unidadesMedida = useAppSelector(
 		(state) => state.business.unidadMedidas
 	);
+	const [selectedCategoria, setSelectedCategoria] = useState(categoria);
+	const [errorCategoria, setErrorCategoria] = useState<null | string>(null);
+
+	let mappedCategorias =
+		categorias && categorias !== "loading" ? categorias : [];
+	if (categorias !== "loading")
+		mappedCategorias = mapCategories(categorias, false, true);
 
 	const initialValues = {
 		...articulo,
@@ -52,17 +62,14 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 							(unidad) => unidad.denominacion! == values.unidadMedida
 					  )
 					: undefined;
+
 			let newArticulo;
-			if (values.categoria) {
-				const categoria =
-					categorias && categorias != "loading"
-						? findCategory(categorias, values.categoria)
-						: undefined;
+			if (selectedCategoria) {
 				newArticulo = {
 					...articulo,
 					denominacion: values.denominacion,
 					unidadMedida,
-					categoria: values.categoria !== "" ? categoria : undefined,
+					categoria: selectedCategoria,
 				};
 			} else {
 				newArticulo = {
@@ -111,8 +118,6 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				icon: <FastfoodIcon />,
 				required: true,
 			},
-		],
-		[
 			{
 				label: "Unidad de medida",
 				name: "unidadMedida",
@@ -122,17 +127,6 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 						? unidadesMedida?.map((unidad) => unidad.denominacion)
 						: [],
 				icon: <ScaleIcon />,
-				required: true,
-			},
-			{
-				label: "Categoría",
-				name: "categoria",
-				type: "select",
-				options:
-					categorias && categorias != "loading"
-						? mapCategories(categorias, false)
-						: [],
-				icon: <LocalOfferIcon />,
 				required: true,
 			},
 		],
@@ -145,6 +139,29 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 			validationSchema={articuloSchema}
 			onSubmit={handleSubmit}
 			submitButtonText={submitButtonText}
-		/>
+			childrenPosition="bottom"
+		>
+			{isManufacturado && (
+				<TextFieldStack alignItems="center" spacing={1} width="50%">
+					<Typography>Categoría</Typography>
+					<Autocomplete
+						fullWidth
+						options={mappedCategorias}
+						value={selectedCategoria}
+						onChange={(_event, newValue) => {
+							setErrorCategoria(null);
+							setSelectedCategoria(newValue);
+						}}
+						getOptionLabel={(option) => option.denominacion}
+						renderInput={(params) => (
+							<TextField {...params} variant="outlined" />
+						)}
+					/>
+					{errorCategoria && (
+						<ErrorTypography>Este campo es requerido</ErrorTypography>
+					)}
+				</TextFieldStack>
+			)}
+		</GenericForm>
 	);
 };

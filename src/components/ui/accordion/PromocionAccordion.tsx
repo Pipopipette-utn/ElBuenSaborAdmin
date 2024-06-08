@@ -11,17 +11,24 @@ import { AccordionSummary, Chip, Stack, Typography } from "@mui/material";
 import { ActionButtons } from "./AccordionButtons";
 import { theme } from "../../../styles/theme";
 import { Carousel } from "react-responsive-carousel";
+import { editPromocionesSucursal } from "../../../redux/slices/SelectedData";
+import { PromocionService } from "../../../services/PromocionService";
+import { useAppDispatch } from "../../../redux/hooks";
 
 interface PromocionAccordionProps {
 	promocion: IPromocion;
+	onShowSuccess: (m: string) => void;
+	onShowError: (m: string) => void;
 }
 
 export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 	promocion,
+	onShowSuccess,
+	onShowError,
 }) => {
+	const dispatch = useAppDispatch();
 	const [showModal, setShowModal] = useState(false);
 	const [showBajaAlert, setShowBajaAlert] = useState(false);
-	const [showAlert, setShowAlert] = useState(false);
 
 	// Funciones para abrir y cerrar el modal de edición
 	const handleOpenEditModal = (
@@ -35,18 +42,19 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 	const handleOpenBajaAlert = () => setShowBajaAlert(true);
 	const handleCloseBajaAlert = () => setShowBajaAlert(false);
 
-	// Funciones para abrir y cerrar el diálogo de alerta de eliminación
-	const handleOpenAlert = () => setShowAlert(true);
-	const handleCloseAlert = () => setShowAlert(false);
-
-	// Función para dar de baja la promoción
 	const handleBaja = async () => {
-		// Lógica para eliminar la promoción
-	};
-
-	// Función para eliminar la promoción
-	const handleDelete = async () => {
-		// Lógica para eliminar la promoción
+		try {
+			const promocionService = new PromocionService(
+				"/promociones"
+			);
+			await promocionService.delete(promocion.id!);
+			const newPromo = { ...promocion!, baja: false };
+			dispatch(editPromocionesSucursal(newPromo));
+			handleCloseBajaAlert();
+			onShowSuccess("Artículo dado de baja con éxito");
+		} catch (e: any) {
+			onShowError("Error al dar de baja artículo: " + e);
+		}
 	};
 
 	return (
@@ -71,7 +79,6 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 						onEdit={handleOpenEditModal}
 						color={theme.palette.primary.main}
 						onBaja={handleOpenBajaAlert}
-						onDelete={handleOpenAlert}
 					/>
 				</AccordionSummary>
 				<Stack padding={"12px 24px"} spacing={4} direction="row">
@@ -121,6 +128,8 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 				<PromocionForm
 					initialPromocion={promocion}
 					onClose={handleCloseEditModal}
+					onShowSuccess={onShowSuccess}
+					onShowError={onShowError}
 				/>
 			</GenericModal>
 
@@ -130,15 +139,6 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 				content={"La promoción se dará de baja sólo en esta sucursal."}
 				onAgreeClose={handleBaja}
 				onDisagreeClose={handleCloseBajaAlert}
-			/>
-
-			{/* Diálogo de alerta de eliminación */}
-			<AlertDialog
-				open={showAlert}
-				title={"¿Estás seguro de que querés eliminar la promoción?"}
-				content={"Esta acción no es reversible."}
-				onAgreeClose={handleDelete}
-				onDisagreeClose={handleCloseAlert}
 			/>
 		</>
 	);

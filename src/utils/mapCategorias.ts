@@ -2,13 +2,14 @@ import { ICategoria } from "../types/empresa";
 
 export const mapCategories = (
 	categorias: ICategoria[] | null,
-	esInsumo: boolean
+	esInsumo: boolean,
+	esParaVender: boolean,
 ) => {
 	const result: any[] = [];
 
 	function traverseAndFilter(categoryList: ICategoria[] | null) {
 		categoryList!.forEach((categoria) => {
-			if (categoria.esInsumo == esInsumo) {
+			if (categoria.esInsumo == esInsumo && categoria.esParaVender == esParaVender) {
 				result.push(categoria);
 				if (categoria.subCategorias && categoria.subCategorias.length > 0) {
 					traverseAndFilter(categoria.subCategorias);

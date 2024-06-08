@@ -6,7 +6,7 @@ import { BackendClient } from "./BakendClient";
 export class ImagenService extends BackendClient<IImagen> {
 	async crearImagen(
 		selectedFiles: File[],
-		idEntidades: number[]
+		idEntidades: number[] | number
 	): Promise<any> {
 		try {
 			// Crear un objeto FormData y agregar los archivos seleccionados
@@ -14,13 +14,13 @@ export class ImagenService extends BackendClient<IImagen> {
 			Array.from(selectedFiles).forEach((file) => {
 				formData.append("uploads", file);
 			});
-			console.log(idEntidades);
-			console.log(idEntidades.toString());
 
 			// Realizar la petición POST para subir los archivos
 			const response = await fetch(
-				`${this.baseUrl}?${
-					idEntidades.length > 0 && `idArticulos=${idEntidades.toString()}`
+				`${this.baseUrl}${
+					Array.isArray(idEntidades)
+						? idEntidades.length > 0 && `?idArticulos=${idEntidades.toString()}`
+						: `/${idEntidades}`
 				}`,
 				{
 					method: "POST",

@@ -22,7 +22,11 @@ export const ArticuloElaborarForm: FC = () => {
 	let mappedCategorias =
 		categorias && categorias !== "loading" ? categorias : [];
 	if (categorias !== "loading")
-		mappedCategorias = mapCategories(categorias, true);
+		if (values.esParaElaborar)
+			mappedCategorias = mapCategories(categorias, true, false);
+		else
+			mappedCategorias = mapCategories(categorias, true, true);
+		
 
 	let articuloSchema = Yup.object().shape({
 		esParaElaborar: Yup.boolean().required("Este campo es requerido."),

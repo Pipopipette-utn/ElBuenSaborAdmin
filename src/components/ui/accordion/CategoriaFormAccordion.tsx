@@ -43,12 +43,20 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 	const [expanded, setExpanded] = useState(false);
 	const [categoria, setCategoria] = useState(initialCategoria);
 	const [esInsumo, setEsInsumo] = useState(insumo);
+	const [esParaVender, setEsParaVender] = useState(insumo);
 
 	const handleExpand = () => setExpanded((prev) => !prev);
 
 	const handleChangeEsInsumo = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setCategoria({ ...categoria, esInsumo: event.target.checked });
 		setEsInsumo(event.target.checked);
+	};
+
+	const handleChangeEsParaVender = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setCategoria({ ...categoria, esParaVender: event.target.checked });
+		setEsParaVender(event.target.checked);
 	};
 
 	const handleAddCategoria = (e: React.MouseEvent) => {
@@ -58,7 +66,8 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 			denominacion: "",
 			subCategorias: [],
 			esInsumo: esInsumo ?? false,
-			esNueva: true
+			esParaVender: esParaVender ?? false,
+			esNueva: true,
 		};
 		const newCategoria = {
 			...categoria,
@@ -175,7 +184,7 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 			</Accordion>
 			{order === 0 && (
 				<Stack width="80%">
-					<Stack direction="row" alignItems="center" alignSelf="flex-start">
+					<Stack direction="column">
 						<FormControlLabel
 							control={
 								<Checkbox
@@ -184,6 +193,15 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 								/>
 							}
 							label="Es insumo"
+						/>
+						<FormControlLabel
+							control={
+								<Checkbox
+									checked={categoria.esParaVender}
+									onChange={handleChangeEsParaVender}
+								/>
+							}
+							label="Es para vender"
 						/>
 					</Stack>
 					<Button

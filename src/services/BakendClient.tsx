@@ -119,8 +119,9 @@ export abstract class BackendClient<T> implements IGenericFetch<T> {
 			});
 
 			if (!response.ok) {
-				console.log(response);
-				throw Error(response.statusText);
+				if (response.statusText){
+					throw Error(response.statusText);
+				}
 			}
 			return response.json(); // Retorna los datos en formato JSON
 		} catch (error) {

@@ -58,6 +58,9 @@ export const ArticuloManufacturadoDetails: FC<
 	return (
 		<Modal open={open} onClose={handleClose}>
 			<Stack width="100%" sx={modalStyle} alignItems="center">
+				<Typography variant="h4" sx={{ fontSize: 18, pt: 4 }}>
+					Detalles del artículo manufacturado
+				</Typography>
 				<Stack
 					width="100%"
 					height="100%"
@@ -73,9 +76,6 @@ export const ArticuloManufacturadoDetails: FC<
 							spacing={2}
 							sx={{ mb: 1 }}
 						>
-							<Typography variant="h4" sx={{ fontSize: 18 }}>
-								Detalles del artículo manufacturado
-							</Typography>
 							<Stack direction="row" spacing={1}>
 								<FastfoodIcon
 									sx={{
@@ -125,9 +125,9 @@ export const ArticuloManufacturadoDetails: FC<
 									disabled={activeStep === maxSteps - 1}
 								>
 									{theme.direction === "rtl" ? (
-										<KeyboardArrowLeft />
+										<KeyboardArrowLeft color="info" />
 									) : (
-										<KeyboardArrowRight />
+										<KeyboardArrowRight color="info" />
 									)}
 								</Button>
 							}
@@ -138,9 +138,9 @@ export const ArticuloManufacturadoDetails: FC<
 									disabled={activeStep === 0}
 								>
 									{theme.direction === "rtl" ? (
-										<KeyboardArrowRight />
+										<KeyboardArrowRight color="info" />
 									) : (
-										<KeyboardArrowLeft />
+										<KeyboardArrowLeft color="info" />
 									)}
 								</Button>
 							}

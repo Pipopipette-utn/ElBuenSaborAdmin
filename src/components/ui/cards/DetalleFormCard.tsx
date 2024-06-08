@@ -35,10 +35,10 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 	onUpdate,
 }) => {
 	const insumos = useAppSelector(
-		(state) => state.selectedData.articulosInsumosSucursal
+		(state) => state.business.articulosInsumos
 	);
 	const manufacturados = useAppSelector(
-		(state) => state.selectedData.articulosManufacturadosSucursal
+		(state) => state.business.articulosManufacturados
 	);
 
 	const [cantidad, setCantidad] = useState(detalle.cantidad);
@@ -60,7 +60,7 @@ export const DetalleFormCard: FC<DetalleFormCardProps> = ({
 
 	const filteredArticulos = [
 		...(esInsumo
-			? filteredInsumos
+			? filteredInsumos.filter((i) => i.esParaElaborar)
 			: filteredInsumos.filter((i) => !i.esParaElaborar)),
 		...(esInsumo ? [] : filteredManufacturados),
 	];

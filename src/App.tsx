@@ -5,7 +5,6 @@ import {
 	setCategoriasSucursal,
 	setInsumosSucursal,
 	setManufacturadosSucursal,
-	setPromocionesSucursal,
 	setSelectedSucursal,
 	setSucursalesEmpresa,
 } from "./redux/slices/SelectedData";
@@ -38,6 +37,12 @@ export const App: FC = () => {
 
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
+	const articulosInsumosSucursal = useAppSelector(
+		(state) => state.selectedData.articulosInsumosSucursal
+	);
+	const articulosManufacturadosSucursal = useAppSelector(
+		(state) => state.selectedData.articulosManufacturadosSucursal
+	);
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
@@ -88,7 +93,6 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		dispatch(setCategoriasSucursal(null));
-		dispatch(setPromocionesSucursal(null));
 		dispatch(setInsumosSucursal(null));
 		dispatch(setManufacturadosSucursal(null));
 
@@ -123,6 +127,38 @@ export const App: FC = () => {
 		};
 		traerDatosSucursal();
 	}, [sucursal]);
+
+	useEffect(() => {
+		dispatch(setArticulosInsumos(null));
+		const traerDatosSucursal = async () => {
+			if (empresa && sucursal) {
+				try {
+					const articulosInsumos =
+						(await insumoService.getAllActiveBySucursal(sucursal.id!)) ?? [];
+					dispatch(setArticulosInsumos(articulosInsumos));
+				} catch (e) {
+					dispatch(setArticulosInsumos(null));
+				}
+			}
+		};
+		traerDatosSucursal();
+	}, [articulosInsumosSucursal]);
+
+	useEffect(() => {
+		dispatch(setArticulosManufacturados(null));
+		const traerDatosSucursal = async () => {
+			if (empresa && sucursal) {
+				try {
+					const articulosManufacturados =
+						(await manufacturadoService.getAllActiveBySucursal(sucursal.id!)) ?? [];
+					dispatch(setArticulosManufacturados(articulosManufacturados));
+				} catch (e) {
+					dispatch(setArticulosManufacturados(null));
+				}
+			}
+		};
+		traerDatosSucursal();
+	}, [articulosManufacturadosSucursal]);
 
 	return (
 		<Box

@@ -2,17 +2,22 @@ import { LinearProgress, Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import SucursalCardDetails from "../../ui/cards/SucursalCardDetails";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GenericModal from "../../ui/shared/GenericModal";
 import StoreIcon from "@mui/icons-material/Store";
 import { SucursalForm } from "../../ui/forms/SucursalForm";
 import { emptySucursal } from "../../../types/emptyEntities";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
+import { PaisService } from "../../../services/PaisService";
+import { ProvinciaService } from "../../../services/ProvinciaService";
+import { LocalidadService } from "../../../services/LocalidadService";
+import { setLocalidades, setPaises, setProvincias } from "../../../redux/slices/Location";
 
 export const Sucursales = () => {
+	const dispatch = useAppDispatch();
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
@@ -29,6 +34,27 @@ export const Sucursales = () => {
 	const [showError, setShowError] = useState("");
 	const handleShowError = (message: string) => setShowError(message);
 	const handleCloseError = () => setShowError("");
+
+	useEffect(() => {
+		const paisService = new PaisService("/paises");
+		const provinciaService = new ProvinciaService("/provincias");
+		const localidadService = new LocalidadService("/localidades");
+
+		console.log("entre");
+
+		const traerUbicacion = async () => {
+			const todosPaises = await paisService.getAll();
+			const todasProvincias = await provinciaService.getAll();
+			const todasLocalidades = await localidadService.getAll();
+
+			console.log(todosPaises);
+			dispatch(setPaises(todosPaises));
+			dispatch(setProvincias(todasProvincias));
+			dispatch(setLocalidades(todasLocalidades));
+		};
+
+		traerUbicacion();
+	}, []);
 
 	return (
 		<>

@@ -41,9 +41,23 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 		handleNext();
 	};
 
+	const setearSubcategorias = (categoria: ICategoria) => {
+		console.log(categoria);
+		if (categoria.subCategorias) {
+			categoria.subCategorias = categoria.subCategorias.map((subcategoria) => {
+				console.log(subcategoria);
+				return {
+					...subcategoria,
+					esInsumo: categoria.esInsumo,
+					esParaVender: categoria.esParaVender,
+				};
+			});
+			categoria.subCategorias.forEach(setearSubcategorias);
+		}
+	};
+	
 	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
 		try {
-			console.log(sucursales);
 			const mappedSucursales = sucursales.map((s) => {
 				return { id: s.id, baja: s.baja, nombre: s.nombre };
 			});
@@ -52,9 +66,8 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 				...categoria,
 				sucursales: mappedSucursales,
 			};
-			newCategoria.subCategorias?.map(
-				(s) => (s = { ...s, esInsumo: newCategoria.esInsumo })
-			);
+			setearSubcategorias(newCategoria);
+			console.log(newCategoria);
 
 			if (categoria.id) {
 				const updatedCategoria = await categoriaService.update(

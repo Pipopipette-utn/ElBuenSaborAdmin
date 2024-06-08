@@ -16,7 +16,7 @@ import { ISucursalDTO } from "../../../types/dto";
 
 interface SucursalSelectorProps {
 	selected: ISucursalDTO[];
-	onBack: () => void;
+	onBack?: () => void;
 	handleSubmit: (selectedSucursales: ISucursalDTO[]) => void;
 	buttonTitle: string;
 }
@@ -89,13 +89,16 @@ export const SucursalesSelector: FC<SucursalSelectorProps> = ({
 				</FormGroup>
 			</FormControl>
 			<Stack direction="row" width="80%" spacing={2}>
-				<Button
-					variant="outlined"
-					sx={{ py: 1, px: 4, textTransform: "uppercase" }}
-					onClick={onBack}
-				>
-					Volver
-				</Button>
+				{onBack && (
+					<Button
+						variant="outlined"
+						sx={{ py: 1, px: 4, textTransform: "uppercase" }}
+						onClick={onBack}
+					>
+						Volver
+					</Button>
+				)}
+
 				<Button
 					variant="contained"
 					disabled={disabled}

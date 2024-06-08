@@ -26,6 +26,7 @@ export interface ICategoria extends BaseEntity {
 	subCategorias?: ICategoria[];
 	categoriaPadre?: ICategoria;
 	esInsumo: boolean;
+	esParaVender: boolean;
 	sucursales?: ISucursalDTO[];
 	esNueva?: boolean;
 }

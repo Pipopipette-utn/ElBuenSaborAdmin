@@ -14,9 +14,14 @@ import { ArticuloManufacturadoForm } from "../../ui/forms/ArticuloManufacturadoF
 import { emptyArticuloManufacturado } from "../../../types/emptyEntities";
 import FilterFields from "../../ui/shared/FilterFields";
 import { ArticuloManufacturadoDetails } from "../../ui/details/ArticuloManufacturadoDetails";
-import { editArticuloManufacturadoSucursal, setManufacturadosSucursal } from "../../../redux/slices/SelectedData";
+import {
+	editArticuloManufacturadoSucursal,
+	setManufacturadosSucursal,
+} from "../../../redux/slices/SelectedData";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
+import { ISucursalDTO } from "../../../types/dto";
+import { SucursalesSelector } from "../../ui/forms/SucursalesSelector";
 
 export const ArticulosManufacturados = () => {
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
@@ -29,6 +34,7 @@ export const ArticulosManufacturados = () => {
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [showAlertAlta, setShowAlertAlta] = useState(false);
+	const [showAlertAltaSucursal, setShowAlertAltaSucursal] = useState(false);
 
 	const [idArticulo, setIdArticulo] = useState<number>();
 	const [articulo, setArticulo] = useState<IArticuloManufacturado | null>(null);
@@ -53,6 +59,7 @@ export const ArticulosManufacturados = () => {
 	}, [articulosRedux]);
 
 	useEffect(() => {
+		let filtered = articulosManufacturados;
 		const findArticulos = async () => {
 			if (sucursal !== null && !Array.isArray(sucursal)) {
 				setLoading(true);
@@ -62,18 +69,16 @@ export const ArticulosManufacturados = () => {
 						page,
 						rowsPerPage
 					);
-				setArticulosManufacturados(response.data);
+				filtered = response.data;
 				dispatch(setManufacturadosSucursal(response.data));
 				setTotalRows(response.total);
 				setLoading(false);
 			}
 		};
-		findArticulos();
-	}, [page, rowsPerPage]);
 
-	useEffect(() => {
-		let filtered = articulosManufacturados;
-		const filterManufacturados = async () => {
+		const filterInsumos = async () => {
+			console.log(categoryFilter);
+			console.log(nameFilter);
 			if (sucursal && !Array.isArray(sucursal)) {
 				setLoading(true);
 				const filteredArticulos =
@@ -90,17 +95,20 @@ export const ArticulosManufacturados = () => {
 				setLoading(false);
 			}
 		};
-		if (nameFilter !== null || categoryFilter !== null) {
-			filterManufacturados();
-		}
+		if (categoryFilter == null && nameFilter == null) findArticulos();
+		else filterInsumos();
+
 		setArticulosManufacturados(filtered);
-	}, [nameFilter, categoryFilter]);
+	}, [sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
 
 	const handleOpenAlert = () => setShowAlert(true);
 	const handleCloseAlert = () => setShowAlert(false);
 
 	const handleOpenAlertAlta = () => setShowAlertAlta(true);
 	const handleCloseAlertAlta = () => setShowAlertAlta(false);
+
+	const handleOpenAlertAltaSucursal = () => setShowAlertAltaSucursal(true);
+	const handleCloseAlertAltaSucursal = () => setShowAlertAltaSucursal(false);
 
 	const handleOpenDetailsModal = () => setShowDetailsModal(true);
 	const handleCloseDetailsModal = () => {
@@ -149,10 +157,8 @@ export const ArticulosManufacturados = () => {
 				"/articulosManufacturados"
 			);
 			await productoService.delete(idArticulo!);
-			const newProductos = articulosManufacturados!.filter(
-				(a) => a.id != idArticulo
-			);
-			setArticulosManufacturados(newProductos);
+			const newArticulo = { ...articulo!, baja: false };
+			dispatch(editArticuloManufacturadoSucursal(newArticulo));
 			handleCloseAlert();
 			handleShowSuccess("Artículo dado de baja con éxito");
 		} catch (e: any) {
@@ -176,6 +182,33 @@ export const ArticulosManufacturados = () => {
 			dispatch(editArticuloManufacturadoSucursal(newArticulo));
 			handleCloseAlertAlta();
 			handleShowSuccess("Artículo dado de alta con éxito");
+		} catch (e: any) {
+			handleShowError("Error al dar de alta artículo: " + e);
+		}
+	};
+
+	const handleAltaSucursalClick = (articuloId: number) => {
+		const articuloEncontrado = articulosManufacturados?.find(
+			(a) => a.id == articuloId
+		);
+		handleOpenAlertAltaSucursal();
+		setIdArticulo(articuloId);
+		setArticulo(articuloEncontrado!);
+	};
+
+	const handleAltaSucursal = async (sucursales: ISucursalDTO[]) => {
+		try {
+			if (!Array.isArray(sucursal)) {
+				const filteredSucursales = sucursales.filter(
+					(s) => s.id !== sucursal.id!
+				);
+				await articuloManufacturadoService.altaSucursales(
+					idArticulo!,
+					filteredSucursales
+				);
+				handleCloseAlertAltaSucursal();
+				handleShowSuccess("Artículo dado de alta con éxito.");
+			}
 		} catch (e: any) {
 			handleShowError("Error al dar de alta artículo: " + e);
 		}
@@ -248,6 +281,7 @@ export const ArticulosManufacturados = () => {
 								onEdit={handleOpenEditModal}
 								onSeeDetails={handleSeeDetails}
 								onAlta={handleAltaClick}
+								onAltaSucursal={handleAltaSucursalClick}
 								onDelete={handleDeleteClick}
 								onPageChange={handlePageChange}
 								onRowsPerPageChange={handleRowsPerPageChange}
@@ -275,6 +309,19 @@ export const ArticulosManufacturados = () => {
 					onShowError={handleShowError}
 				/>
 			</GenericModal>
+
+			<GenericModal
+				title={"Dar de alta artículo manufacturado"}
+				icon={<LocalMallIcon fontSize="large" />}
+				open={showAlertAltaSucursal}
+				handleClose={handleCloseAlertAltaSucursal}
+			>
+				<SucursalesSelector
+					selected={articulo && articulo.sucursal ? [articulo.sucursal] : []}
+					handleSubmit={handleAltaSucursal}
+					buttonTitle={"Dar de alta en sucursales"}
+				/>
+			</GenericModal>
 			{articulo && (
 				<ArticuloManufacturadoDetails
 					articuloManufacturado={articulo!}
@@ -291,7 +338,7 @@ export const ArticulosManufacturados = () => {
 			/>
 			<AlertDialog
 				open={showAlert}
-				title={"¿Estás seguro de que querés eliminar el artículo"}
+				title={"¿Estás seguro de que querés dar de baja el artículo?s"}
 				content={
 					"Luego podrás acceder al artículo para darlo de alta nuevamente"
 				}

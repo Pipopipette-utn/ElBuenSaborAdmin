@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { FC, useState } from "react";
 import { IPromocion, IDetalle, ISucursal } from "../../../types/empresa";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import dayjs from "dayjs";
 import { IStep } from "../../../types/business";
 
@@ -26,6 +26,8 @@ import { ImagenService } from "../../../services/ImagenService";
 interface PromocionFormProps {
 	initialPromocion: IPromocion;
 	onClose: Function;
+	onShowSuccess: (m: string) => void;
+	onShowError: (m: string) => void;
 }
 
 // En este componente uso un stepper ya que tiene 2 pasos el formulario: el de los datos de la promocion
@@ -33,8 +35,12 @@ interface PromocionFormProps {
 export const PromocionForm: FC<PromocionFormProps> = ({
 	initialPromocion,
 	onClose,
+	onShowSuccess,
+	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
+
 	const [promocion, setPromocion] = useState(initialPromocion);
 	const [activeStep, setActiveStep] = useState(0);
 	const [files, setFiles] = useState<File[]>([]);
@@ -162,30 +168,37 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 				...promocion,
 				sucursales: mappedSucursales,
 			};
-			setPromocion(newPromocion);
 
 			let promocionNueva;
+			let promocionesNuevas;
 			if (promocion.id) {
 				promocionNueva = await promocionService.update(
 					promocion.id,
 					newPromocion
 				);
 				dispatch(editPromocionesSucursal(promocionNueva));
+				onShowSuccess("Promoción creada con éxito.");
 			} else {
-				promocionNueva = await promocionService.create(newPromocion);
-				dispatch(addPromocionesSucursal(promocionNueva));
+				promocionesNuevas = await promocionService.createWithSucursal(
+					newPromocion
+				);
+				promocionNueva = promocionesNuevas.find(
+					(i) => i.sucursales[0]!.id === sucursal!.id
+				);
+				dispatch(addPromocionesSucursal(promocionNueva!));
+				onShowSuccess("Promoción creada con éxito.");
 			}
 
 			if (files != null && files.length > 0) {
-				imagenService.crearImagen(files, promocionNueva!.id!);
-				const newPromo = await promocionService.getById(promocionNueva.id!);
+				await imagenService.crearImagen(files, promocionNueva!.id!);
+				const newPromo = await promocionService.getById(promocionNueva!.id!);
 				if (newPromo != null) {
 					dispatch(editPromocionesSucursal(newPromo));
 				}
 			}
 			onClose();
 		} catch (error: any) {
-			throw new Error(error);
+			onShowError("Error en el alta de la promoción: " + error);
 		}
 	};
 
@@ -268,11 +281,12 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 			title: "Detalles",
 			fields: [],
 		},
-		{
-			title: "Sucursales",
-			fields: [],
-		},
+		
 	];
+	if (!promocion.id) {
+		steps.push({ title: "Sucursales", fields: [] });
+	}
+
 
 	return (
 		<>
@@ -307,7 +321,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 									detallesArticulo={promocion.promocionDetalles!}
 									onBack={handleBack}
 									onSubmit={handleNextDetalles}
-									submitButtonText={"Continuar"}
+									submitButtonText={promocion.id ? "Editar promoción" : "Continuar"}
 									esInsumo={false}
 									precioInicial={promocion.precioPromocional}
 								/>

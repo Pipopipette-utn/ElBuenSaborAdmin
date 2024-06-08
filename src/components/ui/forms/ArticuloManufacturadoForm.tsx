@@ -84,6 +84,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			...articuloManufacturado,
 			...articulo,
 		};
+		console.log(articulo);
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
 	};
@@ -125,28 +126,36 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			articuloManufacturadoDetalles: detalles,
 		};
 		setArticuloManufacturado(newArticuloManufacturado);
-		handleNext();
+
+		if (articuloManufacturado.id) {
+			handleSubmitForm();
+		} else {
+			handleNext();
+		}
 	};
 
-	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
+	const handleSubmitForm = async (sucursales?: ISucursalDTO[]) => {
 		try {
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
 			const articuloImagenService = new ImagenService("/images/uploads");
 
-			const mappedSucursales = sucursales.map((s) => {
-				return { id: s.id, baja: s.baja, nombre: s.nombre };
-			});
+			let mappedSucursales = undefined;
+
+			if (sucursales) {
+				mappedSucursales = sucursales.map((s) => {
+					return { id: s.id, baja: s.baja, nombre: s.nombre };
+				});
+			}
 
 			const newArticuloManufacturado = {
 				...articuloManufacturado,
 				sucursales: mappedSucursales,
 			};
 
-			console.log({ articuloManufacturado });
-
 			let producto;
+			let productos;
 			if (articuloManufacturado.id) {
 				producto = await articuloManufacturadoService.update(
 					articuloManufacturado.id,
@@ -155,7 +164,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 				dispatch(editArticuloManufacturadoSucursal(producto));
 				onShowSuccess("Artículo manufacturado modificado con éxito.");
 			} else {
-				const productos = await articuloManufacturadoService.createWithSucursal(
+				productos = await articuloManufacturadoService.createWithSucursal(
 					newArticuloManufacturado
 				);
 				producto = productos.find((i) => i.sucursal!.id === sucursal!.id);
@@ -164,7 +173,10 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			}
 
 			if (files != null && files.length > 0) {
-				await articuloImagenService.crearImagen(files, producto!.id!);
+				await articuloImagenService.crearImagen(
+					files,
+					productos ? productos.map((i) => i.id!) : [producto!.id!]
+				);
 				const newProducto = await articuloManufacturadoService.getById(
 					producto!.id!
 				);
@@ -233,11 +245,12 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			title: "Detalles",
 			fields: [],
 		},
-		{
-			title: "Sucursales",
-			fields: [],
-		},
 	];
+
+	if (!initialArticuloManufacturado.id) {
+		steps.push({ title: "Sucursales", fields: [] });
+	}
+
 	return (
 		<Stack width={"100%"} alignItems="center" spacing={3}>
 			<Stack width={"80%"} marginBottom={2}>
@@ -253,6 +266,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								isManufacturado={true}
 								submitButtonText={"Continuar"}
 								handleSubmitForm={handleSubmitArticulo}
+								categoria={articuloManufacturado.categoria ?? null}
 							/>
 						);
 					case 1:
@@ -283,7 +297,9 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								}
 								onBack={handleBack}
 								onSubmit={handleSubmitDetalles}
-								submitButtonText={"Continuar"}
+								submitButtonText={
+									articuloManufacturado.id ? "Editar insumo" : "Siguiente"
+								}
 								esInsumo={true}
 							/>
 						);

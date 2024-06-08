@@ -1,14 +1,14 @@
-import React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import { theme } from '../../../styles/theme';
-import ButtonGroup from './GenericTableButtonGroup';
-import { Stack, Typography } from '@mui/material';
+import React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import { theme } from "../../../styles/theme";
+import ButtonGroup from "./GenericTableButtonGroup";
+import { Stack, Typography } from "@mui/material";
 
 export interface TableColumn {
 	label: string;
@@ -24,6 +24,7 @@ export interface TableProps<T> {
 	onEdit: (id: number) => void;
 	onDelete: (id: number) => void;
 	onAlta: (id: number) => void;
+	onAltaSucursal: (id: number) => void;
 	onSeeDetails?: (id: number) => void;
 	onPageChange: (page: number) => void; // Add onPageChange handler
 	onRowsPerPageChange: (rowsPerPage: number) => void; // Add onRowsPerPageChange handler
@@ -38,6 +39,7 @@ export const GenericTable = <T,>({
 	onEdit,
 	onDelete,
 	onAlta,
+	onAltaSucursal,
 	onSeeDetails,
 	onPageChange,
 	onRowsPerPageChange,
@@ -61,10 +63,10 @@ export const GenericTable = <T,>({
 				justifyContent: "center",
 				alignItems: "center",
 				flex: 1, // Allow the Stack to grow
-				overflow: 'hidden', // Prevent overflow issues
+				overflow: "hidden", // Prevent overflow issues
 			}}
 		>
-			<TableContainer style={{ flex: 1, overflow: 'auto' }}>
+			<TableContainer style={{ flex: 1, overflow: "auto" }}>
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
@@ -110,6 +112,9 @@ export const GenericTable = <T,>({
 													onEdit={row["baja"] ? undefined : onEdit}
 													onDelete={row["baja"] ? undefined : onDelete}
 													onAlta={row["baja"] ? onAlta : undefined}
+													onAltaSucursal={
+														row["baja"] ? undefined : onAltaSucursal
+													}
 													onSeeDetails={onSeeDetails!}
 												/>
 											) : (

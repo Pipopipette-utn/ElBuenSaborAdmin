@@ -19,10 +19,11 @@ import {
 } from "../../../redux/slices/SelectedData";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
+import { SucursalesSelector } from "../../ui/forms/SucursalesSelector";
+import { ISucursalDTO } from "../../../types/dto";
 
 export const ArticulosInsumos = () => {
 	const insumoService = new ArticuloInsumoService("/articulosInsumos");
-	const articuloInsumoService = new ArticuloInsumoService("/articulosInsumos");
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal) ?? [];
 	const categorias =
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
@@ -31,6 +32,7 @@ export const ArticulosInsumos = () => {
 	const [showDetailsModal, setShowDetailsModal] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
 	const [showAlertAlta, setShowAlertAlta] = useState(false);
+	const [showAlertAltaSucursal, setShowAlertAltaSucursal] = useState(false);
 	const [idArticulo, setIdArticulo] = useState<number>();
 	const [articulo, setArticulo] = useState<IArticuloInsumo | null>(null);
 	const [articulosInsumos, setArticulosInsumos] = useState<IArticuloInsumo[]>(
@@ -65,7 +67,7 @@ export const ArticulosInsumos = () => {
 		const findArticulos = async () => {
 			if (sucursal !== null && !Array.isArray(sucursal)) {
 				setLoading(true);
-				const response = await articuloInsumoService.getAllPagedBySucursal(
+				const response = await insumoService.getAllPagedBySucursal(
 					sucursal!.id!,
 					page,
 					rowsPerPage
@@ -83,7 +85,7 @@ export const ArticulosInsumos = () => {
 			if (sucursal && !Array.isArray(sucursal)) {
 				setLoading(true);
 				const filteredArticulos =
-					await articuloInsumoService.getAllPagedFiltered(
+					await insumoService.getAllPagedFiltered(
 						sucursal!.id!,
 						page,
 						rowsPerPage,
@@ -120,6 +122,9 @@ export const ArticulosInsumos = () => {
 	const handleOpenAlertAlta = () => setShowAlertAlta(true);
 	const handleCloseAlertAlta = () => setShowAlertAlta(false);
 
+	const handleOpenAlertAltaSucursal = () => setShowAlertAltaSucursal(true);
+	const handleCloseAlertAltaSucursal = () => setShowAlertAltaSucursal(false);
+
 	const handleOpenEditModal = (articuloId: number) => {
 		const articuloEncontrado = articulosInsumos?.find(
 			(a) => a.id == articuloId
@@ -144,8 +149,8 @@ export const ArticulosInsumos = () => {
 	const handleDelete = async () => {
 		try {
 			await insumoService.delete(idArticulo!);
-			const newInsumos = articulosInsumos!.filter((a) => a.id != idArticulo);
-			setArticulosInsumos(newInsumos);
+			const newArticulo = { ...articulo!, baja: false };
+			dispatch(editArticuloInsumoSucursal(newArticulo));
 			handleCloseAlert();
 			handleShowSuccess("Artículo dado de baja con éxito");
 		} catch (e: any) {
@@ -169,6 +174,30 @@ export const ArticulosInsumos = () => {
 			dispatch(editArticuloInsumoSucursal(newArticulo));
 			handleCloseAlertAlta();
 			handleShowSuccess("Artículo dado de alta con éxito");
+		} catch (e: any) {
+			handleShowError("Error al dar de alta artículo: " + e);
+		}
+	};
+
+	const handleAltaSucursalClick = (articuloId: number) => {
+		const articuloEncontrado = articulosInsumos?.find(
+			(a) => a.id == articuloId
+		);
+		handleOpenAlertAltaSucursal();
+		setIdArticulo(articuloId);
+		setArticulo(articuloEncontrado!);
+	};
+
+	const handleAltaSucursal = async (sucursales: ISucursalDTO[]) => {
+		try {
+			if (!Array.isArray(sucursal)) {
+				const filteredSucursales = sucursales.filter(
+					(s) => s.id !== sucursal.id!
+				);
+				await insumoService.altaSucursales(idArticulo!, filteredSucursales);
+				handleCloseAlertAltaSucursal();
+				handleShowSuccess("Artículo dado de alta con éxito.");
+			}
 		} catch (e: any) {
 			handleShowError("Error al dar de alta artículo: " + e);
 		}
@@ -227,7 +256,7 @@ export const ArticulosInsumos = () => {
 						width="100%"
 						height="100%"
 						justifyContent="center"
-						sx={{ flex: 1, overflow: "auto" }} 
+						sx={{ flex: 1, overflow: "auto" }}
 					>
 						{loading ? (
 							<CircularProgress sx={{ mt: 6 }} />
@@ -237,7 +266,8 @@ export const ArticulosInsumos = () => {
 								onSeeDetails={handleSeeDetails}
 								onEdit={handleOpenEditModal}
 								onAlta={handleAltaClick}
-								data={articuloInsumoService.articulosInsumosToDTO(
+								onAltaSucursal={handleAltaSucursalClick}
+								data={insumoService.articulosInsumosToDTO(
 									articulosInsumos!
 								)}
 								columns={[
@@ -275,6 +305,20 @@ export const ArticulosInsumos = () => {
 					onShowError={handleShowError}
 				/>
 			</GenericModal>
+
+			<GenericModal
+				title={"Dar de alta insumo"}
+				icon={<ShoppingCartIcon fontSize="large" />}
+				open={showAlertAltaSucursal}
+				handleClose={handleCloseAlertAltaSucursal}
+			>
+				<SucursalesSelector
+					selected={articulo && articulo.sucursal ? [articulo.sucursal] : []}
+					handleSubmit={handleAltaSucursal}
+					buttonTitle={"Dar de alta en sucursales"}
+				/>
+			</GenericModal>
+
 			{articulo && (
 				<ArticuloInsumoDetails
 					articuloInsumo={articulo!}
@@ -292,9 +336,9 @@ export const ArticulosInsumos = () => {
 			/>
 			<AlertDialog
 				open={showAlert}
-				title={"¿Estás seguro de que querés eliminar el artículo"}
+				title={"¿Estás seguro de que querés dar de baja el artículo?"}
 				content={
-					"Luego podrás acceder al artículo para darlo de alta nuevamente"
+					"Luego podrás acceder al artículo para darlo de alta nuevamente."
 				}
 				onAgreeClose={handleDelete}
 				onDisagreeClose={handleCloseAlert}

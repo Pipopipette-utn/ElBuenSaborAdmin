@@ -116,7 +116,8 @@ const SelectedDataSlice = createSlice({
 		},
 		addArticuloInsumoSucursal: (state, action: PayloadAction<IArticuloInsumo>) => {
 			if (state.articulosInsumosSucursal) {
-				state.articulosInsumosSucursal!.push(action.payload);
+				if (state.articulosInsumosSucursal.length < 6)
+					state.articulosInsumosSucursal!.push(action.payload);
 			} else {
 				state.articulosInsumosSucursal = [action.payload];
 			}

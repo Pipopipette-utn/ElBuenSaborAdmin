@@ -147,7 +147,12 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		};
 
 		setArticuloInsumo(newArticuloInsumo);
-		handleNext();
+
+		if (initialArticuloInsumo.id) {
+			handleSubmitForm();
+		} else {
+			handleNext();
+		}
 	};
 
 	const handleSubmitForm = async (selectedSucursales?: ISucursalDTO[]) => {
@@ -159,10 +164,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 
 			let mappedSucursales = undefined;
 
-			console.log(selectedSucursales);
-	
 			if (selectedSucursales) {
-				console.log(selectedSucursales);
 				mappedSucursales = selectedSucursales.map((s) => {
 					return { id: s.id, baja: s.baja, nombre: s.nombre };
 				});
@@ -173,7 +175,6 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				sucursales: mappedSucursales,
 			};
 
-			console.log(newArticuloInsumo);
 			let insumo;
 			let insumos;
 
@@ -194,20 +195,18 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			}
 
 			if (files != null) {
-				console.log(insumos);
-				console.log(insumos?.map((i) => i.id!));
 				await articuloImagenService.crearImagen(
 					files,
 					insumos ? insumos.map((i) => i.id!) : [insumo!.id!]
 				);
 				const newProducto = await articuloInsumoService.getById(insumo!.id!);
-				console.log(newProducto);
 				if (newProducto != null) {
 					dispatch(editArticuloInsumoSucursal(newProducto));
 				}
 			}
 			onClose();
 		} catch (error: any) {
+			console.log(error);
 			onShowError("Error en el alta de artículo insumo: " + error);
 		}
 	};
@@ -255,11 +254,11 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				],
 			],
 		},
-		{
-			title: "Sucursales",
-			fields: [],
-		},
 	];
+
+	if (!initialArticuloInsumo.id) {
+		steps.push({ title: "Sucursales", fields: [] });
+	}
 
 	return (
 		<Stack width="100%" alignItems="center" spacing={3}>
@@ -293,11 +292,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 								initialValues={initialValues}
 								validationSchema={articuloInsumoSchema}
 								onBack={handleBack}
-								onSubmit={
-									articuloInsumo.id
-										? handleSubmitForm
-										: handleSubmitArticuloElaborar
-								}
+								onSubmit={handleSubmitArticuloElaborar}
 								childrenPosition="top"
 								submitButtonText={
 									articuloInsumo.id ? "Editar insumo" : "Siguiente"
@@ -310,7 +305,11 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					case 3:
 						return (
 							<SucursalesSelector
-								selected={[]}
+								selected={
+									initialArticuloInsumo.sucursal
+										? [initialArticuloInsumo.sucursal]
+										: []
+								}
 								onBack={handleBack}
 								handleSubmit={handleSubmitForm}
 								buttonTitle={

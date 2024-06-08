@@ -11,6 +11,8 @@ import { PromocionAccordion } from "../../ui/accordion/PromocionAccordion";
 import { PromocionService } from "../../../services/PromocionService";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { setPromocionesSucursal } from "../../../redux/slices/SelectedData";
+import { SuccessMessage } from "../../ui/shared/SuccessMessage";
+import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
 export const Promociones = () => {
 	const dispatch = useAppDispatch();
@@ -20,13 +22,14 @@ export const Promociones = () => {
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 
 	useEffect(() => {
-		if (promocionesRedux) setPromociones(promocionesRedux);
+		if (promocionesRedux && promocionesRedux != "loading")
+			setPromociones(promocionesRedux);
 	}, [promocionesRedux]);
 
 	const [showModal, setShowModal] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [promociones, setPromociones] = useState<IPromocion[]>([]);
-	const [page, setPage] = useState(1);
+	const [page, setPage] = useState(0);
 	const [totalRows, setTotalRows] = useState(0);
 	const itemsPerPage = 5;
 	const promocionService = new PromocionService("/promociones");
@@ -34,25 +37,27 @@ export const Promociones = () => {
 	const handleOpenModal = () => setShowModal(true);
 	const handleCloseModal = () => setShowModal(false);
 
-	const fetchPromociones = async () => {
-		setLoading(true);
-		const response = await promocionService.getAllPagedIncludeDeleted(
-			page - 1,
-			itemsPerPage
-		);
-		const promocionesSucursal = response.data.filter(
-			(p) => p.sucursales && p.sucursales.some((s) => s.id === sucursal?.id)
-		);
-
-		setPromociones(promocionesSucursal);
-		dispatch(setPromocionesSucursal(promocionesSucursal));
-		setTotalRows(response.total);
-		setLoading(false);
-	};
-
 	useEffect(() => {
-		fetchPromociones();
-	}, [page, sucursal]);
+		let filtered = promociones;
+		const findPromociones = async () => {
+			if (sucursal !== null && !Array.isArray(sucursal)) {
+				setLoading(true);
+				//TODO CAMBIAR POR SUCURSAL
+				const response = await promocionService.getAllPagedIncludeDeleted(
+					page,
+					itemsPerPage
+				);
+				filtered = response.data;
+				dispatch(setPromocionesSucursal(response.data));
+				setTotalRows(response.total);
+				setLoading(false);
+			}
+		};
+		findPromociones();
+
+		setPromociones(filtered);
+	}, [sucursal, page]);
+
 
 	const noOfPages = Math.ceil(totalRows / itemsPerPage);
 
@@ -62,6 +67,14 @@ export const Promociones = () => {
 	) => {
 		setPage(value);
 	};
+
+	const [showSuccess, setShowSuccess] = useState("");
+	const handleShowSuccess = (message: string) => setShowSuccess(message);
+	const handleCloseSuccess = () => setShowSuccess("");
+
+	const [showError, setShowError] = useState("");
+	const handleShowError = (message: string) => setShowError(message);
+	const handleCloseError = () => setShowError("");
 
 	return (
 		<>
@@ -90,7 +103,12 @@ export const Promociones = () => {
 						) : (
 							promociones &&
 							promociones.map((promocion, index) => (
-								<PromocionAccordion key={index} promocion={promocion} />
+								<PromocionAccordion
+									key={index}
+									promocion={promocion}
+									onShowSuccess={handleShowSuccess}
+									onShowError={handleShowError}
+								/>
 							))
 						)}
 					</Stack>
@@ -113,8 +131,20 @@ export const Promociones = () => {
 				<PromocionForm
 					initialPromocion={emptyPromocion}
 					onClose={handleCloseModal}
+					onShowSuccess={handleShowSuccess}
+					onShowError={handleShowError}
 				/>
 			</GenericModal>
+			<SuccessMessage
+				open={!!showSuccess}
+				onClose={handleCloseSuccess}
+				message={showSuccess}
+			/>
+			<ErrorMessage
+				open={!!showError}
+				onClose={handleCloseError}
+				message={showError}
+			/>
 		</>
 	);
 };

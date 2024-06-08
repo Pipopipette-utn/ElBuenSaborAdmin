@@ -1,5 +1,5 @@
 // Importamos el tipo de dato IEmpresa y la clase BackendClient
-import { IArticuloManufacturadoTableDTO } from "../types/dto";
+import { IArticuloManufacturadoTableDTO, ISucursalDTO } from "../types/dto";
 import { IArticuloManufacturado } from "../types/empresa";
 import { BackendClient } from "./BakendClient";
 
@@ -99,7 +99,52 @@ export class ArticuloManufacturadoService extends BackendClient<IArticuloManufac
 				body: JSON.stringify(data), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
 			});
 			if (!response.ok) {
-				throw Error(response.statusText);
+				return response.text().then(error => {
+				  throw new Error(error);
+				});
+			  }
+			  return response.json();
+			return response.json(); // Retorna los datos en formato JSON
+		} catch (error) {
+			return Promise.reject(error); // Rechaza la promesa con el error
+		}
+	}
+
+	async updateWithSucursal(id: number, data: IArticuloManufacturado): Promise<IArticuloManufacturado[]> {
+		try {
+			const response = await fetch(`${this.baseUrl}/update/${id}`, {
+				method: "PUT",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
+			});
+			if (!response.ok) {
+				// Extrae el mensaje de error del cuerpo de la respuesta
+				const errorData = await response.json();
+				throw new Error(errorData.message || "Error desconocido");
+			}
+			return response.json(); // Retorna los datos en formato JSON
+		} catch (error) {
+			return Promise.reject(error); // Rechaza la promesa con el error
+		}
+	}
+
+	async altaSucursales(id: number, sucursales: ISucursalDTO[]): Promise<IArticuloManufacturado[]> {
+		try {
+			const response = await fetch(`${this.baseUrl}/${id}/duplicate`, {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(sucursales), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
+			});
+			if (!response.ok) {
+				// Extrae el mensaje de error del cuerpo de la respuesta
+				const errorData = await response.json();
+				throw new Error(errorData.message || "Error desconocido");
 			}
 			return response.json(); // Retorna los datos en formato JSON
 		} catch (error) {

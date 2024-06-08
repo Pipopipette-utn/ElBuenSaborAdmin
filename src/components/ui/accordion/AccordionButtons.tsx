@@ -15,7 +15,7 @@ export const ActionButtons = ({
 	color: string;
 	onEdit: any;
 	onBaja: () => void;
-	onDelete: () => void;
+	onDelete?: () => void;
 }) => {
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
@@ -31,11 +31,13 @@ export const ActionButtons = ({
 				</IconButton>
 			</Tooltip>
 
-			<Tooltip title="Eliminar">
-				<IconButton onClick={onDelete}>
-					<DeleteOutlineIcon fontSize="small" sx={{ color: color }} />
-				</IconButton>
-			</Tooltip>
+			{onDelete && (
+				<Tooltip title="Eliminar">
+					<IconButton onClick={onDelete}>
+						<DeleteOutlineIcon fontSize="small" sx={{ color: color }} />
+					</IconButton>
+				</Tooltip>
+			)}
 		</Stack>
 	);
 };

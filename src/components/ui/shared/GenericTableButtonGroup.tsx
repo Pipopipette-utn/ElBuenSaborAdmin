@@ -11,6 +11,7 @@ interface ButtonGroupProps {
 	onEdit?: (id: number) => void;
 	onDelete?: (id: number) => void;
 	onAlta?: (id: number) => void;
+	onAltaSucursal?: (id: number) => void;
 	onSeeDetails: (id: number) => void;
 }
 
@@ -20,6 +21,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 	onEdit,
 	onSeeDetails,
 	onAlta,
+	onAltaSucursal,
 }) => {
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
@@ -45,6 +47,13 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 			{onAlta && (
 				<Tooltip title="Dar de alta">
 					<IconButton onClick={() => onAlta(idEntity)}>
+						<UpgradeIcon fontSize="small" color="primary" />
+					</IconButton>
+				</Tooltip>
+			)}
+			{onAltaSucursal && (
+				<Tooltip title="Dar de alta en otra sucursal">
+					<IconButton onClick={() => onAltaSucursal(idEntity)}>
 						<UpgradeIcon fontSize="small" color="primary" />
 					</IconButton>
 				</Tooltip>
