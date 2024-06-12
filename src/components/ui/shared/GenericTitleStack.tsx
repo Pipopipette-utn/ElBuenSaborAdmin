@@ -7,9 +7,9 @@ interface GenericHeaderStackProps {
 	icon: ReactElement;
 	quantity: number;
 	activeEntities: string;
-	buttonText: string;
+	buttonText?: string;
 	disabledButton?: boolean;
-	onClick: any;
+	onClick?: any;
 	children?: ReactNode;
 }
 
@@ -39,7 +39,7 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 				>
 					{icon}
 				</Stack>
-				<Stack direction="column">
+				<Stack direction="column" width="100%">
 					<Typography
 						sx={{ fontWeight: "bolder", fontSize: "36px", lineHeight: 1 }}
 					>
@@ -53,15 +53,17 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 				</Stack>
 				{children}
 			</Stack>
-			<Button
-				disabled={disabledButton}
-				onClick={onClick}
-				variant="contained"
-				sx={{ borderRadius: "50px", p: "12px 20px" }}
-				startIcon={<AddIcon />}
-			>
-				{buttonText}
-			</Button>
+			{buttonText && onClick && (
+				<Button
+					disabled={disabledButton}
+					onClick={onClick}
+					variant="contained"
+					sx={{ borderRadius: "50px", p: "12px 20px" }}
+					startIcon={<AddIcon />}
+				>
+					{buttonText}
+				</Button>
+			)}
 		</Stack>
 	);
 };

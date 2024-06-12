@@ -4,6 +4,7 @@ import {
 	IArticuloManufacturado,
 	ICategoria,
 	IEmpresa,
+	IPedido,
 	IPromocion,
 	ISucursal,
 } from "../../types/empresa";
@@ -18,6 +19,7 @@ interface IInitialState {
 	articulosInsumosSucursal: IArticuloInsumo[] | null;
 	articulosManufacturadosSucursal: IArticuloManufacturado[] | null;
 	empleadosSucursal: IEmpleado[] | null | "loading";
+	pedidosSucursal: IPedido[] | null;
 }
 
 const initialState: IInitialState = {
@@ -29,6 +31,7 @@ const initialState: IInitialState = {
 	articulosInsumosSucursal: null,
 	articulosManufacturadosSucursal: null,
 	empleadosSucursal: null,
+	pedidosSucursal: null,
 };
 
 //acá definimos el estado global
@@ -176,6 +179,20 @@ const SelectedDataSlice = createSlice({
 				);
 			}
 		},
+		setPedidosSucursal: (
+			state,
+			action: PayloadAction<IPedido[] | null>
+		) => {
+			state.pedidosSucursal = action.payload;
+		},
+		editPedidoSucursal: (state, action: PayloadAction<IPedido>) => {
+			const pedidoEditado = action.payload;
+			if (state.pedidosSucursal) {
+				state.pedidosSucursal = state.pedidosSucursal.map((empleado) =>
+					empleado.id === pedidoEditado.id ? pedidoEditado : empleado
+				);
+			}
+		},
 	},
 });
 
@@ -200,6 +217,8 @@ export const {
 	setEmpleadosSucursal,
 	editEmpleadoSucursal,
 	addEmpleadoSucursal,
+	setPedidosSucursal,
+	editPedidoSucursal
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;
 

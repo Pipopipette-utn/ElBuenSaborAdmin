@@ -14,6 +14,7 @@ import Promociones from "../components/screens/Promociones/Promociones";
 import Empleados from "../components/screens/Empleados/Empleados";
 import PrivateRoute from "./ProtectedRoute";
 import { useAppSelector } from "../redux/hooks";
+import Pedidos from "../components/screens/Pedidos/Pedidos";
 
 const ProtectedRoutes = () => {
 	const user = useAppSelector((state) => state.auth.user);
@@ -152,6 +153,15 @@ const ProtectedRoutes = () => {
 										<PrivateRoute
 											component={Empleados}
 											roles={["SUPERADMIN", "ADMIN"]}
+										/>
+									}
+								/>
+								<Route
+									path="/pedidos"
+									element={
+										<PrivateRoute
+											component={Pedidos}
+											roles={["SUPERADMIN", "ADMIN", "CAJERO", "DELIVERY"]}
 										/>
 									}
 								/>

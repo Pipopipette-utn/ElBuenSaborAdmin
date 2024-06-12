@@ -95,7 +95,7 @@ export interface IPedido extends BaseEntity {
 	horaEstimadaFinalizacion: string;
 	total: number;
 	totalCosto: number;
-	estado: "PREPARACION" | "PENDIENTE" | "CANCELADO" | "RECHAZADO" | "ENTREGADO";
+	estado: "PREPARACION" | "PENDIENTE" | "CANCELADO" | "RECHAZADO" | "DELIVERY" | "ENTREGADO";
 	tipoEnvio: "DELIVERY" | "TAKE_AWAY";
     formaPago: "EFECTIVO" | "MERCADO_PAGO";
 	fechaPedido: Date;

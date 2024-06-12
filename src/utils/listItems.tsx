@@ -5,6 +5,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import PercentIcon from "@mui/icons-material/Percent";
 import PersonIcon from "@mui/icons-material/Person";
 import ScaleIcon from "@mui/icons-material/Scale";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 export type MenuItem = {
 	label: string;
@@ -39,6 +40,8 @@ const listItemsAdmin: MenuItem[] = [
 	},
 	{ label: "Categorias", icon: SellIcon },
 	{ label: "Promociones", icon: PercentIcon },
+	{ label: "Pedidos", icon: ShoppingCartIcon },
+
 	{
 		label: "Empleados",
 		icon: PersonIcon,
@@ -67,8 +70,10 @@ const listItemsCajero: MenuItem[] = [
 	},
 	{ label: "Categorias", icon: SellIcon },
 	{ label: "Promociones", icon: PercentIcon },
+	{ label: "Pedidos", icon: ShoppingCartIcon },
 ];
 
 const listItemsDelivery: MenuItem[] = [
 	{ label: "Inicio", icon: HomeIcon },
+	{ label: "Pedidos", icon: ShoppingCartIcon },
 ];
