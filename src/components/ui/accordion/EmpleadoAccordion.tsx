@@ -150,6 +150,7 @@ export const EmpleadoAccordion: FC<EmpleadoAccordionProps> = ({
 			<AlertDialog
 				open={showBajaAlert}
 				title={"¿Estás seguro de que querés dar de baja el empleado?"}
+				content={""}
 				onAgreeClose={handleBaja}
 				onDisagreeClose={handleCloseBajaAlert}
 			/>

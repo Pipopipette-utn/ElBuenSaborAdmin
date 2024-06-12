@@ -17,6 +17,7 @@ import GenericModal from "../../shared/GenericModal";
 import { SuccessMessage } from "../../shared/SuccessMessage";
 import { EmpresaForm } from "../../forms/EmpresaForm";
 import { ErrorMessage } from "../../shared/ErrorMessage";
+import { emptyEmpresa } from "../../../../types/emptyEntities";
 
 interface EmpresaIconProps {}
 
@@ -120,7 +121,7 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 						}
 					})}
 				<Divider />
-				<MenuItem onClick={handleClose}>
+				<MenuItem onClick={handleOpenModal}>
 					<ListItemIcon>
 						<AddIcon fontSize="small" />
 					</ListItemIcon>
@@ -128,13 +129,13 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 				</MenuItem>
 			</Menu>
 			<GenericModal
-				title={"Editar empresa"}
+				title={"Crear empresa"}
 				icon={<AddBusinessIcon fontSize="large" />}
 				open={showModal}
 				handleClose={handleCloseModal}
 			>
 				<EmpresaForm
-					empresa={empresa!}
+					empresa={emptyEmpresa}
 					onClose={handleCloseModal}
 					onShowSuccess={handleShowSuccess}
 					onShowError={handleShowError}
