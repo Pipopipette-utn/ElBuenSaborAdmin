@@ -10,14 +10,16 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useAppDispatch } from "../../../../redux/hooks";
 import { theme } from "../../../../styles/theme";
-import { setLogout } from "../../../../redux/slices/Auth";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { logout } from "../../../../redux/slices/Auth";
 export const UserButton = () => {
+	const { logout: logoutAuth0, user } = useAuth0();
+	const dispatch = useAppDispatch();
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-	const dispatch = useAppDispatch();
 
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -27,7 +29,8 @@ export const UserButton = () => {
 	};
 
 	const handleLogout = () => {
-		dispatch(setLogout());
+		logoutAuth0();
+		dispatch(logout());
 	};
 
 	return (
@@ -47,14 +50,9 @@ export const UserButton = () => {
 						src="https://www.shutterstock.com/image-vector/young-smiling-man-avatar-brown-600nw-2261401207.jpg"
 					/>
 					{!isSmallScreen && (
-						<Stack sx={{ alignItems: "flex-start" }}>
+						<Stack sx={{ justifyContent: "center" }}>
 							<Typography sx={{ color: theme.palette.bg.light }}>
-								users.name
-							</Typography>
-							<Typography
-								sx={{ fontWeight: "lighter", color: theme.palette.bg.light }}
-							>
-								user@email.com
+								{user?.name ?? ""}
 							</Typography>
 						</Stack>
 					)}

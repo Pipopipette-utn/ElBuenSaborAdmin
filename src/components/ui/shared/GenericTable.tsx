@@ -8,7 +8,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { theme } from "../../../styles/theme";
 import ButtonGroup from "./GenericTableButtonGroup";
-import { Stack, Typography } from "@mui/material";
+import { Chip, Stack, Typography } from "@mui/material";
 
 export interface TableColumn {
 	label: string;
@@ -117,6 +117,9 @@ export const GenericTable = <T,>({
 													}
 													onSeeDetails={onSeeDetails!}
 												/>
+											) : column.label === "Categoria" ||
+											  column.label === "Unidad de medida" ? (
+												<Chip label={cellValue} />
 											) : (
 												cellValue
 											)}

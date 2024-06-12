@@ -5,23 +5,14 @@ import { BackendClient } from "./BakendClient";
 
 // Clase CategoriaService que extiende BackendClient para interactuar con la API de categorias
 export class CategoriaService extends BackendClient<ICategoria> {
-	filterBySucursal = async (
-		categorias: ICategoria[],
-		sucursalId: number
-	): Promise<ICategoria[]> => {
-		const categoriasSucursal = categorias.filter((categoria) =>
-			categoria.sucursales?.some((s) => s.id === sucursalId)
-		);
-
-		return categoriasSucursal;
-	};
-
 	async baja(id: number, sucursal: ISucursalDTO) {
 		try {
+			const token = localStorage.getItem("token");
 			const response = await fetch(`${this.baseUrl}/baja/${id}`, {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
 				},
 				body: JSON.stringify(sucursal),
 			});
@@ -32,7 +23,6 @@ export class CategoriaService extends BackendClient<ICategoria> {
 			console.error(error); // Imprime el error en la consola
 		}
 	}
-
 }
 
 /*

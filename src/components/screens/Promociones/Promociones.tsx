@@ -14,11 +14,12 @@ import { setPromocionesSucursal } from "../../../redux/slices/SelectedData";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
-export const Promociones = () => {
+const Promociones = () => {
 	const dispatch = useAppDispatch();
 	const promocionesRedux = useAppSelector(
 		(state) => state.selectedData.promocionesSucursal
 	);
+	const user = useAppSelector((state) => state.auth.user);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 
 	useEffect(() => {
@@ -42,8 +43,8 @@ export const Promociones = () => {
 		const findPromociones = async () => {
 			if (sucursal !== null && !Array.isArray(sucursal)) {
 				setLoading(true);
-				//TODO CAMBIAR POR SUCURSAL
-				const response = await promocionService.getAllPagedIncludeDeleted(
+				const response = await promocionService.getAllPagedBySucursal(
+					sucursal.id!,
 					page,
 					itemsPerPage
 				);
@@ -57,7 +58,6 @@ export const Promociones = () => {
 
 		setPromociones(filtered);
 	}, [sucursal, page]);
-
 
 	const noOfPages = Math.ceil(totalRows / itemsPerPage);
 
@@ -89,6 +89,7 @@ export const Promociones = () => {
 					quantity={totalRows}
 					activeEntities={"Promociones activas"}
 					buttonText={"Nueva promoción"}
+					disabledButton={user!.rol! === "CAJERO"}
 					onClick={handleOpenModal}
 				/>
 				<Stack sx={{ p: "12px" }}>
@@ -148,3 +149,5 @@ export const Promociones = () => {
 		</>
 	);
 };
+
+export default Promociones;

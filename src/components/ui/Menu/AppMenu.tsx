@@ -22,6 +22,7 @@ import { background } from "../../../styles/palette";
 import { SucursalSelect } from "./NavBar/SucursalSelect";
 import { UserButton } from "./NavBar/UserButton";
 import { fromKebabCase } from "../../../utils/textTransform";
+import { useAppSelector } from "../../../redux/hooks";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -106,10 +107,14 @@ const Overlay = styled("div")<{ open: boolean }>(({ open }) => ({
 export const AppMenu = () => {
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+	const user = useAppSelector((state) => state.auth.user);
+
 	const [open, setOpen] = useState(isSmallScreen ? false : true);
 	const path = useLocation().pathname;
 	const isEmpresasPage =
-		path === "/" || path === "/empresas" || path === "/empresas/sucursales";
+		(path === "/" || path === "/empresas" || path === "/empresas/sucursales") &&
+		user &&
+		(user.rol === "SUPERADMIN" || user.rol === "ADMIN");
 
 	useEffect(() => {
 		if (isSmallScreen) setOpen(false);

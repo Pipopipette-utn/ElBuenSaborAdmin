@@ -9,8 +9,8 @@ import { FC } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useLocation } from "react-router-dom";
-import { MenuItem } from "./AppMenuList";
 import { theme } from "../../../../styles/theme";
+import { MenuItem } from "../../../../utils/listItems";
 
 interface MenuItemButtonProps {
 	open: boolean;

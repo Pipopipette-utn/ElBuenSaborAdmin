@@ -17,7 +17,7 @@ import { emptyEmpresa } from "../../../types/emptyEntities";
 import { Loader } from "../../ui/shared/Loader";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
-export const ListaEmpresas = () => {
+const ListaEmpresas = () => {
 	const empresas = useAppSelector((state) => state.business.empresas);
 	const [showModal, setShowModal] = useState(false);
 
@@ -99,3 +99,5 @@ export const ListaEmpresas = () => {
 		</Stack>
 	);
 };
+
+export default ListaEmpresas;

@@ -16,7 +16,7 @@ import { ProvinciaService } from "../../../services/ProvinciaService";
 import { LocalidadService } from "../../../services/LocalidadService";
 import { setLocalidades, setPaises, setProvincias } from "../../../redux/slices/Location";
 
-export const Sucursales = () => {
+const Sucursales = () => {
 	const dispatch = useAppDispatch();
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
@@ -39,8 +39,6 @@ export const Sucursales = () => {
 		const paisService = new PaisService("/paises");
 		const provinciaService = new ProvinciaService("/provincias");
 		const localidadService = new LocalidadService("/localidades");
-
-		console.log("entre");
 
 		const traerUbicacion = async () => {
 			const todosPaises = await paisService.getAll();
@@ -118,3 +116,4 @@ export const Sucursales = () => {
 		</>
 	);
 };
+export default Sucursales;

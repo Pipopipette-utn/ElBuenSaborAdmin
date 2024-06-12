@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUsuario } from "../../types/empresa";
+import { IEmpleado, IUsuario } from "../../types/usuarios";
 
 interface IInitialState {
 	user: IUsuario | null;
-	isLogged: boolean;
+	empleado: IEmpleado | null;
+	login: boolean;
 }
 
 const initialState: IInitialState = {
 	user: null,
-	isLogged: false,
+	empleado: null,
+	login: false,
 };
 
 //acá definimos el estado global
@@ -16,16 +18,22 @@ const AuthUser = createSlice({
 	name: "AuthUser",
 	initialState,
 	reducers: {
-		setLogin: (state, action: PayloadAction<IUsuario>) => {
-			state.user = action.payload;
-			state.isLogged = true;
+		login: (state) => {
+			state.login = true;
 		},
-		setLogout: (state) => {
+		logout: (state) => {
+			state.login = false;
 			state.user = null;
-			state.isLogged = false;
+			state.empleado = null;
 		},
+		setUser: (state, action: PayloadAction<IUsuario>) => {
+			state.user = action.payload;
+		},
+		setEmpleado: (state, action: PayloadAction<IEmpleado>) => {
+			state.empleado = action.payload;
+		}
 	},
 });
 
-export const { setLogin, setLogout } = AuthUser.actions;
+export const { login, logout, setUser, setEmpleado} = AuthUser.actions;
 export default AuthUser.reducer;

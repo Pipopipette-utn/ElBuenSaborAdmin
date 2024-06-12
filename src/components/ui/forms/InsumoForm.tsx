@@ -18,6 +18,10 @@ import {
 } from "../../../redux/slices/SelectedData";
 import { SucursalesSelector } from "./SucursalesSelector";
 import { ISucursalDTO } from "../../../types/dto";
+import {
+	addArticuloInsumo,
+	editArticuloInsumo,
+} from "../../../redux/slices/Business";
 
 interface InsumoFormProps {
 	initialArticuloInsumo: IArticuloInsumo;
@@ -184,6 +188,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					newArticuloInsumo
 				);
 				dispatch(editArticuloInsumoSucursal(insumo));
+				dispatch(editArticuloInsumo(insumo));
 				onShowSuccess("Artículo insumo modificado con éxito.");
 			} else {
 				insumos = await articuloInsumoService.createWithSucursal(
@@ -191,6 +196,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				);
 				insumo = insumos.find((i) => i.sucursal!.id === sucursal!.id);
 				dispatch(addArticuloInsumoSucursal(insumo!));
+				dispatch(addArticuloInsumo(insumo!));
 				onShowSuccess("Artículo insumo creado con éxito.");
 			}
 
@@ -202,6 +208,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				const newProducto = await articuloInsumoService.getById(insumo!.id!);
 				if (newProducto != null) {
 					dispatch(editArticuloInsumoSucursal(newProducto));
+					dispatch(editArticuloInsumo(newProducto));
 				}
 			}
 			onClose();

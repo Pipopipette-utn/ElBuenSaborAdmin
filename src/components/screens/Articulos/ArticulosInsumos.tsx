@@ -22,8 +22,9 @@ import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 import { SucursalesSelector } from "../../ui/forms/SucursalesSelector";
 import { ISucursalDTO } from "../../../types/dto";
 
-export const ArticulosInsumos = () => {
+const ArticulosInsumos = () => {
 	const insumoService = new ArticuloInsumoService("/articulosInsumos");
+	const user = useAppSelector((state) => state.auth.user);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal) ?? [];
 	const categorias =
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
@@ -80,18 +81,15 @@ export const ArticulosInsumos = () => {
 		};
 
 		const filterInsumos = async () => {
-			console.log(categoryFilter);
-			console.log(nameFilter);
 			if (sucursal && !Array.isArray(sucursal)) {
 				setLoading(true);
-				const filteredArticulos =
-					await insumoService.getAllPagedFiltered(
-						sucursal!.id!,
-						page,
-						rowsPerPage,
-						categoryFilter !== null ? categoryFilter.id! : undefined,
-						nameFilter !== null ? nameFilter : undefined
-					);
+				const filteredArticulos = await insumoService.getAllPagedFiltered(
+					sucursal!.id!,
+					page,
+					rowsPerPage,
+					categoryFilter !== null ? categoryFilter.id! : undefined,
+					nameFilter !== null ? nameFilter : undefined
+				);
 				filtered = filteredArticulos.data;
 				dispatch(setInsumosSucursal(filteredArticulos.data));
 				setTotalRows(filteredArticulos.total);
@@ -149,7 +147,7 @@ export const ArticulosInsumos = () => {
 	const handleDelete = async () => {
 		try {
 			await insumoService.delete(idArticulo!);
-			const newArticulo = { ...articulo!, baja: false };
+			const newArticulo = { ...articulo!, baja: true };
 			dispatch(editArticuloInsumoSucursal(newArticulo));
 			handleCloseAlert();
 			handleShowSuccess("Artículo dado de baja con éxito");
@@ -194,7 +192,10 @@ export const ArticulosInsumos = () => {
 				const filteredSucursales = sucursales.filter(
 					(s) => s.id !== sucursal.id!
 				);
-				await insumoService.altaSucursales(idArticulo!, filteredSucursales);
+				await insumoService.altaSucursales(
+					idArticulo!,
+					filteredSucursales,
+				);
 				handleCloseAlertAltaSucursal();
 				handleShowSuccess("Artículo dado de alta con éxito.");
 			}
@@ -232,6 +233,7 @@ export const ArticulosInsumos = () => {
 					quantity={totalRows}
 					activeEntities={"Insumos activos"}
 					buttonText={"Nuevo insumo"}
+					disabledButton={user!.rol! === "CAJERO"}
 					onClick={handleOpenModal}
 				>
 					<FilterFields
@@ -267,9 +269,7 @@ export const ArticulosInsumos = () => {
 								onEdit={handleOpenEditModal}
 								onAlta={handleAltaClick}
 								onAltaSucursal={handleAltaSucursalClick}
-								data={insumoService.articulosInsumosToDTO(
-									articulosInsumos!
-								)}
+								data={insumoService.articulosInsumosToDTO(articulosInsumos!)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
 									{ label: "Precio compra", key: "precioCompra" },
@@ -356,3 +356,5 @@ export const ArticulosInsumos = () => {
 		</>
 	);
 };
+
+export default ArticulosInsumos;

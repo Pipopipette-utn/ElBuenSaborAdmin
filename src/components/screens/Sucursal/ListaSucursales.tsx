@@ -26,13 +26,14 @@ import {
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
-export const ListaSucursales = () => {
+const ListaSucursales = () => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 	const paisService = new PaisService("/paises");
 	const provinciaService = new ProvinciaService("/provincias");
 	const localidadService = new LocalidadService("/localidades");
 
+	const user = useAppSelector((state) => state.auth.user);
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
@@ -47,7 +48,7 @@ export const ListaSucursales = () => {
 	const handleCloseError = () => setShowError("");
 
 	useEffect(() => {
-		if (!empresa) {
+		if (!empresa && user!.rol != "ADMIN") {
 			navigate("/empresas");
 		} else {
 			const traerUbicacion = async () => {
@@ -134,3 +135,4 @@ export const ListaSucursales = () => {
 		</Stack>
 	);
 };
+export default ListaSucursales;

@@ -8,6 +8,7 @@ interface GenericHeaderStackProps {
 	quantity: number;
 	activeEntities: string;
 	buttonText: string;
+	disabledButton?: boolean;
 	onClick: any;
 	children?: ReactNode;
 }
@@ -17,8 +18,9 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 	quantity,
 	activeEntities,
 	buttonText,
+	disabledButton,
 	onClick,
-	children
+	children,
 }) => {
 	return (
 		<Stack
@@ -52,6 +54,7 @@ export const GenericHeaderStack: FC<GenericHeaderStackProps> = ({
 				{children}
 			</Stack>
 			<Button
+				disabled={disabledButton}
 				onClick={onClick}
 				variant="contained"
 				sx={{ borderRadius: "50px", p: "12px 20px" }}

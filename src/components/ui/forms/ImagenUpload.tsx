@@ -20,6 +20,7 @@ interface ImageUploadProps {
 		selectedPreviews: string[]
 	) => void;
 	onNext: () => void;
+	multiple?: boolean;
 }
 
 const RemoveButton = styled(IconButton)(({ theme }) => ({
@@ -34,6 +35,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 	onBack,
 	onNext,
 	onChangeImages,
+	multiple,
 }) => {
 	const [error, setError] = useState("");
 	const [images, setImages] = useState<string[]>(imagenes);
@@ -77,7 +79,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 					fullWidth
 					onChange={handleImageChange}
 					inputProps={{
-						multiple: true,
+						multiple: multiple ?? true,
 					}}
 				/>
 			</TextFieldStack>

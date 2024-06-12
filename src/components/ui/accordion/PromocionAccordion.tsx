@@ -13,7 +13,9 @@ import { theme } from "../../../styles/theme";
 import { Carousel } from "react-responsive-carousel";
 import { editPromocionesSucursal } from "../../../redux/slices/SelectedData";
 import { PromocionService } from "../../../services/PromocionService";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { SucursalesSelector } from "../forms/SucursalesSelector";
+import { ISucursalDTO } from "../../../types/dto";
 
 interface PromocionAccordionProps {
 	promocion: IPromocion;
@@ -27,8 +29,14 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
+	const user = useAppSelector((state) => state.auth.user);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
+	const promocionService = new PromocionService("/promociones");
+
 	const [showModal, setShowModal] = useState(false);
 	const [showBajaAlert, setShowBajaAlert] = useState(false);
+	const [showAltaAlert, setShowAltaAlert] = useState(false);
+	const [showAlertAltaSucursal, setShowAlertAltaSucursal] = useState(false);
 
 	// Funciones para abrir y cerrar el modal de edición
 	const handleOpenEditModal = (
@@ -42,18 +50,51 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 	const handleOpenBajaAlert = () => setShowBajaAlert(true);
 	const handleCloseBajaAlert = () => setShowBajaAlert(false);
 
+	const handleOpenAltaAlert = () => setShowAltaAlert(true);
+	const handleCloseAltaAlert = () => setShowAltaAlert(false);
+
+	const handleOpenAlertAltaSucursal = () => setShowAlertAltaSucursal(true);
+	const handleCloseAlertAltaSucursal = () => setShowAlertAltaSucursal(false);
+
 	const handleBaja = async () => {
 		try {
-			const promocionService = new PromocionService(
-				"/promociones"
-			);
 			await promocionService.delete(promocion.id!);
-			const newPromo = { ...promocion!, baja: false };
+			const newPromo = { ...promocion!, baja: true };
 			dispatch(editPromocionesSucursal(newPromo));
 			handleCloseBajaAlert();
 			onShowSuccess("Artículo dado de baja con éxito");
 		} catch (e: any) {
 			onShowError("Error al dar de baja artículo: " + e);
+		}
+	};
+
+	const handleAlta = async () => {
+		try {
+			await promocionService.alta(promocion.id!);
+			const newPromo = { ...promocion!, baja: false };
+			dispatch(editPromocionesSucursal(newPromo));
+			handleCloseBajaAlert();
+			onShowSuccess("Artículo dado de alta con éxito");
+		} catch (e: any) {
+			onShowError("Error al dar de alta artículo: " + e);
+		}
+	};
+
+	const handleAltaSucursal = async (sucursales: ISucursalDTO[]) => {
+		try {
+			if (!Array.isArray(sucursal)) {
+				const filteredSucursales = sucursales.filter(
+					(s) => s.id !== sucursal!.id!
+				);
+				await promocionService.altaSucursales(
+					promocion.id!,
+					filteredSucursales
+				);
+				handleCloseAlertAltaSucursal();
+				onShowSuccess("Artículo dado de alta con éxito.");
+			}
+		} catch (e: any) {
+			onShowError("Error al dar de alta artículo: " + e);
 		}
 	};
 
@@ -77,8 +118,16 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 					<ActionButtons
 						entity={promocion}
 						onEdit={handleOpenEditModal}
-						color={theme.palette.primary.main}
-						onBaja={handleOpenBajaAlert}
+						color={
+							user!.rol! === "CAJERO"
+								? theme.palette.info.light
+								: theme.palette.primary.main
+						}
+						onBaja={promocion.baja ? undefined : handleOpenBajaAlert}
+						onAlta={promocion.baja ? handleOpenAltaAlert : undefined}
+						onAltaSucursales={
+							promocion.baja ? undefined : handleOpenAlertAltaSucursal
+						}
 					/>
 				</AccordionSummary>
 				<Stack padding={"12px 24px"} spacing={4} direction="row">
@@ -133,12 +182,32 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 				/>
 			</GenericModal>
 
+			<GenericModal
+				title={"Dar de alta promoción"}
+				icon={<StoreIcon fontSize="large" />}
+				open={showAlertAltaSucursal}
+				handleClose={handleCloseAlertAltaSucursal}
+			>
+				<SucursalesSelector
+					selected={promocion && promocion.sucursal ? [promocion.sucursal] : []}
+					handleSubmit={handleAltaSucursal}
+					buttonTitle={"Dar de alta en sucursales"}
+				/>
+			</GenericModal>
+
 			<AlertDialog
 				open={showBajaAlert}
 				title={"¿Estás seguro de que querés dar de baja la promoción?"}
 				content={"La promoción se dará de baja sólo en esta sucursal."}
 				onAgreeClose={handleBaja}
 				onDisagreeClose={handleCloseBajaAlert}
+			/>
+			<AlertDialog
+				open={showAltaAlert}
+				title={"¿Estás seguro de que querés dar de alta la promoción?"}
+				content={""}
+				onAgreeClose={handleAlta}
+				onDisagreeClose={handleCloseAltaAlert}
 			/>
 		</>
 	);

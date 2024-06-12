@@ -86,6 +86,7 @@ export const GenericForm: FC<FormProps> = ({
 												switch (f.type) {
 													case "text":
 													case "number":
+													case "email":
 														return (
 															<TextField
 																type={f.type}

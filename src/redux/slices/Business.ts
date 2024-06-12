@@ -4,8 +4,8 @@ import {
 	IArticuloManufacturado,
 	IEmpresa,
 	IUnidadMedida,
-	IUsuario,
 } from "../../types/empresa";
+import { IUsuario } from "../../types/usuarios";
 
 interface IInitialState {
 	usuarios: IUsuario[] | null | "loading";
@@ -61,6 +61,36 @@ const BusinessSlice = createSlice({
 		setArticulosManufacturados: (state, action: PayloadAction<IArticuloManufacturado[] | null>) => {
 			state.articulosManufacturados = action.payload;
 		},
+		addArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
+			if (state.articulosInsumos) {
+				state.articulosInsumos!.push(action.payload);
+			} else {
+				state.articulosInsumos = [action.payload];
+			}
+		},
+		editArticuloInsumo: (state, action: PayloadAction<IArticuloInsumo>) => {
+			const articuloEditado = action.payload;
+			if (state.articulosInsumos) {
+				state.articulosInsumos = state.articulosInsumos.map((unidad) =>
+					unidad.id === articuloEditado.id ? articuloEditado : unidad
+				);
+			}
+		},
+		addArticuloManufacturado: (state, action: PayloadAction<IArticuloManufacturado>) => {
+			if (state.articulosManufacturados) {
+				state.articulosManufacturados!.push(action.payload);
+			} else {
+				state.articulosManufacturados = [action.payload];
+			}
+		},
+		editArticuloManufacturado: (state, action: PayloadAction<IArticuloManufacturado>) => {
+			const articuloEditado = action.payload;
+			if (state.articulosManufacturados) {
+				state.articulosManufacturados = state.articulosManufacturados.map((unidad) =>
+					unidad.id === articuloEditado.id ? articuloEditado : unidad
+				);
+			}
+		},
 	},
 });
 
@@ -71,6 +101,10 @@ export const {
 	editUnidadMedida,
 	setEmpresas,
 	setArticulosInsumos,
+	addArticuloInsumo,
+	editArticuloInsumo,
 	setArticulosManufacturados,
+	addArticuloManufacturado,
+	editArticuloManufacturado,
 } = BusinessSlice.actions;
 export default BusinessSlice.reducer;

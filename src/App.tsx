@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { SucursalService } from "./services/SucursalService";
 import {
 	setCategoriasSucursal,
+	setEmpresa,
 	setInsumosSucursal,
 	setManufacturadosSucursal,
 	setSelectedSucursal,
@@ -20,13 +21,15 @@ import { UnidadMedidaService } from "./services/UnidadMedidaService";
 import { EmpresaService } from "./services/EmpresaService";
 import { ArticuloInsumoService } from "./services/ArticuloInsumoService";
 import { ArticuloManufacturadoService } from "./services/ArticuloManufacturadoService";
+import { useAuth0 } from "@auth0/auth0-react";
+import { login, setEmpleado, setUser } from "./redux/slices/Auth";
+import { callApi } from "./components/auth0/callApi";
+import { UsuarioService } from "./services/UsuarioService";
+import { EmpleadoService } from "./services/EmpleadoService";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
 export const App: FC = () => {
-	const dispatch = useAppDispatch();
-
-	//const usuarioService = new UsuarioService("/usuario");
 	const empresaService = new EmpresaService("/empresas");
 	const unidadMedidaService = new UnidadMedidaService("/unidadesMedidas");
 	const sucursalService = new SucursalService("/sucursales");
@@ -34,62 +37,96 @@ export const App: FC = () => {
 	const manufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
 	);
+	const usuarioService = new UsuarioService("/usuarios");
+	const empleadoService = new EmpleadoService("/empleados");
+	const dispatch = useAppDispatch();
+	const {
+		isAuthenticated,
+		getAccessTokenSilently,
+		user: userAuth0,
+	} = useAuth0();
 
+	const user = useAppSelector((state) => state.auth.user);
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
-	const articulosInsumosSucursal = useAppSelector(
-		(state) => state.selectedData.articulosInsumosSucursal
-	);
-	const articulosManufacturadosSucursal = useAppSelector(
-		(state) => state.selectedData.articulosManufacturadosSucursal
-	);
+
+	const getToken = async () => {
+		const token = await callApi(getAccessTokenSilently);
+		localStorage.setItem("token", token);
+	};
+
+	useEffect(() => {
+		const obtenerUsuario = async () => {
+			const usuario = await usuarioService.getUsuarioByMail(userAuth0!.email!);
+			if (usuario.rol !== "SUPERADMIN") {
+				const empleado = await empleadoService.getEmpleadoByMail(
+					userAuth0!.email!
+				);
+				if (empleado) {
+					dispatch(setEmpleado(empleado));
+					const sucursal = await sucursalService.getById(
+						empleado.sucursal!.id!
+					);
+					dispatch(setSelectedSucursal(sucursal));
+				}
+			}
+			dispatch(setUser(usuario));
+			dispatch(login());
+		};
+		if (isAuthenticated) {
+			getToken();
+			obtenerUsuario();
+		}
+	}, [isAuthenticated]);
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
-			//const usuarios = await usuarioService.getAll();
-			//dispatch(setUsuarios(usuarios));
-			try {
-				dispatch(setEmpresas("loading"));
-				const empresas = await empresaService.getAll();
-				dispatch(setEmpresas(empresas));
-			} catch (e) {
-				dispatch(setEmpresas(null));
+			if (user!.rol === "SUPERADMIN" || user!.rol === "ADMIN") {
+				try {
+					dispatch(setEmpresas("loading"));
+					const empresas = await empresaService.getAll();
+					dispatch(setEmpresas(empresas));
+				} catch (e) {
+					dispatch(setEmpresas(null));
+				}
 			}
-
-			try {
-				dispatch(setUnidadMedidas("loading"));
-				const unidadMedidas = await unidadMedidaService.getAll();
-				dispatch(setUnidadMedidas(unidadMedidas));
-			} catch (e) {
-				dispatch(setUnidadMedidas(null));
+			if (user && ["SUPERADMIN", "ADMIN", "COCINERO"].includes(user!.rol!)) {
+				try {
+					dispatch(setUnidadMedidas("loading"));
+					const unidadMedidas = await unidadMedidaService.getAll();
+					dispatch(setUnidadMedidas(unidadMedidas));
+				} catch (e) {
+					dispatch(setUnidadMedidas(null));
+				}
 			}
 		};
-
-		traerEmpresas();
-	}, []);
+		if (user) traerEmpresas();
+	}, [user]);
 
 	useEffect(() => {
 		const traerSucursales = async () => {
-			dispatch(setSucursalesEmpresa(null));
-			dispatch(setSelectedSucursal(null));
-			if (empresa) {
-				try {
-					dispatch(setSucursalesEmpresa("loading"));
-					const sucursalesFiltradas = await sucursalService.getAllByEmpresa(
-						empresa.id!
-					);
-					dispatch(setSucursalesEmpresa(sucursalesFiltradas));
-					if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
-						dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
-				} catch (e) {
-					dispatch(setUnidadMedidas(null));
-					dispatch(setSelectedSucursal(null));
+			if (empresa && !sucursal) {
+				dispatch(setSucursalesEmpresa(null));
+				dispatch(setSelectedSucursal(null));
+				if (user && ["SUPERADMIN", "ADMIN"].includes(user!.rol!)) {
+					try {
+						dispatch(setSucursalesEmpresa("loading"));
+						const sucursalesFiltradas = await sucursalService.getAllByEmpresa(
+							empresa.id!
+						);
+						dispatch(setSucursalesEmpresa(sucursalesFiltradas));
+						if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
+							dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
+					} catch (e) {
+						dispatch(setUnidadMedidas(null));
+						dispatch(setSelectedSucursal(null));
+					}
 				}
 			}
 		};
 
-		traerSucursales();
-	}, [empresa]);
+		if (user) traerSucursales();
+	}, [empresa, user]);
 
 	useEffect(() => {
 		dispatch(setCategoriasSucursal(null));
@@ -97,7 +134,15 @@ export const App: FC = () => {
 		dispatch(setManufacturadosSucursal(null));
 
 		const traerDatosSucursal = async () => {
-			if (empresa && sucursal) {
+			if (!empresa && sucursal) {
+				const empresa = await sucursalService.getEmpresa(sucursal.id!);
+				dispatch(setEmpresa(empresa));
+			}
+			if (
+				empresa &&
+				sucursal &&
+				["SUPERADMIN", "ADMIN", "COCINERO", "CAJERO"].includes(user!.rol!)
+			) {
 				try {
 					dispatch(setCategoriasSucursal("loading"));
 					const categorias =
@@ -125,40 +170,8 @@ export const App: FC = () => {
 				}
 			}
 		};
-		traerDatosSucursal();
-	}, [sucursal]);
-
-	useEffect(() => {
-		dispatch(setArticulosInsumos(null));
-		const traerDatosSucursal = async () => {
-			if (empresa && sucursal) {
-				try {
-					const articulosInsumos =
-						(await insumoService.getAllActiveBySucursal(sucursal.id!)) ?? [];
-					dispatch(setArticulosInsumos(articulosInsumos));
-				} catch (e) {
-					dispatch(setArticulosInsumos(null));
-				}
-			}
-		};
-		traerDatosSucursal();
-	}, [articulosInsumosSucursal]);
-
-	useEffect(() => {
-		dispatch(setArticulosManufacturados(null));
-		const traerDatosSucursal = async () => {
-			if (empresa && sucursal) {
-				try {
-					const articulosManufacturados =
-						(await manufacturadoService.getAllActiveBySucursal(sucursal.id!)) ?? [];
-					dispatch(setArticulosManufacturados(articulosManufacturados));
-				} catch (e) {
-					dispatch(setArticulosManufacturados(null));
-				}
-			}
-		};
-		traerDatosSucursal();
-	}, [articulosManufacturadosSucursal]);
+		if (user) traerDatosSucursal();
+	}, [sucursal, user]);
 
 	return (
 		<Box

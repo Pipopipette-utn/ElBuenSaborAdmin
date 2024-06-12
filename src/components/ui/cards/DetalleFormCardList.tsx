@@ -37,6 +37,8 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 		precioInicial ?? 0
 	);
 
+	console.log(detalles);
+
 	useEffect(() => {
 		if (precioInicial == 0) {
 			const precio = detalles.reduce(

@@ -1,21 +1,25 @@
 import { Route, Routes } from "react-router-dom";
-import { useAppSelector } from "../redux/hooks";
-import { ProtectedRoutes } from "./ProtectedRoutes";
+import ProtectedRoutes from "./ProtectedRoutes";
+import { AuthenticationGuard } from "../components/auth0/AuthenticationGuard";
+import CallbackPage from "../components/auth0/CallbackPage";
 import { Login } from "../components/screens/Login/Login";
+import UnauthorizedPage from "../components/auth0/UnauthorizedPage";
+import { Suspense } from "react";
 
 // Definición del componente AppRouter
 export const AppRouter = () => {
-	const isLogged = useAppSelector((state) => state.auth!.isLogged);
-
 	// Devolución del componente Routes que define las rutas de la aplicación
 	return (
-		<Routes>
-			{isLogged ? (
-				<Route path="/*" element={<ProtectedRoutes />} />
-			) : (
-				<Route path="/*" element={<ProtectedRoutes />} />
-			)}
-			<Route path="/login" element={<Login />} />
-		</Routes>
+		<Suspense fallback={<div>Cargando...</div>}>
+			<Routes>
+				<Route
+					path="/*"
+					element={<AuthenticationGuard component={ProtectedRoutes} />}
+				/>
+				<Route path="/login" element={<Login />} />
+				<Route path="/callback" element={<CallbackPage />} />
+				<Route path="/unauthorized" element={<UnauthorizedPage />} />
+			</Routes>
+		</Suspense>
 	);
 };

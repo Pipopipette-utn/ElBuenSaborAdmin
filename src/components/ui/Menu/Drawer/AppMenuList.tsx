@@ -1,54 +1,23 @@
 import { List, useMediaQuery } from "@mui/material";
 import { FC, useState } from "react";
-import HomeIcon from "@mui/icons-material/Home";
-import StoreIcon from "@mui/icons-material/Store";
-import LocalMallIcon from "@mui/icons-material/LocalMall";
-import SellIcon from "@mui/icons-material/Sell";
-import PercentIcon from "@mui/icons-material/Percent";
-import PersonIcon from "@mui/icons-material/Person";
-import ScaleIcon from "@mui/icons-material/Scale";
 import { Link } from "react-router-dom";
 import { renderMenuItem } from "./MenuItemButton";
 import { theme } from "../../../../styles/theme";
 import { toKebabCase } from "../../../../utils/textTransform";
+import { useAppSelector } from "../../../../redux/hooks";
+import { MenuItem, getListItemsByRol } from "../../../../utils/listItems";
 
 interface AppMenuListProps {
 	open: boolean;
 	setOpen: Function;
 }
 
-export type MenuItem = {
-	label: string;
-	icon?: React.ElementType<any>;
-	subcategories?: MenuItem[];
-};
-
-const listItems: MenuItem[] = [
-	{ label: "Inicio", icon: HomeIcon },
-	{ label: "Sucursales", icon: StoreIcon },
-	{
-		label: "Articulos",
-		icon: LocalMallIcon,
-		subcategories: [{ label: "Insumos" }, { label: "Manufacturados" }],
-	},
-	{ label: "Categorias", icon: SellIcon },
-	{ label: "Promociones", icon: PercentIcon },
-	{
-		label: "Usuarios",
-		icon: PersonIcon,
-		subcategories: [
-			{ label: "Roles" },
-			{ label: "Clientes" },
-			{ label: "Empleados" },
-		],
-	},
-	{ label: "Unidades de medida", icon: ScaleIcon },
-];
-
 export const AppMenuList: FC<AppMenuListProps> = ({ open, setOpen }) => {
 	const [openedListItems, setOpenedListItems] = useState<MenuItem[]>([]);
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+	const user = useAppSelector((state) => state.auth.user);
 
+	const listItems = user ? getListItemsByRol(user.rol!) : [];
 	const handleClick = (item: MenuItem) => {
 		let updatedList;
 		if (!item.subcategories || !open) {

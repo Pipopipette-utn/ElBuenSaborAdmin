@@ -31,11 +31,17 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 	async getAllPagedBySucursal(
 		sucursalId: number,
 		page: number,
-		size: number
+		size: number,
 	): Promise<{ data: IArticuloInsumo[]; total: number }> {
 		try {
+			const token = localStorage.getItem("token");
 			const response = await fetch(
-				`${this.baseUrl}/porSucursal/${sucursalId}?page=${page}&size=${size}`
+				`${this.baseUrl}/porSucursal/${sucursalId}?page=${page}&size=${size}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			);
 			if (!response.ok) {
 				throw Error(response.statusText);
@@ -55,9 +61,10 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 		page: number,
 		size: number,
 		categoriaId?: number,
-		nombre?: string
+		nombre?: string,
 	): Promise<{ data: IArticuloInsumo[]; total: number }> {
 		try {
+			const token = localStorage.getItem("token");
 			let url = `${this.baseUrl}/filtrar/${sucursalId}?page=${page}&size=${size}`;
 			if (categoriaId) {
 				url += `&categoriaId=${categoriaId}`;
@@ -65,7 +72,11 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 			if (nombre) {
 				url += `&nombre=${nombre}`;
 			}
-			const response = await fetch(url);
+			const response = await fetch(url, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
 			if (!response.ok) {
 				throw Error(response.statusText);
 			}
@@ -79,10 +90,18 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 		}
 	}
 
-	async getAllActiveBySucursal(sucursalId: number): Promise<IArticuloInsumo[]> {
+	async getAllActiveBySucursal(
+		sucursalId: number,
+	): Promise<IArticuloInsumo[]> {
 		try {
+			const token = localStorage.getItem("token");
 			const response = await fetch(
-				`${this.baseUrl}/activos/porSucursal/${sucursalId}`
+				`${this.baseUrl}/activos/porSucursal/${sucursalId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
 			);
 			if (!response.ok) {
 				throw Error(response.statusText);
@@ -93,13 +112,17 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 		}
 	}
 
-	async createWithSucursal(data: IArticuloInsumo): Promise<IArticuloInsumo[]> {
+	async createWithSucursal(
+		data: IArticuloInsumo,
+	): Promise<IArticuloInsumo[]> {
 		try {
+			const token = localStorage.getItem("token");
 			const response = await fetch(`${this.baseUrl}/create`, {
 				method: "POST",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
 				},
 				body: JSON.stringify(data), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
 			});
@@ -108,7 +131,6 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 					throw new Error(error);
 				});
 			}
-			return response.json();
 			return response.json(); // Retorna los datos en formato JSON
 		} catch (error) {
 			return Promise.reject(error); // Rechaza la promesa con el error
@@ -117,14 +139,16 @@ export class ArticuloInsumoService extends BackendClient<IArticuloInsumo> {
 
 	async altaSucursales(
 		id: number,
-		sucursales: ISucursalDTO[]
+		sucursales: ISucursalDTO[],
 	): Promise<IArticuloInsumo[]> {
 		try {
+			const token = localStorage.getItem("token");
 			const response = await fetch(`${this.baseUrl}/${id}/duplicate`, {
 				method: "POST",
 				headers: {
 					Accept: "application/json",
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
 				},
 				body: JSON.stringify(sucursales), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
 			});

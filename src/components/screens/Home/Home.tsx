@@ -1,13 +1,19 @@
-import { Divider, Stack, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import {
-	ReportStack,
-	StyledStack,
-} from "../../ui/styled/StyledStack";
+	Button,
+	Divider,
+	Stack,
+	ToggleButton,
+	ToggleButtonGroup,
+	Typography,
+} from "@mui/material";
+import { ReportStack, StyledStack } from "../../ui/styled/StyledStack";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import GroupsIcon from "@mui/icons-material/Groups";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import TodayIcon from "@mui/icons-material/Today";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import SoupKitchenIcon from "@mui/icons-material/SoupKitchen";
+import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import {
 	ReportAmount,
 	ReportSubtitle,
@@ -15,8 +21,14 @@ import {
 } from "../../ui/styled/Typography";
 import { useState } from "react";
 import ProductsPieChart from "../../ui/charts/ProductsPieChart";
+import { useAppSelector } from "../../../redux/hooks";
+import { useNavigate } from "react-router-dom";
 
-export const Home = () => {
+const Home = () => {
+	const user = useAppSelector((state) => state.auth.user);
+	const empleado = useAppSelector((state) => state.auth.empleado);
+	const navigate = useNavigate();
+
 	const [month, setMonth] = useState<string | null>("may");
 
 	const handleMonth = (
@@ -33,82 +45,148 @@ export const Home = () => {
 			sx={{ borderRadius: 0 }}
 			justifyContent="center"
 			alignItems="center"
+			width="100%"
 		>
-			<Stack direction="row" spacing={3} width="100%">
-				<ReportStack spacing={1} flexGrow={1}>
-					<TodayIcon fontSize="large" />
-					<ReportAmount>$0.000,00</ReportAmount>
-					Recaudado hoy
-				</ReportStack>
-				<ReportStack spacing={1} flexGrow={1}>
-					<DateRangeIcon fontSize="large" />
-					<ReportAmount>$00.000,00</ReportAmount>
-					Recaudado esta semana
-				</ReportStack>
-				<ReportStack spacing={1} flexGrow={1}>
-					<CalendarTodayIcon fontSize="large" />
-					<ReportAmount>$000.000,00</ReportAmount>
-					Recaudado este mes
-				</ReportStack>
-			</Stack>
-			<Stack direction="row" spacing={3} width="100%">
-				<Stack spacing={2} width="40%">
-					<ReportStack spacing={2} alignItems="center">
-						<ReportTitle>Ganancias</ReportTitle>
-						<Stack direction="row" spacing={2}>
-							<Stack alignItems="center">
-								<ReportSubtitle>Costos</ReportSubtitle>
-								<ReportAmount>$00.000,00</ReportAmount>
-							</Stack>
-							<Divider orientation="vertical" />
-							<Stack alignItems="center">
-								<ReportSubtitle>Ventas</ReportSubtitle>
-								<ReportAmount>$00.000,00</ReportAmount>
-							</Stack>
-						</Stack>
-						<ToggleButtonGroup value={month} size="small" exclusive onChange={handleMonth}>
-							<ToggleButton value="january">J</ToggleButton>
-							<ToggleButton value="february">F</ToggleButton>
-							<ToggleButton value="march">M</ToggleButton>
-							<ToggleButton value="april">A</ToggleButton>
-							<ToggleButton value="may">M</ToggleButton>
-							<ToggleButton value="june">J</ToggleButton>
-							<ToggleButton value="july">J</ToggleButton>
-							<ToggleButton value="agost">A</ToggleButton>
-							<ToggleButton value="september">S</ToggleButton>
-							<ToggleButton value="october">O</ToggleButton>
-							<ToggleButton value="november">N</ToggleButton>
-							<ToggleButton value="december">D</ToggleButton>
-						</ToggleButtonGroup>
-					</ReportStack>
-
-					<Stack direction="row" spacing={2.5} width="100%">
-						<ReportStack direction="row" spacing={2} alignItems="center">
-							<GroupsIcon fontSize="large" />
-							<Stack padding="0">
-								<ReportTitle sx={{ lineHeight: "20px" }}>
-									Nuevos clientes
-								</ReportTitle>
-								<ReportAmount fontWeight="bolder">10+</ReportAmount>
-							</Stack>
+			{["SUPERADMIN", "ADMIN", "CAJERO"].includes(user!.rol!) ? (
+				<>
+					<Stack direction="row" spacing={3} width="100%">
+						<ReportStack spacing={1} flexGrow={1}>
+							<TodayIcon fontSize="large" />
+							<ReportAmount>$0.000,00</ReportAmount>
+							Recaudado hoy
 						</ReportStack>
-						<ReportStack direction="row" spacing={2} alignItems="center">
-							<PeopleAltIcon fontSize="large" />
-							<Stack padding="0">
-								<ReportTitle sx={{ lineHeight: "20px" }}>
-									Empleados activos
-								</ReportTitle>
-								<ReportAmount fontWeight="bolder">8</ReportAmount>
-							</Stack>
+						<ReportStack spacing={1} flexGrow={1}>
+							<DateRangeIcon fontSize="large" />
+							<ReportAmount>$00.000,00</ReportAmount>
+							Recaudado esta semana
+						</ReportStack>
+						<ReportStack spacing={1} flexGrow={1}>
+							<CalendarTodayIcon fontSize="large" />
+							<ReportAmount>$000.000,00</ReportAmount>
+							Recaudado este mes
 						</ReportStack>
 					</Stack>
-				</Stack>
+					<Stack direction="row" spacing={3} width="100%">
+						<Stack spacing={2} width="40%">
+							<ReportStack spacing={2} alignItems="center">
+								<ReportTitle>Ganancias</ReportTitle>
+								<Stack direction="row" spacing={2}>
+									<Stack alignItems="center">
+										<ReportSubtitle>Costos</ReportSubtitle>
+										<ReportAmount>$00.000,00</ReportAmount>
+									</Stack>
+									<Divider orientation="vertical" />
+									<Stack alignItems="center">
+										<ReportSubtitle>Ventas</ReportSubtitle>
+										<ReportAmount>$00.000,00</ReportAmount>
+									</Stack>
+								</Stack>
+								<ToggleButtonGroup
+									value={month}
+									size="small"
+									exclusive
+									onChange={handleMonth}
+								>
+									<ToggleButton value="january">J</ToggleButton>
+									<ToggleButton value="february">F</ToggleButton>
+									<ToggleButton value="march">M</ToggleButton>
+									<ToggleButton value="april">A</ToggleButton>
+									<ToggleButton value="may">M</ToggleButton>
+									<ToggleButton value="june">J</ToggleButton>
+									<ToggleButton value="july">J</ToggleButton>
+									<ToggleButton value="agost">A</ToggleButton>
+									<ToggleButton value="september">S</ToggleButton>
+									<ToggleButton value="october">O</ToggleButton>
+									<ToggleButton value="november">N</ToggleButton>
+									<ToggleButton value="december">D</ToggleButton>
+								</ToggleButtonGroup>
+							</ReportStack>
 
-				<ReportStack spacing={-3} alignItems="center" width="60%">
-					<ReportTitle>Productos más vendidos</ReportTitle>
-					<ProductsPieChart />
-				</ReportStack>
-			</Stack>
+							<Stack direction="row" spacing={2.5} width="100%">
+								<ReportStack direction="row" spacing={2} alignItems="center">
+									<GroupsIcon fontSize="large" />
+									<Stack padding="0">
+										<ReportTitle sx={{ lineHeight: "20px" }}>
+											Nuevos clientes
+										</ReportTitle>
+										<ReportAmount fontWeight="bolder">10+</ReportAmount>
+									</Stack>
+								</ReportStack>
+								<ReportStack direction="row" spacing={2} alignItems="center">
+									<PeopleAltIcon fontSize="large" />
+									<Stack padding="0">
+										<ReportTitle sx={{ lineHeight: "20px" }}>
+											Empleados activos
+										</ReportTitle>
+										<ReportAmount fontWeight="bolder">8</ReportAmount>
+									</Stack>
+								</ReportStack>
+							</Stack>
+						</Stack>
+
+						<ReportStack spacing={-3} alignItems="center" width="60%">
+							<ReportTitle>Productos más vendidos</ReportTitle>
+							<ProductsPieChart />
+						</ReportStack>
+					</Stack>
+				</>
+			) : (
+				<Stack width="100%" alignItems="center" spacing={2} padding={2}>
+					<ReportTitle>
+						Bienvenido {empleado!.nombre} {empleado!.apellido}
+					</ReportTitle>
+					<Typography variant="h6" align="center">
+						Esta es tu sección personalizada.
+					</Typography>
+					<Stack direction="row" spacing={3} alignItems="center">
+						{user!.rol === "COCINERO" && (
+							<Stack alignItems="center">
+								<SoupKitchenIcon fontSize="large" />
+								<Typography variant="subtitle1">Panel del Cocinero</Typography>
+								<Stack direction="row" spacing={2} marginTop={2} width="100%">
+									<Button
+										variant="contained"
+										color="primary"
+										sx={{ flex: 1 }}
+										onClick={() => {
+											navigate("/articulos/insumos");
+										}}
+									>
+										Ver artículos insumos
+									</Button>
+									<Button
+										variant="contained"
+										color="primary"
+										sx={{ flex: 1 }}
+										onClick={() => {
+											navigate("/articulos/manufacturados");
+										}}
+									>
+										Ver artículos manufacturados
+									</Button>
+								</Stack>
+							</Stack>
+						)}
+						{user!.rol === "DELIVERY" && (
+							<Stack alignItems="center">
+								<TwoWheelerIcon fontSize="large" />
+								<Typography variant="subtitle1">Panel de Delivery</Typography>
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={() => {
+										navigate("/pedidos");
+									}}
+								>
+									Ver pedidos
+								</Button>
+							</Stack>
+						)}
+					</Stack>
+				</Stack>
+			)}
 		</StyledStack>
 	);
 };
+
+export default Home;

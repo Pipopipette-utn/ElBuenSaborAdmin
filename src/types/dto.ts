@@ -20,7 +20,6 @@ export interface IArticuloManufacturadoTableDTO {
 	unidadMedida: string;
     descripcion: string;
 	tiempoEstimadoMinutos: number;
-	preparacion: string;
 	articuloManufacturadoDetalle: IDetalle[];
 }
 

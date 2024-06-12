@@ -23,10 +23,11 @@ import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 import { ISucursalDTO } from "../../../types/dto";
 import { SucursalesSelector } from "../../ui/forms/SucursalesSelector";
 
-export const ArticulosManufacturados = () => {
+const ArticulosManufacturados = () => {
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
 		"/articulosManufacturados"
 	);
+	const user = useAppSelector((state) => state.auth.user);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal) ?? [];
 	const dispatch = useAppDispatch();
 	const [loading, setLoading] = useState(false);
@@ -157,7 +158,7 @@ export const ArticulosManufacturados = () => {
 				"/articulosManufacturados"
 			);
 			await productoService.delete(idArticulo!);
-			const newArticulo = { ...articulo!, baja: false };
+			const newArticulo = { ...articulo!, baja: true };
 			dispatch(editArticuloManufacturadoSucursal(newArticulo));
 			handleCloseAlert();
 			handleShowSuccess("Artículo dado de baja con éxito");
@@ -243,6 +244,7 @@ export const ArticulosManufacturados = () => {
 					quantity={totalRows}
 					activeEntities={"Productos activos"}
 					buttonText={"Nuevo producto"}
+					disabledButton={user!.rol! === "CAJERO"}
 					onClick={handleOpenModal}
 				>
 					<FilterFields
@@ -257,7 +259,13 @@ export const ArticulosManufacturados = () => {
 					<Typography variant="h5" sx={{ p: "4px 0px 12px 24px" }}>
 						Todos los productos manufacturados
 					</Typography>
-					<Stack direction="row" width="100%" justifyContent="center">
+					<Stack
+						direction="row"
+						width="100%"
+						height="100%"
+						justifyContent="center"
+						sx={{ flex: 1, overflow: "auto" }}
+					>
 						{loading ? (
 							<CircularProgress sx={{ mt: 6 }} />
 						) : (
@@ -271,7 +279,6 @@ export const ArticulosManufacturados = () => {
 									{ label: "Precio", key: "precioVenta" },
 									{ label: "Descripcion", key: "descripcion" },
 									{ label: "Tiempo (mins)", key: "tiempoEstimadoMinutos" },
-									{ label: "Preparacion", key: "preparacion" },
 									{ label: "Categoria", key: "categoria" },
 									{ label: "Acciones", key: "acciones" },
 								]}
@@ -358,3 +365,5 @@ export const ArticulosManufacturados = () => {
 		</>
 	);
 };
+
+export default ArticulosManufacturados;

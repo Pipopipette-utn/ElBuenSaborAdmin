@@ -7,6 +7,7 @@ import {
 	IPromocion,
 	ISucursal,
 } from "../../types/empresa";
+import { IEmpleado } from "../../types/usuarios";
 
 interface IInitialState {
 	empresa: IEmpresa | null;
@@ -16,6 +17,7 @@ interface IInitialState {
 	promocionesSucursal: IPromocion[] | null | "loading";
 	articulosInsumosSucursal: IArticuloInsumo[] | null;
 	articulosManufacturadosSucursal: IArticuloManufacturado[] | null;
+	empleadosSucursal: IEmpleado[] | null | "loading";
 }
 
 const initialState: IInitialState = {
@@ -26,6 +28,7 @@ const initialState: IInitialState = {
 	promocionesSucursal: null,
 	articulosInsumosSucursal: null,
 	articulosManufacturadosSucursal: null,
+	empleadosSucursal: null,
 };
 
 //acá definimos el estado global
@@ -152,6 +155,27 @@ const SelectedDataSlice = createSlice({
 				state.articulosManufacturadosSucursal = [action.payload];
 			}
 		},
+		setEmpleadosSucursal: (
+			state,
+			action: PayloadAction<IEmpleado[] | null | "loading">
+		) => {
+			state.empleadosSucursal = action.payload;
+		},
+		addEmpleadoSucursal: (state, action: PayloadAction<IEmpleado>) => {
+			if (state.empleadosSucursal && state.empleadosSucursal !== "loading") {
+				state.empleadosSucursal!.push(action.payload);
+			} else {
+				state.empleadosSucursal = [action.payload];
+			}
+		},
+		editEmpleadoSucursal: (state, action: PayloadAction<IEmpleado>) => {
+			const empleadoEditado = action.payload;
+			if (state.empleadosSucursal && state.empleadosSucursal !== "loading") {
+				state.empleadosSucursal = state.empleadosSucursal.map((empleado) =>
+					empleado.id === empleadoEditado.id ? empleadoEditado : empleado
+				);
+			}
+		},
 	},
 });
 
@@ -173,6 +197,9 @@ export const {
 	setManufacturadosSucursal,
 	editArticuloManufacturadoSucursal,
 	addArticuloManufacturadoSucursal,
+	setEmpleadosSucursal,
+	editEmpleadoSucursal,
+	addEmpleadoSucursal,
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;
 

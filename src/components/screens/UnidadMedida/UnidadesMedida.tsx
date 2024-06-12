@@ -15,7 +15,7 @@ import { setUnidadMedidas } from "../../../redux/slices/Business";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 
-export const UnidadesMedida = () => {
+const UnidadesMedida = () => {
 	const unidadesdMedida = useAppSelector(
 		(state) => state.business.unidadMedidas
 	);
@@ -123,3 +123,4 @@ export const UnidadesMedida = () => {
 		</>
 	);
 };
+export default UnidadesMedida;

@@ -70,7 +70,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 				? "Promoción"
 				: "",
 		imagenes: promocion.imagenes,
-		sucursales: promocion.sucursales,
+		sucursal: promocion.sucursal,
 		promocionDetalles: promocion.promocionDetalles,
 	};
 	const today = new Date();
@@ -183,7 +183,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 					newPromocion
 				);
 				promocionNueva = promocionesNuevas.find(
-					(i) => i.sucursales[0]!.id === sucursal!.id
+					(i) => i.sucursal!.id === sucursal!.id
 				);
 				dispatch(addPromocionesSucursal(promocionNueva!));
 				onShowSuccess("Promoción creada con éxito.");
@@ -329,7 +329,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 						case 3:
 							return (
 								<SucursalesSelector
-									selected={promocion.sucursales}
+									selected={[promocion.sucursal]}
 									onBack={handleBack}
 									handleSubmit={handleSubmitForm}
 									buttonTitle={

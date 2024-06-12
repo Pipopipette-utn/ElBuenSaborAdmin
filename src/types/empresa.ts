@@ -70,11 +70,6 @@ export interface IUnidadMedida extends BaseEntity {
 	denominacion: string;
 }
 
-export interface IUsuario extends BaseEntity {
-	username: string;
-	password: string;
-}
-
 export interface IImagen {
 	id: string;
 	url: string;
@@ -92,11 +87,11 @@ export interface IPromocion extends BaseEntity {
 	tipoPromocion: "HAPPY_HOUR" | "PROMOCION" | "";
 	imagenes: IImagen[];
 	archivos?: FileList | null;
-	sucursales: ISucursalDTO[];
+	sucursal: ISucursalDTO;
 	promocionDetalles: IDetalle[];
 }
 
-export interface IPedido {
+export interface IPedido extends BaseEntity {
 	horaEstimadaFinalizacion: string;
 	total: number;
 	totalCosto: number;

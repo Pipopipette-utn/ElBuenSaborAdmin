@@ -25,8 +25,9 @@ import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 import { setCategoriasSucursal } from "../../../redux/slices/SelectedData";
 import { SucursalService } from "../../../services/SucursalService";
 
-export const Categorias = () => {
+const Categorias = () => {
 	const dispatch = useAppDispatch();
+	const user = useAppSelector((state) => state.auth.user);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
@@ -137,6 +138,7 @@ export const Categorias = () => {
 					}
 					activeEntities={"Categorias activas"}
 					buttonText={"Nueva categoria"}
+					disabledButton={user!.rol! === "CAJERO"}
 					onClick={handleClick}
 				>
 					<Stack direction="row">
@@ -178,10 +180,12 @@ export const Categorias = () => {
 					</Stack>
 				</GenericHeaderStack>
 				<Stack sx={{ p: "12px" }}>
-					<Stack direction="row" alignItems="center" justifyContent="space-between">
-						<Typography variant="h5" >
-							Todas las categorias
-						</Typography>
+					<Stack
+						direction="row"
+						alignItems="center"
+						justifyContent="space-between"
+					>
+						<Typography variant="h5">Todas las categorias</Typography>
 						<IconButton onClick={handleReload}>
 							<RefreshIcon color="primary" />
 						</IconButton>
@@ -241,3 +245,5 @@ export const Categorias = () => {
 		</>
 	);
 };
+
+export default Categorias;

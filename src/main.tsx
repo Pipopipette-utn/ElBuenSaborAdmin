@@ -6,14 +6,17 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./styles/theme.tsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
-import "./main.css"
+import "./main.css";
+import { Auth0ProviderWithNavigate } from "./components/auth0/Auth0ProviderWithNavigate.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<Provider store={store}>
 				<ThemeProvider theme={theme}>
-					<App />
+					<Auth0ProviderWithNavigate>
+						<App />
+					</Auth0ProviderWithNavigate>
 				</ThemeProvider>
 			</Provider>
 		</BrowserRouter>

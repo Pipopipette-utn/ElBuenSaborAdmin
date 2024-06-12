@@ -34,6 +34,7 @@ export const CategoriaAccordion: FC<{
 		(state) => state.selectedData.categoriasSucursal
 	);
 	const categorias = categoriasSucursal !== "loading" ? categoriasSucursal : [];
+	const user = useAppSelector((state) => state.auth.user);
 
 	const [showModal, setShowModal] = useState<ICategoria | null>(null);
 	const [showAlert, setShowAlert] = useState(false);
@@ -135,7 +136,11 @@ export const CategoriaAccordion: FC<{
 								onEdit={(event: MouseEvent<HTMLButtonElement, MouseEvent>) =>
 									handleClick(event, categoria)
 								}
-								color={buttonsColor}
+								color={
+									user!.rol! === "CAJERO"
+										? theme.palette.info.light
+										: buttonsColor
+								}
 								onBaja={handleOpenAlert}
 								onDelete={handleOpenDeleteAlert}
 							/>
@@ -156,7 +161,11 @@ export const CategoriaAccordion: FC<{
 										MouseEvent<Element, globalThis.MouseEvent>
 									>
 								) => handleClick(event, categoria)}
-								color={buttonsColor}
+								color={
+									user!.rol! === "CAJERO"
+										? theme.palette.info.light
+										: buttonsColor
+								}
 								onBaja={handleOpenAlert}
 								onDelete={handleOpenDeleteAlert}
 							/>

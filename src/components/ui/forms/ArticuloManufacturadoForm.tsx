@@ -26,6 +26,10 @@ import {
 } from "../../../redux/slices/SelectedData";
 import { SucursalesSelector } from "./SucursalesSelector";
 import { ISucursalDTO } from "../../../types/dto";
+import {
+	addArticuloManufacturado,
+	editArticuloManufacturado,
+} from "../../../redux/slices/Business";
 
 interface InsumoFormProps {
 	initialArticuloManufacturado: IArticuloManufacturado;
@@ -84,7 +88,6 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			...articuloManufacturado,
 			...articulo,
 		};
-		console.log(articulo);
 		setArticuloManufacturado(newArticuloManufacturado);
 		handleNext();
 	};
@@ -128,13 +131,16 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		setArticuloManufacturado(newArticuloManufacturado);
 
 		if (articuloManufacturado.id) {
-			handleSubmitForm();
+			handleSubmitForm(undefined, detalles);
 		} else {
 			handleNext();
 		}
 	};
 
-	const handleSubmitForm = async (sucursales?: ISucursalDTO[]) => {
+	const handleSubmitForm = async (
+		sucursales?: ISucursalDTO[],
+		detalles?: IDetalle[]
+	) => {
 		try {
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
@@ -148,11 +154,16 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 					return { id: s.id, baja: s.baja, nombre: s.nombre };
 				});
 			}
+			console.log(detalles);
 
 			const newArticuloManufacturado = {
 				...articuloManufacturado,
 				sucursales: mappedSucursales,
+				articuloManufacturadoDetalles: detalles
+					? detalles
+					: articuloManufacturado.articuloManufacturadoDetalles,
 			};
+			console.log(newArticuloManufacturado);
 
 			let producto;
 			let productos;
@@ -162,6 +173,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 					newArticuloManufacturado
 				);
 				dispatch(editArticuloManufacturadoSucursal(producto));
+				dispatch(editArticuloManufacturado(producto));
 				onShowSuccess("Artículo manufacturado modificado con éxito.");
 			} else {
 				productos = await articuloManufacturadoService.createWithSucursal(
@@ -169,6 +181,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 				);
 				producto = productos.find((i) => i.sucursal!.id === sucursal!.id);
 				dispatch(addArticuloManufacturadoSucursal(producto!));
+				dispatch(addArticuloManufacturado(producto!));
 				onShowSuccess("Artículo manufacturado creado con éxito.");
 			}
 
