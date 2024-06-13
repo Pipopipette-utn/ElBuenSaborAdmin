@@ -131,8 +131,8 @@ export const App: FC = () => {
 		dispatch(setManufacturadosSucursal(null));
 
 		const traerDatosSucursal = async () => {
-			if (!empresa && !sucursal) {
-				const empresa = await sucursalService.getEmpresa(sucursal.id!);
+			if (!empresa) {
+				const empresa = await sucursalService.getEmpresa(sucursal!.id!);
 				dispatch(setEmpresa(empresa));
 			}
 			if (
