@@ -14,5 +14,5 @@ export interface IEmpleado extends BaseEntity {
 export interface IUsuario extends BaseEntity {
 	username: string;
 	email: string;
-	rol?: "SUPERADMIN" | "ADMIN" | "COCINERO" | "DELIVERY" | "CAJERO";
+	rol?: "SUPERADMIN" | "ADMIN" | "COCINERO" | "DELIVERY" | "CAJERO" | any ;
 }

@@ -111,24 +111,28 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 
 	const handleSubmitForm = async () => {
 		try {
-			console.log(empleado);
 			const empleadoService = new EmpleadoService("/empleados");
 			const empleadoImagenService = new ImagenPersonaService(
 				"/imagenesPersona/uploads"
 			);
 			let rolName = empleado.usuario.rol;
 			let rol = Rol[rolName as keyof typeof Rol];
+
+			if (typeof rol !== 'number') {
+				throw new Error(`Invalid role name: ${rolName}`);
+			}
+
 			const newEmpleado = {
 				...empleado,
+				usuario: {
+					...empleado.usuario,
+					rol
+				},
 				sucursal: {
 					id: sucursal!.id!,
 					baja: sucursal!.baja,
 					nombre: sucursal!.nombre,
-					usuario: {
-						...empleado.usuario,
-						rol
-					}
-				},
+				}
 			};
 
 			let createdEmpleado;
