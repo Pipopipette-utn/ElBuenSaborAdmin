@@ -37,6 +37,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 	onChangeImages,
 	multiple,
 }) => {
+	const [disabled, setDisabled] = useState(false);
 	const [error, setError] = useState("");
 	const [images, setImages] = useState<string[]>(imagenes);
 
@@ -63,6 +64,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 		if (images.length == 0) {
 			setError("Debes ingresar una imagen.");
 		} else {
+			setDisabled(true);
 			onNext();
 		}
 	};
@@ -120,6 +122,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
 					Volver
 				</Button>
 				<Button
+					disabled={disabled}
 					variant="contained"
 					type="submit"
 					fullWidth

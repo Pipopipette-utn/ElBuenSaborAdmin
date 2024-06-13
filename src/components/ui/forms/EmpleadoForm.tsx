@@ -134,6 +134,7 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 					nombre: sucursal!.nombre,
 				}
 			};
+			console.log(newEmpleado);
 
 			let createdEmpleado;
 			if (empleado.id) {
