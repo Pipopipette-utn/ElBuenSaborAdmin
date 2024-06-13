@@ -131,13 +131,13 @@ export const App: FC = () => {
 		dispatch(setManufacturadosSucursal(null));
 
 		const traerDatosSucursal = async () => {
-			if (!empresa && sucursal) {
+			if (!empresa && !sucursal) {
 				const empresa = await sucursalService.getEmpresa(sucursal.id!);
 				dispatch(setEmpresa(empresa));
 			}
 			if (
 				empresa &&
-				sucursal &&
+				!sucursal &&
 				["SUPERADMIN", "ADMIN", "COCINERO", "CAJERO"].includes(user!.rol!)
 			) {
 				try {
