@@ -119,7 +119,7 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 						entity={promocion}
 						onEdit={handleOpenEditModal}
 						color={
-							user!.rol! === "CAJERO"
+							user!.rol! === "CAJERO" || user!.rol! === "COCINERO"
 								? theme.palette.info.light
 								: theme.palette.primary.main
 						}

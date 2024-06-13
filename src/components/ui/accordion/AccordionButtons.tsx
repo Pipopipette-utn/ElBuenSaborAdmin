@@ -24,12 +24,13 @@ export const ActionButtons = ({
 	onDelete?: () => void;
 }) => {
 	const user = useAppSelector((state) => state.auth.user);
-	const disabled = user!.rol! === "CAJERO";
+	const disabled = user!.rol! === "CAJERO" || user!.rol! === "COCINERO";
+	console.log(disabled);
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
 			<Tooltip title="Editar">
 				<IconButton
-					disabled={onAlta || disabled ? true : false}
+					disabled={onAlta || disabled  ? true : false}
 					onClick={(event) => onEdit(event, entity)}
 				>
 					<EditIcon fontSize="small" sx={{ color: color }} />

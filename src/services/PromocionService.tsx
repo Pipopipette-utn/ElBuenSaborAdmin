@@ -43,9 +43,9 @@ export class PromocionService extends BackendClient<IPromocion> {
 				body: JSON.stringify(sucursales), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
 			});
 			if (!response.ok) {
-				// Extrae el mensaje de error del cuerpo de la respuesta
-				const errorData = await response.json();
-				throw new Error(errorData.message || "Error desconocido");
+				return response.text().then((error) => {
+					throw new Error(error);
+				});
 			}
 			return response.json(); // Retorna los datos en formato JSON
 		} catch (error) {

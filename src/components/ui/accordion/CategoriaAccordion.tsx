@@ -137,7 +137,7 @@ export const CategoriaAccordion: FC<{
 									handleClick(event, categoria)
 								}
 								color={
-									user!.rol! === "CAJERO"
+									user!.rol! === "CAJERO" || user!.rol! === "COCINERO"
 										? theme.palette.info.light
 										: buttonsColor
 								}
@@ -162,7 +162,7 @@ export const CategoriaAccordion: FC<{
 									>
 								) => handleClick(event, categoria)}
 								color={
-									user!.rol! === "CAJERO"
+									user!.rol! === "CAJERO" || user!.rol! === "COCINERO"
 										? theme.palette.info.light
 										: buttonsColor
 								}
