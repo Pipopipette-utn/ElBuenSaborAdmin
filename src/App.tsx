@@ -105,22 +105,19 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		const traerSucursales = async () => {
-			if (empresa && !sucursal) {
+			if (empresa && user && ["SUPERADMIN", "ADMIN"].includes(user!.rol!)) {
 				dispatch(setSucursalesEmpresa(null));
-				dispatch(setSelectedSucursal(null));
-				if (user && ["SUPERADMIN", "ADMIN"].includes(user!.rol!)) {
-					try {
-						dispatch(setSucursalesEmpresa("loading"));
-						const sucursalesFiltradas = await sucursalService.getAllByEmpresa(
-							empresa.id!
-						);
-						dispatch(setSucursalesEmpresa(sucursalesFiltradas));
-						if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
-							dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
-					} catch (e) {
-						dispatch(setUnidadMedidas(null));
-						dispatch(setSelectedSucursal(null));
-					}
+				try {
+					dispatch(setSucursalesEmpresa("loading"));
+					const sucursalesFiltradas = await sucursalService.getAllByEmpresa(
+						empresa.id!
+					);
+					dispatch(setSucursalesEmpresa(sucursalesFiltradas));
+					if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
+						dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
+				} catch (e) {
+					dispatch(setUnidadMedidas(null));
+					dispatch(setSelectedSucursal(null));
 				}
 			}
 		};
