@@ -5,16 +5,25 @@
 2. Abrir el proyecto y ejecutar el comando:
   `npm install`
 3. Crear el archivo .env con las siguientes claves:
+
+```
 VITE_API_URL=http://localhost:8080
+
 VITE_AUTH0_DOMAIN="dev-a05a7lseksnulwmg.us.auth0.com"
+
 VITE_AUTH0_CLIENT_ID="UtXRb461duqH2tuBF7ZB8DRss9AwFIcx"
+
 VITE_AUTH0_CALLBACK_URL="http://localhost:5173/callback"
+
 VITE_AUTH0_AUDIENCE="https://elbuensabor"
+
 VITE_API_SERVER_URL="http://localhost:8080"
-4. Correr la aplicación Java (Backend): `https://github.com/Pipopipette-utn/entidades_BuenSabor`
-5. Correr el frontend con el comando:
+```
+
+5. Correr la aplicación Java (Backend): `https://github.com/Pipopipette-utn/entidades_BuenSabor`
+6. Correr el frontend con el comando:
   `npm run dev`
-6. Credenciales para loguearse:
+7. Credenciales para loguearse:
 
     Rol Superadmin: Usuario superadmin@gmail.com, contraseña Elbuensabor!
    
