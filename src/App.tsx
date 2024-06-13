@@ -68,6 +68,10 @@ export const App: FC = () => {
 						empleado.sucursal!.id!
 					);
 					dispatch(setSelectedSucursal(sucursal));
+					const selectedEmpresa = await sucursalService.getEmpresa(
+						sucursal!.id!
+					);
+					dispatch(setEmpresa(selectedEmpresa));
 				}
 			}
 			dispatch(setUser(usuario));
@@ -81,7 +85,7 @@ export const App: FC = () => {
 
 	useEffect(() => {
 		const traerEmpresas = async () => {
-			if (user!.rol === "SUPERADMIN" || user!.rol === "ADMIN") {
+			if (user!.rol === "SUPERADMIN") {
 				try {
 					dispatch(setEmpresas("loading"));
 					const empresas = await empresaService.getAll();
@@ -131,13 +135,9 @@ export const App: FC = () => {
 		dispatch(setManufacturadosSucursal(null));
 
 		const traerDatosSucursal = async () => {
-			if (!empresa) {
-				const empresa = await sucursalService.getEmpresa(sucursal!.id!);
-				dispatch(setEmpresa(empresa));
-			}
 			if (
 				empresa &&
-				!sucursal &&
+				sucursal &&
 				["SUPERADMIN", "ADMIN", "COCINERO", "CAJERO"].includes(user!.rol!)
 			) {
 				try {

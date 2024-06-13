@@ -87,7 +87,7 @@ export interface IPromocion extends BaseEntity {
 	tipoPromocion: "HAPPY_HOUR" | "PROMOCION" | "";
 	imagenes: IImagen[];
 	archivos?: FileList | null;
-	sucursal: ISucursalDTO;
+	sucursal?: ISucursalDTO;
 	promocionDetalles: IDetalle[];
 }
 

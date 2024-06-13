@@ -89,7 +89,7 @@ const Promociones = () => {
 					quantity={totalRows}
 					activeEntities={"Promociones activas"}
 					buttonText={"Nueva promoción"}
-					disabledButton={user!.rol! === "CAJERO"}
+					disabledButton={user!.rol! === "CAJERO" || user!.rol! === "COCINERO"}
 					onClick={handleOpenModal}
 				/>
 				<Stack sx={{ p: "12px" }}>

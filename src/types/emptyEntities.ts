@@ -96,7 +96,6 @@ export const emptyPromocion: IPromocion = {
 	precioPromocional: 0,
 	tipoPromocion: "",
 	imagenes: [],
-	sucursal: emptySucursal,
 	promocionDetalles: [],
 };
 

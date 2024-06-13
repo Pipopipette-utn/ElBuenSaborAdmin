@@ -233,7 +233,7 @@ const ArticulosInsumos = () => {
 					quantity={totalRows}
 					activeEntities={"Insumos activos"}
 					buttonText={"Nuevo insumo"}
-					disabledButton={user!.rol! === "CAJERO"}
+					disabledButton={user!.rol! === "CAJERO" || user!.rol! === "COCINERO"}
 					onClick={handleOpenModal}
 				>
 					<FilterFields

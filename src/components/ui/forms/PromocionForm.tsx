@@ -158,6 +158,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 
 	const handleSubmitForm = async (sucursales: ISucursalDTO[] | ISucursal[]) => {
 		try {
+			console.log(sucursales);
 			const mappedSucursales = sucursales.map((s) => {
 				return { id: s.id, baja: s.baja, nombre: s.nombre };
 			});
@@ -281,12 +282,10 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 			title: "Detalles",
 			fields: [],
 		},
-		
 	];
 	if (!promocion.id) {
 		steps.push({ title: "Sucursales", fields: [] });
 	}
-
 
 	return (
 		<>
@@ -321,7 +320,9 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 									detallesArticulo={promocion.promocionDetalles!}
 									onBack={handleBack}
 									onSubmit={handleNextDetalles}
-									submitButtonText={promocion.id ? "Editar promoción" : "Continuar"}
+									submitButtonText={
+										promocion.id ? "Editar promoción" : "Continuar"
+									}
 									esInsumo={false}
 									precioInicial={promocion.precioPromocional}
 								/>
@@ -329,7 +330,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 						case 3:
 							return (
 								<SucursalesSelector
-									selected={[promocion.sucursal]}
+									selected={promocion.sucursal ? [promocion.sucursal] : []}
 									onBack={handleBack}
 									handleSubmit={handleSubmitForm}
 									buttonTitle={

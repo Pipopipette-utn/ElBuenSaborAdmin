@@ -44,8 +44,6 @@ const EmpresaIcon: FC<EmpresaIconProps> = () => {
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		if (user!.rol === "SUPERADMIN") {
 			setAnchorEl(event.currentTarget);
-		} else {
-			setShowModal(true);
 		}
 	};
 
