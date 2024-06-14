@@ -25,7 +25,6 @@ export const ActionButtons = ({
 }) => {
 	const user = useAppSelector((state) => state.auth.user);
 	const disabled = user!.rol! === "CAJERO" || user!.rol! === "COCINERO";
-	console.log(disabled);
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
 			<Tooltip title="Editar">

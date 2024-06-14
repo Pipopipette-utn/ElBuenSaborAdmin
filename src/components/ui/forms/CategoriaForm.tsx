@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { CategoriaService } from "../../../services/CategoriaService";
 import { ICategoria } from "../../../types/empresa";
 import { Stack } from "@mui/material";
@@ -29,6 +29,8 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
+	const user = useAppSelector((state) => state.auth.user);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const [categoria, setCategoria] = useState(initialCategoria);
 
 	const [activeStep, setActiveStep] = useState(0);
@@ -38,7 +40,8 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 
 	const handleChangeDenominaciones = (newCategoria: ICategoria) => {
 		setCategoria(newCategoria);
-		handleNext();
+		if (user!.rol! === "ADMIN" && user!.rol === "SUPERADMIN") handleNext();
+		else handleSubmitForm(undefined, newCategoria);
 	};
 
 	const setearSubcategorias = (categoria: ICategoria) => {
@@ -55,19 +58,35 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 			categoria.subCategorias.forEach(setearSubcategorias);
 		}
 	};
-	
-	const handleSubmitForm = async (sucursales: ISucursalDTO[]) => {
+
+	const handleSubmitForm = async (
+		sucursales?: ISucursalDTO[],
+		categoriaRecibida?: ICategoria
+	) => {
 		try {
-			const mappedSucursales = sucursales.map((s) => {
-				return { id: s.id, baja: s.baja, nombre: s.nombre };
-			});
 			const categoriaService = new CategoriaService("/categorias");
-			const newCategoria = {
-				...categoria,
-				sucursales: mappedSucursales,
-			};
+			let mappedSucursales = undefined;
+			if (sucursales) {
+				mappedSucursales = sucursales.map((s) => {
+					return { id: s.id, baja: s.baja, nombre: s.nombre };
+				});
+			}else{
+				mappedSucursales = [{id: sucursal!.id, baja: false, nombre: sucursal!.nombre}];
+			}
+			
+			let newCategoria;
+			if (categoriaRecibida) {
+				newCategoria = {
+					...categoriaRecibida,
+					sucursales: mappedSucursales,
+				};
+			} else {
+				newCategoria = {
+					...categoria,
+					sucursales: mappedSucursales,
+				};
+			}
 			setearSubcategorias(newCategoria);
-			console.log(newCategoria);
 
 			if (categoria.id) {
 				const updatedCategoria = await categoriaService.update(
@@ -93,11 +112,14 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 			title: "Categoría y subcategorías",
 			fields: [],
 		},
-		{
+	];
+
+	if (user!.rol === "ADMIN" || user!.rol === "SUPERADMIN") {
+		steps.push({
 			title: "Sucursales",
 			fields: [],
-		},
-	];
+		});
+	}
 
 	return (
 		<Stack width={"100%"} alignItems="center" spacing={4}>

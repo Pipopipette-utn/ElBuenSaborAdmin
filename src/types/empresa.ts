@@ -44,6 +44,7 @@ export interface IArticulo extends BaseEntity {
 	categoria?: ICategoria;
 	unidadMedida?: IUnidadMedida;
 	sucursal?: ISucursalDTO;
+	sucursales?: ISucursalDTO[];
 }
 
 export interface IArticuloInsumo extends IArticulo {

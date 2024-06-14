@@ -18,6 +18,7 @@ import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import { theme } from "../../../styles/theme";
 import { Estado, estadoOptions } from "../../../types/enums";
+import { AlertDialog } from "../shared/AlertDialog";
 
 interface PedidoCardProps {
 	pedido: IPedido;
@@ -32,10 +33,19 @@ const PedidoCard: FC<PedidoCardProps> = ({
 }) => {
 	const pedidoService = new PedidoService("/pedidos");
 	const [selectedEstado, setSelectedEstado] = useState(pedido.estado as string);
+	const [open, setOpen] = useState(false);
 	const dispatch = useAppDispatch();
 	const user = useAppSelector((state) => state.auth.user);
 
-	const handleChangeEstado = async (estado: string) => {
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const updateEstado = async (estado: string) => {
 		try {
 			const formattedEstado =
 				estado.charAt(0).toUpperCase() + estado.slice(1).toLowerCase();
@@ -66,90 +76,115 @@ const PedidoCard: FC<PedidoCardProps> = ({
 		}
 	};
 
+	const handleChangeEstado = (estado: string) => {
+		if (estado === "CANCELADO") {
+			handleClickOpen();
+		} else {
+			updateEstado(estado);
+		}
+	};
+
 	return (
-		<Card>
-			<CardContent>
-				<Typography variant="h6" sx={{ fontWeight: "bold" }}>
-					Pedido #{pedido.id}
-				</Typography>
-				<Stack
-					direction="row"
-					alignItems="center"
-					justifyContent="space-around"
-					spacing={2}
-				>
-					<Stack spacing={1} marginTop={1}>
-						<Stack spacing={1} direction="row" alignItems="center">
-							<TodayIcon fontSize="small" />
-							<Typography>
-								{new Date(pedido.fechaPedido).toLocaleString()}
+		<>
+			<Card>
+				<CardContent>
+					<Typography variant="h6" sx={{ fontWeight: "bold" }}>
+						Pedido #{pedido.id}
+					</Typography>
+					<Stack
+						direction="row"
+						alignItems="center"
+						justifyContent="space-around"
+						spacing={2}
+					>
+						<Stack spacing={1} marginTop={1}>
+							<Stack spacing={1} direction="row" alignItems="center">
+								<TodayIcon fontSize="small" />
+								<Typography>
+									{new Date(pedido.fechaPedido).toLocaleString()}
+								</Typography>
+							</Stack>
+							<Stack spacing={1} direction="row" alignItems="center">
+								<PaidIcon fontSize="small" />
+								<Typography>${pedido.total}</Typography>
+							</Stack>
+						</Stack>
+						<Stack spacing={1} marginTop={1}>
+							<Stack spacing={1} direction="row" alignItems="center">
+								<PaymentsIcon fontSize="small" />
+								<Typography>
+									{pedido.formaPago.toLowerCase().replace(/_/g, " ")}
+								</Typography>
+							</Stack>
+							<Stack spacing={1} direction="row" alignItems="center">
+								<DeliveryDiningIcon fontSize="small" />
+								<Typography>
+									{pedido.tipoEnvio.toLowerCase().replace(/_/g, " ")}
+								</Typography>
+							</Stack>
+						</Stack>
+						<Stack spacing={1} alignItems="center">
+							<Typography variant="h6" sx={{ fontWeight: "bold" }}>
+								Detalles
 							</Typography>
-						</Stack>
-						<Stack spacing={1} direction="row" alignItems="center">
-							<PaidIcon fontSize="small" />
-							<Typography>${pedido.total}</Typography>
-						</Stack>
-					</Stack>
-					<Stack spacing={1} marginTop={1}>
-						<Stack spacing={1} direction="row" alignItems="center">
-							<PaymentsIcon fontSize="small" />
-							<Typography>
-								{pedido.formaPago.toLowerCase().replace(/_/g, " ")}
-							</Typography>
-						</Stack>
-						<Stack spacing={1} direction="row" alignItems="center">
-							<DeliveryDiningIcon fontSize="small" />
-							<Typography>
-								{pedido.tipoEnvio.toLowerCase().replace(/_/g, " ")}
-							</Typography>
-						</Stack>
-					</Stack>
-					<Stack spacing={1} alignItems="center">
-						<Typography variant="h6" sx={{ fontWeight: "bold" }}>
-							Detalles
-						</Typography>
-						{pedido.detallePedidos.map((detalle, index) => (
-							<Chip
-								key={index}
-								label={`${detalle.cantidad} x ${detalle.articulo.denominacion}`}
-							/>
-						))}
-					</Stack>
-					<Stack alignItems="center" justifyContent="center" spacing={1}>
-						<Typography variant="h6" sx={{ fontWeight: "bold" }}>
-							Estado
-						</Typography>
-						<Select
-							size="small"
-							labelId={`estado-label-${pedido.id}`}
-							value={selectedEstado}
-							onChange={(e) => handleChangeEstado(e.target.value)}
-							sx={{
-								backgroundColor:
-									selectedEstado === "ENTREGADO"
-										? theme.palette.success.main
-										: theme.palette.primary.main,
-								fontSize: "14px",
-								color: "white",
-								borderRadius: "30px",
-								paddingX: 1,
-								paddingY: 0.5,
-							}}
-						>
-							{estadoOptions.map(({ key, label }) => (
-								<MenuItem
-									key={key}
-									value={label.toUpperCase()}
-									disabled={user!.rol! === "DELIVERY" && key !== 4 && key !== 5}
-								>
-									{label}
-								</MenuItem>
+							{pedido.detallePedidos.map((detalle, index) => (
+								<Chip
+									key={index}
+									label={`${detalle.cantidad} x ${detalle.articulo.denominacion}`}
+								/>
 							))}
-						</Select>
+						</Stack>
+						<Stack alignItems="center" justifyContent="center" spacing={1}>
+							<Typography variant="h6" sx={{ fontWeight: "bold" }}>
+								Estado
+							</Typography>
+							<Select
+								size="small"
+								labelId={`estado-label-${pedido.id}`}
+								value={selectedEstado}
+								disabled={selectedEstado === "CANCELADO"}
+								onChange={(e) => handleChangeEstado(e.target.value)}
+								sx={{
+									backgroundColor:
+										selectedEstado === "ENTREGADO"
+											? theme.palette.success.main
+											: selectedEstado === "CANCELADO"
+											? theme.palette.bg.dark
+											: theme.palette.primary.main,
+									fontSize: "14px",
+									color: "white",
+									borderRadius: "30px",
+									paddingX: 1,
+									paddingY: 0.5,
+								}}
+							>
+								{estadoOptions.map(({ key, label }) => (
+									<MenuItem
+										key={key}
+										value={label.toUpperCase()}
+										disabled={
+											user!.rol! === "DELIVERY" && key !== 4 && key !== 5
+										}
+									>
+										{label}
+									</MenuItem>
+								))}
+							</Select>
+						</Stack>
 					</Stack>
-				</Stack>
-			</CardContent>
-		</Card>
+				</CardContent>
+			</Card>
+			<AlertDialog
+				open={open}
+				title={"¿Estás seguro que quieres cancelar el pedido?"}
+				content={"El stock de los artículos se recuperará."}
+				onAgreeClose={() => {
+					handleClose();
+					updateEstado("CANCELADO");
+				}}
+				onDisagreeClose={handleClose}
+			/>
+		</>
 	);
 };
 

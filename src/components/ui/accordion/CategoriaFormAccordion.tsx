@@ -20,6 +20,7 @@ import {
 import { theme } from "../../../styles/theme";
 import tinycolor from "tinycolor2";
 import { Accordion } from "../styled/StyledAccordion";
+import { useAppSelector } from "../../../redux/hooks";
 
 interface CategoriaFormAccordionProps {
 	onChangeDenominaciones?: (c: ICategoria) => void;
@@ -40,6 +41,8 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 	onDelete,
 	insumo,
 }) => {
+	const user = useAppSelector((state) => state.auth.user);
+	const [disabled, setDisabled] = useState(false);
 	const [expanded, setExpanded] = useState(false);
 	const [categoria, setCategoria] = useState(initialCategoria);
 	const [esInsumo, setEsInsumo] = useState(insumo);
@@ -205,13 +208,21 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 						/>
 					</Stack>
 					<Button
+						disabled={disabled}
 						variant="contained"
 						sx={{ mt: 2, p: 1 }}
 						onClick={() => {
-							if (onChangeDenominaciones) onChangeDenominaciones(categoria);
+							if (onChangeDenominaciones) {
+								onChangeDenominaciones(categoria);
+								setDisabled(true);
+							}
 						}}
 					>
-						Siguiente
+						{user!.rol === "ADMIN" || user!.rol === "SUPERADMIN"
+							? "Siguiente"
+							: initialCategoria.id
+							? "Editar categoría"
+							: "Crear categoría"}
 					</Button>
 				</Stack>
 			)}

@@ -11,13 +11,13 @@ import {
 	Tooltip,
 } from "@mui/material";
 import { useAppSelector } from "../../../redux/hooks";
-import { IDetalle, ISucursal } from "../../../types/empresa";
+import { ISucursal } from "../../../types/empresa";
 import { ISucursalDTO } from "../../../types/dto";
 
 interface SucursalSelectorProps {
 	selected: ISucursalDTO[];
 	onBack?: () => void;
-	handleSubmit: (selectedSucursales: ISucursalDTO[], detalles?: IDetalle[]) => void;
+	handleSubmit: (selectedSucursales: ISucursalDTO[], detalle?: any) => void;
 	buttonTitle: string;
 }
 

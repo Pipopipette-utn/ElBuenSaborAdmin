@@ -45,6 +45,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	onShowError,
 }) => {
 	const dispatch = useAppDispatch();
+	const user = useAppSelector((state) => state.auth.user);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const [articuloManufacturado, setArticuloManufacturado] = useState(
 		initialArticuloManufacturado
@@ -130,11 +131,12 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		};
 		setArticuloManufacturado(newArticuloManufacturado);
 
-		if (articuloManufacturado.id) {
+		if (
+			initialArticuloManufacturado.id ||
+			(user!.rol! !== "ADMIN" && user!.rol !== "SUPERADMIN")
+		)
 			handleSubmitForm(undefined, detalles);
-		} else {
-			handleNext();
-		}
+		else handleNext();
 	};
 
 	const handleSubmitForm = async (
@@ -148,13 +150,15 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			const articuloImagenService = new ImagenService("/images/uploads");
 
 			let mappedSucursales = undefined;
-
 			if (sucursales) {
 				mappedSucursales = sucursales.map((s) => {
 					return { id: s.id, baja: s.baja, nombre: s.nombre };
 				});
+			} else {
+				mappedSucursales = [
+					{ id: sucursal!.id, baja: false, nombre: sucursal!.nombre },
+				];
 			}
-			console.log(detalles);
 
 			const newArticuloManufacturado = {
 				...articuloManufacturado,
@@ -260,8 +264,14 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 		},
 	];
 
-	if (!initialArticuloManufacturado.id) {
-		steps.push({ title: "Sucursales", fields: [] });
+	if (
+		!initialArticuloManufacturado.id &&
+		(user!.rol === "ADMIN" || user!.rol === "SUPERADMIN")
+	) {
+		steps.push({
+			title: "Sucursales",
+			fields: [],
+		});
 	}
 
 	return (
@@ -311,7 +321,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								onBack={handleBack}
 								onSubmit={handleSubmitDetalles}
 								submitButtonText={
-									articuloManufacturado.id ? "Editar insumo" : "Siguiente"
+									articuloManufacturado.id ? "Editar artículo" : "Siguiente"
 								}
 								esInsumo={true}
 							/>

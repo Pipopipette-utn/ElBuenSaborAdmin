@@ -36,6 +36,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 	onShowSuccess,
 	onShowError,
 }) => {
+	const user = useAppSelector((state) => state.auth.user);
 	const dispatch = useAppDispatch();
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const [activeStep, setActiveStep] = useState(0);
@@ -152,14 +153,18 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 
 		setArticuloInsumo(newArticuloInsumo);
 
-		if (initialArticuloInsumo.id) {
-			handleSubmitForm();
-		} else {
-			handleNext();
-		}
+		if (
+			initialArticuloInsumo.id ||
+			(user!.rol! === "ADMIN" && user!.rol === "SUPERADMIN")
+		)
+			handleSubmitForm(undefined, newArticuloInsumo);
+		else handleNext();
 	};
 
-	const handleSubmitForm = async (selectedSucursales?: ISucursalDTO[]) => {
+	const handleSubmitForm = async (
+		selectedSucursales?: ISucursalDTO[],
+		articuloInsumoRecibido?: IArticuloInsumo
+	) => {
 		try {
 			const articuloInsumoService = new ArticuloInsumoService(
 				"/articulosInsumos"
@@ -167,21 +172,31 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			const articuloImagenService = new ImagenService("/images/uploads");
 
 			let mappedSucursales = undefined;
-
 			if (selectedSucursales) {
 				mappedSucursales = selectedSucursales.map((s) => {
 					return { id: s.id, baja: s.baja, nombre: s.nombre };
 				});
+			} else {
+				mappedSucursales = [
+					{ id: sucursal!.id, baja: false, nombre: sucursal!.nombre },
+				];
 			}
 
-			const newArticuloInsumo = {
-				...articuloInsumo,
-				sucursales: mappedSucursales,
-			};
+			let newArticuloInsumo;
+			if (articuloInsumoRecibido) {
+				newArticuloInsumo = {
+					...articuloInsumoRecibido,
+					sucursales: mappedSucursales,
+				};
+			} else {
+				newArticuloInsumo = {
+					...articuloInsumo,
+					sucursales: mappedSucursales,
+				};
+			}
 
 			let insumo;
 			let insumos;
-
 			if (articuloInsumo.id) {
 				insumo = await articuloInsumoService.update(
 					articuloInsumo.id,
@@ -263,8 +278,14 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 		},
 	];
 
-	if (!initialArticuloInsumo.id) {
-		steps.push({ title: "Sucursales", fields: [] });
+	if (
+		!initialArticuloInsumo.id &&
+		(user!.rol === "ADMIN" || user!.rol === "SUPERADMIN")
+	) {
+		steps.push({
+			title: "Sucursales",
+			fields: [],
+		});
 	}
 
 	return (
@@ -302,7 +323,11 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 								onSubmit={handleSubmitArticuloElaborar}
 								childrenPosition="top"
 								submitButtonText={
-									articuloInsumo.id ? "Editar insumo" : "Siguiente"
+									articuloInsumo.id ||
+									user!.rol === "ADMIN" ||
+									user!.rol === "SUPERADMIN"
+										? "Editar insumo"
+										: "Siguiente"
 								}
 							>
 								<ArticuloElaborarForm />
