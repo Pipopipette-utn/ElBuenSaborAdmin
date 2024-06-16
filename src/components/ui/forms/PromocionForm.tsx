@@ -323,7 +323,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 									submitButtonText={
 										promocion.id ? "Editar promoción" : "Continuar"
 									}
-									esInsumo={false}
+									esPromocion={true}
 									precioInicial={promocion.precioPromocional}
 								/>
 							);

@@ -214,18 +214,19 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 				dispatch(addArticuloInsumo(insumo!));
 				onShowSuccess("Artículo insumo creado con éxito.");
 			}
-
 			if (files != null) {
 				await articuloImagenService.crearImagen(
 					files,
 					insumos ? insumos.map((i) => i.id!) : [insumo!.id!]
 				);
 				const newProducto = await articuloInsumoService.getById(insumo!.id!);
+				console.log(newProducto);
 				if (newProducto != null) {
 					dispatch(editArticuloInsumoSucursal(newProducto));
 					dispatch(editArticuloInsumo(newProducto));
 				}
 			}
+			console.log()
 			onClose();
 		} catch (error: any) {
 			console.log(error);
@@ -323,11 +324,11 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 								onSubmit={handleSubmitArticuloElaborar}
 								childrenPosition="top"
 								submitButtonText={
-									articuloInsumo.id ||
+									!articuloInsumo.id ||
 									user!.rol === "ADMIN" ||
 									user!.rol === "SUPERADMIN"
-										? "Editar insumo"
-										: "Siguiente"
+										? "Siguiente"
+										: "Editar insumo"
 								}
 							>
 								<ArticuloElaborarForm />

@@ -152,7 +152,7 @@ const Pedidos = () => {
 					{pedidos && pedidos.length > 0 && (
 						<Pagination
 							count={noOfPages}
-							page={page}
+							page={page+1}
 							onChange={handlePageChange}
 							sx={{ alignSelf: "center", mt: 2 }}
 						/>

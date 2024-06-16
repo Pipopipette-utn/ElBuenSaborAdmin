@@ -88,6 +88,8 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({
 		}
 	};
 
+	console.log(sucursal);
+
 	return (
 		<>
 			<SucursalCard>

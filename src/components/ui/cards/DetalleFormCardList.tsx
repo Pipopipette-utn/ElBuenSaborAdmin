@@ -20,8 +20,9 @@ interface DetalleFormCardListProps {
 	onBack: () => void;
 	onSubmit: (d: IDetalle[], precio?: number) => void;
 	submitButtonText: string;
-	esInsumo: boolean;
+	esPromocion: boolean;
 	precioInicial?: number;
+	precioVenta?: number;
 }
 
 export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
@@ -29,15 +30,15 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 	onBack,
 	onSubmit,
 	submitButtonText,
-	esInsumo,
+	esPromocion,
 	precioInicial,
+	precioVenta,
 }) => {
 	const [detalles, setDetalles] = useState<IDetalle[]>(detallesArticulo);
 	const [precioPromocional, setPrecioPromocional] = useState(
 		precioInicial ?? 0
 	);
-
-	console.log(detalles);
+	const [ganancia, setGanancia] = useState(precioVenta ?? 0);
 
 	useEffect(() => {
 		if (precioInicial == 0) {
@@ -50,6 +51,19 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 				0 // Valor inicial para 'precio'
 			);
 			setPrecioPromocional(precio);
+		}
+		if (precioVenta) {
+			const costo = detalles.reduce(
+				(costo, detalle) => {
+					if ("precioCompra" in detalle.articulo!) {
+						return costo + detalle.cantidad * detalle.articulo.precioCompra;
+					} else {
+						return costo;
+					}
+				},
+				0 // Valor inicial para 'precio'
+			);
+			setGanancia(precioVenta - costo);
 		}
 	}, [detalles]);
 
@@ -74,31 +88,33 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 
 	return (
 		<Stack width="80%" spacing={3} alignItems="center">
-			{!esInsumo && (
-				<TextFieldStack spacing={1}>
-					<Typography>
-						Precio promocional:
-						<span style={{ color: "red" }}> *</span>
-					</Typography>
-					<TextField
-						type="number"
-						name="precioPromocional"
-						fullWidth
-						placeholder={"Precio promocional"}
-						onChange={(event) =>
-							setPrecioPromocional(parseFloat(event.target.value))
-						}
-						value={precioPromocional}
-						InputProps={{
-							startAdornment: (
-								<InputAdornment position="start">
-									<MonetizationOnIcon />
-								</InputAdornment>
-							),
-						}}
-					/>
-				</TextFieldStack>
-			)}
+			{esPromocion ||
+				(precioVenta && (
+					<TextFieldStack spacing={1}>
+						<Typography>
+							{esPromocion ? "Precio promocional:" : "Ganancia"}
+							{esPromocion && <span style={{ color: "red" }}> *</span>}
+						</Typography>
+						<TextField
+							type="number"
+							name={esPromocion ? "precioPromocional" : "ganancia"}
+							fullWidth
+							placeholder={"Precio promocional"}
+							onChange={(event) =>
+								setPrecioPromocional(parseFloat(event.target.value))
+							}
+							disabled={!esPromocion}
+							value={esPromocion ? precioPromocional : ganancia}
+							InputProps={{
+								startAdornment: (
+									<InputAdornment position="start">
+										<MonetizationOnIcon />
+									</InputAdornment>
+								),
+							}}
+						/>
+					</TextFieldStack>
+				))}
 			<Stack spacing={2} width="100%">
 				{detalles.map((detalle, index) => (
 					<DetalleFormCard
@@ -108,7 +124,7 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 						onUpdate={(updatedDetalle) =>
 							handleUpdateDetalle(index, updatedDetalle)
 						}
-						esInsumo={esInsumo}
+						esInsumo={!esPromocion}
 					/>
 				))}
 			</Stack>

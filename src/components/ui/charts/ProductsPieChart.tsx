@@ -1,55 +1,50 @@
 import { PieChart } from "@mui/x-charts/PieChart";
-/*
-const data2 = [
-	{ label: "Bebidas", value: 400 },
-	{ label: "Hamburguesas", value: 300 },
-	{ label: "Pizzas", value: 300 },
-	{ label: "Postres", value: 200 },
-	{ label: "Entradas", value: 200 },
-];
-*/
+import { FC } from "react";
 
-const data1 = [
-	{ label: "Burger simple", value: 100, color: "#3035c9" },
-	{ label: "Burger Messi", value: 100, color: "#eb2f05" },
-	{ label: "Burger doble", value: 50, color: "#5d19e6" },
-	{ label: "Pizza muzzarella", value: 300, color: "#9987ff" },
-	{ label: "Pizza napolitana", value: 80, color: "#9f59f0" },
-	{ label: "Coca cola", value: 40, color: "#FF5733" },
-	{ label: "Cerveza Quilmes", value: 150, color: "#ff7e70" },
-	{ label: "Papas fritas", value: 100, color: "#ffc2b3" },
-];
-/*
-const series = [
-	{
-		innerRadius: 0,
-		outerRadius: 80,
-		id: "series-1",
-		data: data1,
-	},
-	{
-		innerRadius: 100,
-		outerRadius: 120,
-		id: "series-2",
-		data: data2,
-	},
-];*/
+interface ProductsPieChart {
+	chartData: Object[][];
+}
 
-const ProductsPieChart = () => {
+const ProductsPieChart: FC<ProductsPieChart> = ({ chartData }) => {
+	const colors = [
+		"#3035c9",
+		"#eb2f05",
+		"#5d19e6",
+		"#9987ff",
+		"#9f59f0",
+		"#FF5733",
+		"#ff7e70",
+		"#ffc2b3",
+		"#eb2f05",
+		"#3035c9",
+	];
+
+	let data: { label: string; value: number; color: string }[] = [];
+	chartData.forEach((d, index) => {
+		if (index !== 0)
+			data.push({
+				label: d[0] as string,
+				value: d[1] as number,
+				color: colors[index],
+			});
+	});
+
 	return (
 		<PieChart
-			sx={{ m: -2 }}
+			sx={{ mb: -4 }}
 			series={[
 				{
-					data: data1,
+					data: data!,
 					innerRadius: 30,
 					outerRadius: 100,
 					paddingAngle: 5,
 					cornerRadius: 5,
 					startAngle: -90,
 					endAngle: 180,
-					cx: 200,
+					cx: 130,
 					cy: 150,
+					highlightScope: { faded: "global", highlighted: "item" },
+					faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
 				},
 			]}
 		/>

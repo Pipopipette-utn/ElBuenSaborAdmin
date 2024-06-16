@@ -323,7 +323,8 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 								submitButtonText={
 									articuloManufacturado.id ? "Editar artículo" : "Siguiente"
 								}
-								esInsumo={true}
+								esPromocion={false}
+								precioVenta={articuloManufacturado.precioVenta!}
 							/>
 						);
 					case 4:
