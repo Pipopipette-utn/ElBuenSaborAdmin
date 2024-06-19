@@ -5,6 +5,7 @@ import CallbackPage from "../components/auth0/CallbackPage";
 import { Login } from "../components/screens/Login/Login";
 import UnauthorizedPage from "../components/auth0/UnauthorizedPage";
 import { Suspense } from "react";
+import { Logout } from "../components/screens/Login/Logout";
 
 // Definición del componente AppRouter
 export const AppRouter = () => {
@@ -17,6 +18,7 @@ export const AppRouter = () => {
 					element={<AuthenticationGuard component={ProtectedRoutes} />}
 				/>
 				<Route path="/login" element={<Login />} />
+				<Route path="/logout" element={<Logout />} />
 				<Route path="/callback" element={<CallbackPage />} />
 				<Route path="/unauthorized" element={<UnauthorizedPage />} />
 			</Routes>

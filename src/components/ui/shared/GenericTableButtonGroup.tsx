@@ -6,6 +6,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import UpgradeIcon from "@mui/icons-material/Upgrade";
 import { useAppSelector } from "../../../redux/hooks";
+import { useLocation } from "react-router-dom";
 
 interface ButtonGroupProps {
 	idEntity: number;
@@ -25,7 +26,11 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 	onAltaSucursal,
 }) => {
 	const user = useAppSelector((state) => state.auth.user);
-	const disabled = user!.rol === "CAJERO";
+	const path = useLocation().pathname;
+	const disabled =
+		user!.rol === "CAJERO" ||
+		(user!.rol === "COCINERO" && path === "/articulosInsumos");
+
 	return (
 		<Stack
 			direction="row"
@@ -73,7 +78,10 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 			)}
 			{onAltaSucursal && (
 				<Tooltip title="Dar de alta en otra sucursal">
-					<IconButton disabled={disabled} onClick={() => onAltaSucursal(idEntity)}>
+					<IconButton
+						disabled={disabled}
+						onClick={() => onAltaSucursal(idEntity)}
+					>
 						<UpgradeIcon
 							fontSize="small"
 							color={disabled ? "disabled" : "primary"}

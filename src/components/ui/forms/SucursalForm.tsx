@@ -182,6 +182,8 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 						icon: <StoreIcon />,
 						required: true,
 					},
+				],
+				[
 					{
 						label: "Horario de apertura",
 						name: "horarioApertura",
@@ -195,7 +197,6 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 						required: true,
 					},
 				],
-				[{ label: "Logo", name: "logo", type: "text", icon: <FaceIcon /> }],
 			],
 		},
 		{
@@ -248,7 +249,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 
 	return (
 		<>
-			<Stack alignItems="center" spacing={3}>
+			<Stack alignItems="center" spacing={3} width="100%">
 				<Stack width={"80%"} marginBottom={2}>
 					<FormStepper steps={steps} activeStep={activeStep} />
 				</Stack>

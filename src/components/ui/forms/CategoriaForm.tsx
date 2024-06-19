@@ -40,7 +40,7 @@ export const CategoriaForm: FC<CategoriaFormProps> = ({
 
 	const handleChangeDenominaciones = (newCategoria: ICategoria) => {
 		setCategoria(newCategoria);
-		if (user!.rol! === "ADMIN" && user!.rol === "SUPERADMIN") handleNext();
+		if (user!.rol! === "ADMIN" || user!.rol === "SUPERADMIN") handleNext();
 		else handleSubmitForm(undefined, newCategoria);
 	};
 
