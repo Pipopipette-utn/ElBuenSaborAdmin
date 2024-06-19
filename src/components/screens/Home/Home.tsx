@@ -41,14 +41,6 @@ const Home = () => {
 		minimumFractionDigits: 2,
 	});
 
-	/*
-	const handleMonth = (
-		_event: React.MouseEvent<HTMLElement>,
-		newMonth: string | null
-	) => {
-		setMonth(newMonth);
-	};*/
-
 	useEffect(() => {
 		const getRecaudado = async () => {
 			const recaudadoHoy = await pedidoService.getRecaudadoDia(
@@ -68,7 +60,7 @@ const Home = () => {
 				setRecaudadoDia(0);
 			}
 			if (recaudadoSemana.length > 1) {
-				setRecaudadoSemana(recaudadoMes[1][1] as number);
+				setRecaudadoSemana(recaudadoSemana[1][1] as number);
 			} else {
 				setRecaudadoSemana(0);
 			}
@@ -141,6 +133,7 @@ const Home = () => {
 							<Stack direction="row" spacing={1} alignItems="center">
 								<LocalizationProvider dateAdapter={AdapterDayjs}>
 									<DatePicker
+										format="DD/MM/YYYY"
 										label="Fecha desde"
 										maxDate={fechaHasta}
 										sx={{ maxWidth: "150px" }}
@@ -148,6 +141,7 @@ const Home = () => {
 										onChange={(newValue) => setFechaDesde(dayjs(newValue))}
 									/>
 									<DatePicker
+										format="DD/MM/YYYY"
 										label="Fecha hasta"
 										minDate={fechaDesde}
 										sx={{ maxWidth: "150px" }}
