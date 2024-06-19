@@ -80,7 +80,7 @@ const ListaEmpresas = () => {
 				handleClose={handleCloseModal}
 			>
 				<EmpresaForm
-					empresa={emptyEmpresa}
+					initialEmpresa={emptyEmpresa}
 					onClose={handleCloseModal}
 					onShowSuccess={handleShowSuccess}
 					onShowError={handleShowError}

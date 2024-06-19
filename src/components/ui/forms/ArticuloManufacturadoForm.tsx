@@ -19,7 +19,7 @@ import { ArticuloManufacturadoService } from "../../../services/ArticuloManufact
 import dayjs from "dayjs";
 import { DetalleFormCardList } from "../cards/DetalleFormCardList";
 import ImagenUpload from "./ImagenUpload";
-import { ImagenService } from "../../../services/ImagenService";
+import { ImagenesService } from "../../../services/ImagenesService";
 import {
 	addArticuloManufacturadoSucursal,
 	editArticuloManufacturadoSucursal,
@@ -147,7 +147,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 			const articuloManufacturadoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
-			const articuloImagenService = new ImagenService("/images/uploads");
+			const articuloImagenService = new ImagenesService("/images/uploads");
 
 			let mappedSucursales = undefined;
 			if (sucursales) {

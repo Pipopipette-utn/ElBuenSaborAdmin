@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Home from "../components/screens/Home/Home";
 import { AppMenu } from "../components/ui/Menu/AppMenu";
 import { Box, CircularProgress, Stack } from "@mui/material";
@@ -15,9 +15,18 @@ import Empleados from "../components/screens/Empleados/Empleados";
 import PrivateRoute from "./ProtectedRoute";
 import { useAppSelector } from "../redux/hooks";
 import Pedidos from "../components/screens/Pedidos/Pedidos";
+import { useEffect } from "react";
 
 const ProtectedRoutes = () => {
 	const user = useAppSelector((state) => state.auth.user);
+	const empresa = useAppSelector((state) => state.selectedData.empresa);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!empresa) {
+			navigate("/");
+		}
+	}, []);
 
 	return (
 		<>

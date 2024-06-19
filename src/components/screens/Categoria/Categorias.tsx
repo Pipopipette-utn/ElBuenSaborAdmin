@@ -7,6 +7,8 @@ import {
 	TextField,
 	Typography,
 	IconButton,
+	FormControl,
+	InputLabel,
 } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
@@ -151,6 +153,7 @@ const Categorias = () => {
 						>
 							<Typography variant="h6">Buscar:</Typography>
 							<TextField
+								placeholder="Nombre de categoría"
 								size="small"
 								variant="outlined"
 								value={filter}
@@ -166,16 +169,24 @@ const Categorias = () => {
 							paddingLeft={3}
 						>
 							<Typography variant="h6">Filtrar por:</Typography>
-							<Select
-								size="small"
-								value={filterEsInsumo}
-								onChange={handleCategoryChange}
-								sx={{ width: "200px", fontSize: "14px" }}
-							>
-								<MenuItem value="">Ninguna</MenuItem>
-								<MenuItem value="esInsumo">Es insumo</MenuItem>
-								<MenuItem value="noEsInsumo">Articulos manufacturados</MenuItem>
-							</Select>
+							<FormControl size="small" sx={{ width: "200px" }}>
+								<InputLabel id="demo-simple-select-label">
+									Tipo de categoría
+								</InputLabel>
+								<Select
+									value={filterEsInsumo}
+									label="Tipo de categoría"
+									onChange={handleCategoryChange}
+								>
+									<MenuItem value="">
+										<em>Ninguna</em>
+									</MenuItem>
+									<MenuItem value="esInsumo">Es insumo</MenuItem>
+									<MenuItem value="noEsInsumo">
+										Articulos manufacturados
+									</MenuItem>
+								</Select>
+							</FormControl>
 						</Stack>
 					</Stack>
 				</GenericHeaderStack>

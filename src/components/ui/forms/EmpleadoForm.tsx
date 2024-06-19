@@ -21,8 +21,8 @@ import {
 	addEmpleadoSucursal,
 	editEmpleadoSucursal,
 } from "../../../redux/slices/SelectedData";
-import { ImagenPersonaService } from "../../../services/ImagenPersonaService";
 import { Rol } from "../../../types/enums";
+import { ImagenService } from "../../../services/ImagenService";
 
 interface EmpleadoFormProps {
 	initialEmpleado: IEmpleado;
@@ -112,7 +112,7 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 	const handleSubmitForm = async () => {
 		try {
 			const empleadoService = new EmpleadoService("/empleados");
-			const empleadoImagenService = new ImagenPersonaService(
+			const empleadoImagenService = new ImagenService(
 				"/imagenesPersona/uploads"
 			);
 			let rolName = empleado.usuario.rol;
@@ -134,7 +134,6 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 					nombre: sucursal!.nombre,
 				}
 			};
-			console.log(newEmpleado);
 
 			let createdEmpleado;
 			if (empleado.id) {

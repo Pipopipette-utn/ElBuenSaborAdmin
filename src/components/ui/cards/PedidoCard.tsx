@@ -57,7 +57,8 @@ const PedidoCard: FC<PedidoCardProps> = ({
 				(["PENDIENTE", "CANCELADO", "RECHAZADO"].includes(selectedEstado) &&
 					estadoEnum === Estado.Delivery) ||
 				(["PENDIENTE", "CANCELADO", "RECHAZADO"].includes(selectedEstado) &&
-					estadoEnum === Estado.Entregado)
+					estadoEnum === Estado.Entregado) ||
+				(selectedEstado === "CANCELADO" && estadoEnum !== Estado.Pendiente)
 			) {
 				throw new Error(
 					`El estado del pedido no puede pasar de ${selectedEstado} a  ${estado}`

@@ -21,7 +21,7 @@ import {
 	addPromocionesSucursal,
 	editPromocionesSucursal,
 } from "../../../redux/slices/SelectedData";
-import { ImagenService } from "../../../services/ImagenService";
+import { ImagenesService } from "../../../services/ImagenesService";
 
 interface PromocionFormProps {
 	initialPromocion: IPromocion;
@@ -163,7 +163,7 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 				return { id: s.id, baja: s.baja, nombre: s.nombre };
 			});
 			const promocionService = new PromocionService("/promociones");
-			const imagenService = new ImagenService("/imagenesPromocion/uploads");
+			const imagenService = new ImagenesService("/imagenesPromocion/uploads");
 
 			const newPromocion = {
 				...promocion,

@@ -25,6 +25,8 @@ import {
 import { emptyDomicilio } from "../../../types/emptyEntities";
 import { DomicilioForm } from "./DomicilioForm";
 import { AlertDialog } from "../shared/AlertDialog";
+import ImageUpload from "./ImagenUpload";
+import { ImagenService } from "../../../services/ImagenService";
 
 interface SucursalFormProps {
 	initialSucursal: ISucursal;
@@ -50,6 +52,11 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 	const sucursales = useAppSelector(
 		(state) => state.selectedData.sucursalesEmpresa
 	);
+	const [files, setFiles] = useState<File[]>([]);
+	const [previews, setPreviews] = useState<string[]>(
+		initialSucursal.imagenSucursal ? [initialSucursal.imagenSucursal?.url] : []
+	);
+
 	const casaMatriz = Array.isArray(sucursales)
 		? sucursales!.find((s) => s.esCasaMatriz === true)
 		: undefined;
@@ -63,7 +70,6 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		...sucursal,
 		horarioApertura: dayjs(`2024-05-13T${sucursal.horarioApertura}`),
 		horarioCierre: dayjs(`2024-05-13T${sucursal.horarioCierre}`),
-		logo: sucursal.logo === null ? "" : sucursal.logo,
 	};
 
 	let validationSchema: Yup.ObjectSchema<any, Yup.AnyObject, any, ""> =
@@ -71,7 +77,6 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			nombre: Yup.string().trim().required("Este campo es requerido."),
 			horarioApertura: Yup.string().required("Este campo es requerido."),
 			horarioCierre: Yup.string().required("Este campo es requerido."),
-			logo: Yup.string(),
 		});
 
 	const handleChangeCasaMatriz = (
@@ -86,7 +91,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		}
 	};
 
-	const handleNextForm = (values: { [key: string]: any }) => {
+	const handleSubmitSucursal = (values: { [key: string]: any }) => {
 		handleNext();
 		const newSucursal = {
 			...sucursal,
@@ -99,32 +104,64 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 		setSucursal(newSucursal);
 	};
 
-	const handleSubmitForm = async (domicilio: IDomicilio) => {
+	const handleSubmitDomicilio = async (domicilio: IDomicilio) => {
+		const newSucursal = {
+			...sucursal,
+			domicilio: domicilio,
+		};
+		setSucursal(newSucursal);
+		handleNext();
+	};
+
+	const handleFileChange = (
+		submittedFiles: FileList | null,
+		submittedPreviews: string[]
+	) => {
+		if (submittedFiles != null) {
+			const newFiles = Array.from(submittedFiles);
+			setFiles((prev) => [...prev, ...newFiles]);
+		}
+		setPreviews(submittedPreviews);
+	};
+
+	const handleSubmitForm = async () => {
 		try {
 			if (!empresa) throw new Error("No se ha seleccionado la empresa");
+			const imagenService = new ImagenService("/imagenesSucursal/uploads");
 
 			const sucursalService = new SucursalService("/sucursales");
 			//Si está siendo editado, ya viene con empresa y domicilio, se lo borro
 			const newSucursal = {
 				...sucursal,
-				domicilio: domicilio,
 				empresa: empresa!,
 			};
 
+			let createdSucursal;
 			if (sucursal.id) {
-				const updatedSucursal = await sucursalService.update(
+				createdSucursal = await sucursalService.update(
 					sucursal.id,
 					newSucursal
 				);
-				dispatch(editSucursalEmpresa(updatedSucursal));
+				dispatch(editSucursalEmpresa(createdSucursal));
 				onShowSuccess("Sucursal editada con éxito!");
 			} else {
-				const createdSucursal = await sucursalService.create(newSucursal);
+				createdSucursal = await sucursalService.create(newSucursal);
 				dispatch(addSucursalEmpresa(createdSucursal));
 				if (sucursales?.length === 0) {
 					dispatch(setSelectedSucursal(createdSucursal));
 				}
 				onShowSuccess("Sucursal creada con éxito!");
+			}
+
+			if (files != null) {
+				await imagenService.crearImagen(files, createdSucursal.id!);
+				const sucursalImagen = await sucursalService.getById(
+					createdSucursal.id!
+				);
+				if (sucursalImagen != null) {
+					dispatch(editSucursalEmpresa(sucursalImagen));
+					dispatch(setSelectedSucursal(sucursalImagen));
+				}
 			}
 
 			onClose();
@@ -203,6 +240,10 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 				],
 			],
 		},
+		{
+			title: "Imagen de la sucursal",
+			fields: [],
+		},
 	];
 
 	return (
@@ -211,45 +252,60 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 				<Stack width={"80%"} marginBottom={2}>
 					<FormStepper steps={steps} activeStep={activeStep} />
 				</Stack>
-				{activeStep === 0 && (
-					<GenericForm
-						fields={steps[activeStep].fields}
-						initialValues={initialValues}
-						validationSchema={validationSchema}
-						onSubmit={handleNextForm}
-						childrenPosition="bottom"
-						submitButtonText={
-							activeStep !== steps.length - 1
-								? "Continuar"
-								: sucursal.id
-								? "Editar sucursal"
-								: "Crear sucursal"
-						}
-					>
-						<Stack direction="row" alignItems="center" alignSelf="flex-start">
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={initialValues.esCasaMatriz}
-										onChange={handleChangeCasaMatriz}
-									/>
-								}
-								label="Es casa matriz"
-							/>
-						</Stack>
-					</GenericForm>
-				)}
-				{activeStep === 1 && (
-					<DomicilioForm
-						domicilio={sucursal.domicilio ?? emptyDomicilio}
-						fields={steps[1].fields}
-						handleBack={handleBack}
-						handleSubmitForm={handleSubmitForm}
-						submitButtonText={
-							sucursal.id ? "Editar sucursal" : "Crear sucursal"
-						}
-					/>
-				)}
+				{(() => {
+					switch (activeStep) {
+						case 0:
+							return (
+								<GenericForm
+									fields={steps[activeStep].fields}
+									initialValues={initialValues}
+									validationSchema={validationSchema}
+									onSubmit={handleSubmitSucursal}
+									childrenPosition="bottom"
+									submitButtonText="Continuar"
+								>
+									<Stack
+										direction="row"
+										alignItems="center"
+										alignSelf="flex-start"
+									>
+										<FormControlLabel
+											control={
+												<Checkbox
+													checked={initialValues.esCasaMatriz}
+													onChange={handleChangeCasaMatriz}
+												/>
+											}
+											label="Es casa matriz"
+										/>
+									</Stack>
+								</GenericForm>
+							);
+						case 1:
+							return (
+								<DomicilioForm
+									domicilio={sucursal.domicilio ?? emptyDomicilio}
+									fields={steps[1].fields}
+									handleBack={handleBack}
+									handleSubmitForm={handleSubmitDomicilio}
+									submitButtonText="Siguiente"
+								/>
+							);
+						case 2:
+							return (
+								<ImageUpload
+									imagenes={previews}
+									onBack={handleBack}
+									onNext={handleSubmitForm}
+									onChangeImages={handleFileChange}
+									multiple={false}
+								/>
+							);
+
+						default:
+							return null;
+					}
+				})()}
 			</Stack>
 			<AlertDialog
 				open={openMatrizDialog}

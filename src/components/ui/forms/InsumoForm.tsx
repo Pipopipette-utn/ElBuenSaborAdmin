@@ -11,7 +11,7 @@ import { GenericForm } from "../shared/GenericForm";
 import { ArticuloElaborarForm } from "./ArticuloElaborarForm";
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import ImageUpload from "./ImagenUpload";
-import { ImagenService } from "../../../services/ImagenService";
+import { ImagenesService } from "../../../services/ImagenesService";
 import {
 	addArticuloInsumoSucursal,
 	editArticuloInsumoSucursal,
@@ -169,7 +169,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			const articuloInsumoService = new ArticuloInsumoService(
 				"/articulosInsumos"
 			);
-			const articuloImagenService = new ImagenService("/images/uploads");
+			const articuloImagenService = new ImagenesService("/images/uploads");
 
 			let mappedSucursales = undefined;
 			if (selectedSucursales) {

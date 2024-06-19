@@ -51,7 +51,8 @@ export class PedidoService extends BackendClient<IPedido> {
 				}
 			);
 			if (!response.ok) {
-				throw Error(response.statusText);
+				const errorData = await response.json();
+				throw new Error(errorData.message || "Error desconocido");
 			}
 			return await response.json();
 		} catch (error) {

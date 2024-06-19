@@ -54,8 +54,8 @@ const EmpresaCard: FC<EmpresaCardProps> = ({
 				<CardMedia
 					component="img"
 					image={
-						empresa.logo && empresa.logo != ""
-							? empresa.logo
+						empresa.imagenEmpresa && empresa.imagenEmpresa.url
+							? empresa.imagenEmpresa.url
 							: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${empresa.nombre
 									.toUpperCase()
 									.charAt(0)}`
@@ -76,7 +76,7 @@ const EmpresaCard: FC<EmpresaCardProps> = ({
 				handleClose={handleCloseModal}
 			>
 				<EmpresaForm
-					empresa={empresa}
+					initialEmpresa={empresa}
 					onClose={handleCloseModal}
 					onShowSuccess={onShowSuccess}
 					onShowError={onShowError}

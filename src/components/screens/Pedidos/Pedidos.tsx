@@ -7,6 +7,8 @@ import {
 	MenuItem,
 	IconButton,
 	SelectChangeEvent,
+	FormControl,
+	InputLabel,
 } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -103,22 +105,26 @@ const Pedidos = () => {
 				>
 					<Stack direction="row" width="100%" alignItems="center">
 						<Typography variant="h6">Filtrar por estado:</Typography>
-						<Select
-							size="small"
-							onChange={handleEstadoChange}
-							labelId="estado-label"
-							value={estado}
-							sx={{ width: "200px", fontSize: "14px" }}
-						>
-							<MenuItem value="">
-								<em>Todos</em>
-							</MenuItem>
-							<MenuItem value="PREPARACION">En preparación</MenuItem>
-							<MenuItem value="PENDIENTE">Pendiente</MenuItem>
-							<MenuItem value="CANCELADO">Cancelado</MenuItem>
-							<MenuItem value="RECHAZADO">Rechazado</MenuItem>
-							<MenuItem value="ENTREGADO">Entregado</MenuItem>
-						</Select>
+						<FormControl size="small" sx={{ width: "200px" }}>
+							<InputLabel id="demo-simple-select-label">
+								Estado del pedido
+							</InputLabel>
+							<Select
+								value={estado}
+								label="Tipo de categoría"
+								onChange={handleEstadoChange}
+								sx={{ width: "200px", fontSize: "14px" }}
+							>
+								<MenuItem value="">
+									<em>Todos</em>
+								</MenuItem>
+								<MenuItem value="PREPARACION">En preparación</MenuItem>
+								<MenuItem value="PENDIENTE">Pendiente</MenuItem>
+								<MenuItem value="CANCELADO">Cancelado</MenuItem>
+								<MenuItem value="RECHAZADO">Rechazado</MenuItem>
+								<MenuItem value="ENTREGADO">Entregado</MenuItem>
+							</Select>
+						</FormControl>
 					</Stack>
 				</GenericHeaderStack>
 				<Stack sx={{ p: "12px" }}>
@@ -152,7 +158,7 @@ const Pedidos = () => {
 					{pedidos && pedidos.length > 0 && (
 						<Pagination
 							count={noOfPages}
-							page={page+1}
+							page={page + 1}
 							onChange={handlePageChange}
 							sx={{ alignSelf: "center", mt: 2 }}
 						/>

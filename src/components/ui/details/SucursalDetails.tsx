@@ -40,8 +40,8 @@ export const SucursalDetails: FC<SucursalDetailstProps> = ({
 				<Stack width="100%" direction="row" sx={{ borderRadius: "20px" }}>
 					<img
 						src={
-							sucursal.logo && sucursal.logo != ""
-								? sucursal.logo
+							sucursal.imagenSucursal && sucursal.imagenSucursal.url
+								? sucursal.imagenSucursal.url
 								: `https://via.placeholder.com/150/FCFCFC/FF4F33?text=${sucursal.nombre.charAt(
 										0
 								  )}`
