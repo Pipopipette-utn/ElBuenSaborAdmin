@@ -3,7 +3,6 @@ import {
 	Stack,
 	Typography,
 	TablePagination,
-	CircularProgress,
 } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import ScaleIcon from "@mui/icons-material/Scale";
@@ -119,7 +118,7 @@ const Empleados = () => {
 						<Typography variant="h5">Todos los empleados</Typography>
 					</Stack>
 					{loading ? (
-						<CircularProgress sx={{ mt: 6 }} />
+						<LinearProgress sx={{ width: "100%", mt: 6 }} />
 					) : (
 						<>
 							<Stack direction="column" spacing={2} sx={{ p: "12px" }}>
@@ -137,7 +136,7 @@ const Empleados = () => {
 							{empleados === "loading" && (
 								<LinearProgress sx={{ width: "100%" }} />
 							)}
-							{empleados === null && (
+							{empleados?.length === 0 && (
 								<Typography>Ups! No hay empleados para mostrar.</Typography>
 							)}
 							<TablePagination

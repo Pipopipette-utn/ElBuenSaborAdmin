@@ -43,7 +43,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 					<IconButton disabled={disabled} onClick={() => onEdit(idEntity)}>
 						<EditIcon
 							fontSize="small"
-							color={disabled ? "disabled" : "primary"}
+							color={disabled ? "action" : "primary"}
 						/>
 					</IconButton>
 				</Tooltip>
@@ -52,7 +52,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 				<IconButton onClick={() => onSeeDetails(idEntity)}>
 					<VisibilityIcon
 						fontSize="small"
-						color={onAlta ? "disabled" : "primary"}
+						color={onAlta ? "action" : "primary"}
 					/>
 				</IconButton>
 			</Tooltip>
@@ -61,7 +61,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 					<IconButton disabled={disabled} onClick={() => onDelete(idEntity)}>
 						<DeleteOutlineIcon
 							fontSize="small"
-							color={disabled ? "disabled" : "primary"}
+							color={disabled ? "action" : "primary"}
 						/>
 					</IconButton>
 				</Tooltip>
@@ -69,10 +69,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 			{onAlta && (
 				<Tooltip title="Dar de alta">
 					<IconButton disabled={disabled} onClick={() => onAlta(idEntity)}>
-						<UpgradeIcon
-							fontSize="small"
-							color={disabled ? "disabled" : "primary"}
-						/>
+						<UpgradeIcon fontSize="small" color={"action"} />
 					</IconButton>
 				</Tooltip>
 			)}
@@ -84,7 +81,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 					>
 						<UpgradeIcon
 							fontSize="small"
-							color={disabled ? "disabled" : "primary"}
+							color={disabled ? "action" : "primary"}
 						/>
 					</IconButton>
 				</Tooltip>

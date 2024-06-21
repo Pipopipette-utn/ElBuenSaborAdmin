@@ -95,7 +95,10 @@ const SelectedDataSlice = createSlice({
 			state.promocionesSucursal = action.payload;
 		},
 		addPromocionesSucursal: (state, action: PayloadAction<IPromocion>) => {
-			if (state.promocionesSucursal && state.promocionesSucursal !== "loading") {
+			if (
+				state.promocionesSucursal &&
+				state.promocionesSucursal !== "loading"
+			) {
 				state.promocionesSucursal!.push(action.payload);
 			} else {
 				state.promocionesSucursal = [action.payload];
@@ -103,16 +106,25 @@ const SelectedDataSlice = createSlice({
 		},
 		editPromocionesSucursal: (state, action: PayloadAction<IPromocion>) => {
 			const promocionEditada = action.payload;
-			if (state.promocionesSucursal && state.promocionesSucursal !== "loading") {
+			if (
+				state.promocionesSucursal &&
+				state.promocionesSucursal !== "loading"
+			) {
 				state.promocionesSucursal = state.promocionesSucursal.map((promocion) =>
 					promocion.id === promocionEditada.id ? promocionEditada : promocion
 				);
 			}
 		},
-		setInsumosSucursal: (state, action: PayloadAction<IArticuloInsumo[] | null>) => {
+		setInsumosSucursal: (
+			state,
+			action: PayloadAction<IArticuloInsumo[] | null>
+		) => {
 			state.articulosInsumosSucursal = action.payload;
 		},
-		editArticuloInsumoSucursal: (state, action: PayloadAction<IArticuloInsumo>) => {
+		editArticuloInsumoSucursal: (
+			state,
+			action: PayloadAction<IArticuloInsumo>
+		) => {
 			const insumoEditado = action.payload;
 			if (state.articulosInsumosSucursal) {
 				state.articulosInsumosSucursal = state.articulosInsumosSucursal.map(
@@ -120,15 +132,6 @@ const SelectedDataSlice = createSlice({
 				);
 			}
 		},
-		addArticuloInsumoSucursal: (state, action: PayloadAction<IArticuloInsumo>) => {
-			if (state.articulosInsumosSucursal) {
-				if (state.articulosInsumosSucursal.length < 6)
-					state.articulosInsumosSucursal!.push(action.payload);
-			} else {
-				state.articulosInsumosSucursal = [action.payload];
-			}
-		},
-
 		setManufacturadosSucursal: (
 			state,
 			action: PayloadAction<IArticuloManufacturado[] | null>
@@ -179,10 +182,7 @@ const SelectedDataSlice = createSlice({
 				);
 			}
 		},
-		setPedidosSucursal: (
-			state,
-			action: PayloadAction<IPedido[] | null>
-		) => {
+		setPedidosSucursal: (state, action: PayloadAction<IPedido[] | null>) => {
 			state.pedidosSucursal = action.payload;
 		},
 		editPedidoSucursal: (state, action: PayloadAction<IPedido>) => {
@@ -210,7 +210,6 @@ export const {
 	editPromocionesSucursal,
 	setInsumosSucursal,
 	editArticuloInsumoSucursal,
-	addArticuloInsumoSucursal,
 	setManufacturadosSucursal,
 	editArticuloManufacturadoSucursal,
 	addArticuloManufacturadoSucursal,
@@ -218,7 +217,7 @@ export const {
 	editEmpleadoSucursal,
 	addEmpleadoSucursal,
 	setPedidosSucursal,
-	editPedidoSucursal
+	editPedidoSucursal,
 } = SelectedDataSlice.actions;
 export default SelectedDataSlice.reducer;
 

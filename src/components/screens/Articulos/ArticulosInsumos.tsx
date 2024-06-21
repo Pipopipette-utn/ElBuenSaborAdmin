@@ -1,4 +1,4 @@
-import { Stack, Typography, CircularProgress } from "@mui/material";
+import { Stack, Typography, LinearProgress } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -21,6 +21,10 @@ import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 import { SucursalesSelector } from "../../ui/forms/SucursalesSelector";
 import { ISucursalDTO } from "../../../types/dto";
+import { useFormModal } from "../../../hooks/useFormModal";
+import { useArticuloActions } from "../../../hooks/useArticuloActions";
+import { usePagination } from "../../../hooks/usePagination";
+import { useMessages } from "../../../hooks/useMessages";
 
 const ArticulosInsumos = () => {
 	const insumoService = new ArticuloInsumoService("/articulosInsumos");
@@ -29,31 +33,54 @@ const ArticulosInsumos = () => {
 	const categorias =
 		useAppSelector((state) => state.selectedData.categoriasSucursal) ?? [];
 
-	const [showModal, setShowModal] = useState(false);
-	const [showDetailsModal, setShowDetailsModal] = useState(false);
-	const [showAlert, setShowAlert] = useState(false);
-	const [showAlertAlta, setShowAlertAlta] = useState(false);
-	const [showAlertAltaSucursal, setShowAlertAltaSucursal] = useState(false);
-	const [idArticulo, setIdArticulo] = useState<number>();
-	const [articulo, setArticulo] = useState<IArticuloInsumo | null>(null);
+	const {
+		page,
+		rowsPerPage,
+		totalRows,
+		onPageChange,
+		onRowsPerPageChange,
+		setTotalRows,
+	} = usePagination();
+
+	const {
+		showSuccess,
+		showError,
+		onShowError,
+		onShowSuccess,
+		onCloseError,
+		onCloseSuccess,
+	} = useMessages();
+
+	const { isOpen: isModalOpen, onOpenModal, onCloseModal } = useFormModal();
+
+	const {
+		idArticuloSeleccionado,
+		articuloSeleccionado,
+		showAlertBaja,
+		showAlertAlta,
+		showAlertAltaSucursal,
+		showDetailsModal,
+		setArticuloSeleccionado,
+		onHideAlertBaja,
+		onHideAlertAlta,
+		onHideAlertAltaSucursal,
+		onShowDetailsModal,
+		onHideDetailsModal,
+		onDeleteClick,
+		onAltaClick,
+		onAltaSucursalClick,
+	} = useArticuloActions();
+
 	const [articulosInsumos, setArticulosInsumos] = useState<IArticuloInsumo[]>(
 		[]
 	);
-	const [totalRows, setTotalRows] = useState(0);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(6);
+
+	const [reload, setReload] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [nameFilter, setNameFilter] = useState<string | null>(null);
 	const [categoryFilter, setCategoryFilter] = useState<ICategoria | null>(null);
 
 	const dispatch = useAppDispatch();
-	const articulosRedux = useAppSelector(
-		(state) => state.selectedData.articulosInsumosSucursal
-	);
-
-	useEffect(() => {
-		if (articulosRedux) setArticulosInsumos(articulosRedux);
-	}, [articulosRedux]);
 
 	const handleNameFilterChange = (filtro: string | null) => {
 		setNameFilter(filtro);
@@ -62,6 +89,14 @@ const ArticulosInsumos = () => {
 	const handleCategoryFilterChange = (value: ICategoria | null) => {
 		setCategoryFilter(value);
 	};
+
+	const articulosRedux = useAppSelector(
+		(state) => state.selectedData.articulosInsumosSucursal
+	);
+
+	useEffect(() => {
+		if (articulosRedux) setArticulosInsumos(articulosRedux);
+	}, [articulosRedux]);
 
 	useEffect(() => {
 		let filtered = articulosInsumos;
@@ -100,90 +135,52 @@ const ArticulosInsumos = () => {
 		else filterInsumos();
 
 		setArticulosInsumos(filtered);
-	}, [sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
-
-	const handleOpenModal = () => setShowModal(true);
-	const handleCloseModal = () => {
-		setArticulo(null);
-		setShowModal(false);
-	};
-
-	const handleOpenDetailsModal = () => setShowDetailsModal(true);
-	const handleCloseDetailsModal = () => {
-		setArticulo(null);
-		setShowDetailsModal(false);
-	};
-
-	const handleOpenAlert = () => setShowAlert(true);
-	const handleCloseAlert = () => setShowAlert(false);
-
-	const handleOpenAlertAlta = () => setShowAlertAlta(true);
-	const handleCloseAlertAlta = () => setShowAlertAlta(false);
-
-	const handleOpenAlertAltaSucursal = () => setShowAlertAltaSucursal(true);
-	const handleCloseAlertAltaSucursal = () => setShowAlertAltaSucursal(false);
+	}, [reload, sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
 
 	const handleOpenEditModal = (articuloId: number) => {
 		const articuloEncontrado = articulosInsumos?.find(
 			(a) => a.id == articuloId
 		);
-		setArticulo(articuloEncontrado!);
-		setShowModal(true);
-	};
-
-	const handleDeleteClick = (articuloId: number) => {
-		handleOpenAlert();
-		setIdArticulo(articuloId);
+		setArticuloSeleccionado(articuloEncontrado!);
+		onOpenModal();
 	};
 
 	const handleSeeDetails = (articuloId: number) => {
 		const articuloEncontrado = articulosInsumos?.find(
 			(a) => a.id == articuloId
 		);
-		setArticulo(articuloEncontrado!);
-		handleOpenDetailsModal();
+		setArticuloSeleccionado(articuloEncontrado!);
+		onShowDetailsModal();
 	};
 
 	const handleDelete = async () => {
 		try {
-			await insumoService.delete(idArticulo!);
-			const newArticulo = { ...articulo!, baja: true };
+			await insumoService.delete(idArticuloSeleccionado!);
+			const articuloEncontrado = articulosInsumos?.find(
+				(a) => a.id == idArticuloSeleccionado
+			);
+			const newArticulo = { ...articuloEncontrado!, baja: true };
 			dispatch(editArticuloInsumoSucursal(newArticulo));
-			handleCloseAlert();
-			handleShowSuccess("Artículo dado de baja con éxito");
+			onHideAlertBaja();
+			onShowSuccess("Artículo dado de baja con éxito");
 		} catch (e: any) {
-			handleShowError("Error al dar de baja artículo: " + e);
+			onShowError("Error al dar de baja artículo: " + e);
 		}
-	};
-
-	const handleAltaClick = (articuloId: number) => {
-		const articuloEncontrado = articulosInsumos?.find(
-			(a) => a.id == articuloId
-		);
-		handleOpenAlertAlta();
-		setIdArticulo(articuloId);
-		setArticulo(articuloEncontrado!);
 	};
 
 	const handleAlta = async () => {
 		try {
-			await insumoService.alta(idArticulo!);
-			const newArticulo = { ...articulo!, baja: false };
+			await insumoService.alta(idArticuloSeleccionado!);
+			const articuloEncontrado = articulosInsumos?.find(
+				(a) => a.id == idArticuloSeleccionado
+			);
+			const newArticulo = { ...articuloEncontrado!, baja: false };
 			dispatch(editArticuloInsumoSucursal(newArticulo));
-			handleCloseAlertAlta();
-			handleShowSuccess("Artículo dado de alta con éxito");
+			onHideAlertAlta();
+			onShowSuccess("Artículo dado de alta con éxito");
 		} catch (e: any) {
-			handleShowError("Error al dar de alta artículo: " + e);
+			onShowError("Error al dar de alta artículo: " + e);
 		}
-	};
-
-	const handleAltaSucursalClick = (articuloId: number) => {
-		const articuloEncontrado = articulosInsumos?.find(
-			(a) => a.id == articuloId
-		);
-		handleOpenAlertAltaSucursal();
-		setIdArticulo(articuloId);
-		setArticulo(articuloEncontrado!);
 	};
 
 	const handleAltaSucursal = async (sucursales: ISucursalDTO[]) => {
@@ -193,32 +190,16 @@ const ArticulosInsumos = () => {
 					(s) => s.id !== sucursal.id!
 				);
 				await insumoService.altaSucursales(
-					idArticulo!,
-					filteredSucursales,
+					idArticuloSeleccionado!,
+					filteredSucursales
 				);
-				handleCloseAlertAltaSucursal();
-				handleShowSuccess("Artículo dado de alta con éxito.");
+				onHideAlertAltaSucursal();
+				onShowSuccess("Artículo dado de alta con éxito.");
 			}
 		} catch (e: any) {
-			handleShowError("Error al dar de alta artículo: " + e);
+			onShowError("Error al dar de alta artículo: " + e);
 		}
 	};
-
-	const handlePageChange = (newPage: number) => {
-		setPage(newPage);
-	};
-
-	const handleRowsPerPageChange = (newRowsPerPage: number) => {
-		setRowsPerPage(newRowsPerPage);
-	};
-
-	const [showSuccess, setShowSuccess] = useState("");
-	const handleShowSuccess = (message: string) => setShowSuccess(message);
-	const handleCloseSuccess = () => setShowSuccess("");
-
-	const [showError, setShowError] = useState("");
-	const handleShowError = (message: string) => setShowError(message);
-	const handleCloseError = () => setShowError("");
 
 	return (
 		<>
@@ -234,7 +215,10 @@ const ArticulosInsumos = () => {
 					activeEntities={"Insumos activos"}
 					buttonText={"Nuevo insumo"}
 					disabledButton={user!.rol! === "CAJERO" || user!.rol! === "COCINERO"}
-					onClick={handleOpenModal}
+					onClick={() => {
+						setArticuloSeleccionado(null);
+						onOpenModal();
+					}}
 				>
 					<FilterFields
 						nameFilter={nameFilter ?? ""}
@@ -261,14 +245,14 @@ const ArticulosInsumos = () => {
 						sx={{ flex: 1, overflow: "auto" }}
 					>
 						{loading ? (
-							<CircularProgress sx={{ mt: 6 }} />
+							<LinearProgress sx={{ width: "100%" }} />
 						) : (
 							<GenericTable
-								onDelete={handleDeleteClick}
+								onDelete={onDeleteClick}
 								onSeeDetails={handleSeeDetails}
 								onEdit={handleOpenEditModal}
-								onAlta={handleAltaClick}
-								onAltaSucursal={handleAltaSucursalClick}
+								onAlta={onAltaClick}
+								onAltaSucursal={onAltaSucursalClick}
 								data={insumoService.articulosInsumosToDTO(articulosInsumos!)}
 								columns={[
 									{ label: "Nombre", key: "denominacion" },
@@ -285,24 +269,29 @@ const ArticulosInsumos = () => {
 								totalRows={totalRows}
 								page={page}
 								rowsPerPage={rowsPerPage}
-								onPageChange={handlePageChange}
-								onRowsPerPageChange={handleRowsPerPageChange}
+								onPageChange={onPageChange}
+								onRowsPerPageChange={onRowsPerPageChange}
 							/>
 						)}
 					</Stack>
 				</Stack>
 			</GenericDoubleStack>
 			<GenericModal
-				title={articulo ? "Editar insumo" : "Crear insumo"}
+				title={articuloSeleccionado ? "Editar insumo" : "Crear insumo"}
 				icon={<ShoppingCartIcon fontSize="large" />}
-				open={showModal}
-				handleClose={handleCloseModal}
+				open={isModalOpen}
+				handleClose={onCloseModal}
 			>
 				<InsumoForm
-					initialArticuloInsumo={articulo ? articulo : emptyInsumo}
-					onClose={handleCloseModal}
-					onShowSuccess={handleShowSuccess}
-					onShowError={handleShowError}
+					initialArticuloInsumo={
+						articuloSeleccionado
+							? (articuloSeleccionado as IArticuloInsumo)
+							: emptyInsumo
+					}
+					onClose={onCloseModal}
+					onShowSuccess={onShowSuccess}
+					onShowError={onShowError}
+					onReload={() => setReload(!reload)}
 				/>
 			</GenericModal>
 
@@ -310,47 +299,51 @@ const ArticulosInsumos = () => {
 				title={"Dar de alta insumo"}
 				icon={<ShoppingCartIcon fontSize="large" />}
 				open={showAlertAltaSucursal}
-				handleClose={handleCloseAlertAltaSucursal}
+				handleClose={onHideAlertAltaSucursal}
 			>
 				<SucursalesSelector
-					selected={articulo && articulo.sucursal ? [articulo.sucursal] : []}
+					selected={
+						articuloSeleccionado && articuloSeleccionado.sucursal
+							? [articuloSeleccionado.sucursal]
+							: []
+					}
 					handleSubmit={handleAltaSucursal}
 					buttonTitle={"Dar de alta en sucursales"}
 				/>
 			</GenericModal>
 
-			{articulo && (
+			{articuloSeleccionado && (
 				<ArticuloInsumoDetails
-					articuloInsumo={articulo!}
+					articuloInsumo={articuloSeleccionado! as IArticuloInsumo}
 					open={showDetailsModal}
-					handleClose={handleCloseDetailsModal}
+					handleClose={onHideDetailsModal}
 				/>
 			)}
 
 			<AlertDialog
 				open={showAlertAlta}
-				title={"¿Estás seguro de que querés dar de alta el artículo"}
+				title={"¿Estás seguro de que querés dar de alta el artículo?"}
 				content={""}
 				onAgreeClose={handleAlta}
-				onDisagreeClose={handleCloseAlertAlta}
+				onDisagreeClose={onHideAlertAlta}
 			/>
 			<AlertDialog
-				open={showAlert}
+				open={showAlertBaja}
 				title={"¿Estás seguro de que querés dar de baja el artículo?"}
 				content={
 					"Luego podrás acceder al artículo para darlo de alta nuevamente."
 				}
 				onAgreeClose={handleDelete}
-				onDisagreeClose={handleCloseAlert}
+				onDisagreeClose={onHideAlertBaja}
 			/>
 			<SuccessMessage
 				open={!!showSuccess}
-				onClose={handleCloseSuccess}
+				onClose={onCloseSuccess}
 				message={showSuccess}
 			/>
 			<ErrorMessage
 				open={!!showError}
-				onClose={handleCloseError}
+				onClose={onCloseError}
 				message={showError}
 			/>
 		</>

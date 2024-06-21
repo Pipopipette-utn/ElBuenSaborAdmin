@@ -1,4 +1,4 @@
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { LinearProgress, Stack, Typography } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import StoreMallDirectoryIcon from "@mui/icons-material/StoreMallDirectory";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
@@ -22,6 +22,10 @@ import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 import { ISucursalDTO } from "../../../types/dto";
 import { SucursalesSelector } from "../../ui/forms/SucursalesSelector";
+import { usePagination } from "../../../hooks/usePagination";
+import { useMessages } from "../../../hooks/useMessages";
+import { useFormModal } from "../../../hooks/useFormModal";
+import { useArticuloActions } from "../../../hooks/useArticuloActions";
 
 const ArticulosManufacturados = () => {
 	const articuloManufacturadoService = new ArticuloManufacturadoService(
@@ -31,21 +35,47 @@ const ArticulosManufacturados = () => {
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal) ?? [];
 	const dispatch = useAppDispatch();
 	const [loading, setLoading] = useState(false);
-	const [showModal, setShowModal] = useState(false);
-	const [showDetailsModal, setShowDetailsModal] = useState(false);
-	const [showAlert, setShowAlert] = useState(false);
-	const [showAlertAlta, setShowAlertAlta] = useState(false);
-	const [showAlertAltaSucursal, setShowAlertAltaSucursal] = useState(false);
+	const {
+		page,
+		rowsPerPage,
+		totalRows,
+		onPageChange,
+		onRowsPerPageChange,
+		setTotalRows,
+	} = usePagination();
 
-	const [idArticulo, setIdArticulo] = useState<number>();
-	const [articulo, setArticulo] = useState<IArticuloManufacturado | null>(null);
+	const {
+		showSuccess,
+		showError,
+		onShowError,
+		onShowSuccess,
+		onCloseError,
+		onCloseSuccess,
+	} = useMessages();
+
+	const { isOpen: isModalOpen, onOpenModal, onCloseModal } = useFormModal();
+
+	const {
+		idArticuloSeleccionado,
+		articuloSeleccionado,
+		showAlertBaja,
+		showAlertAlta,
+		showAlertAltaSucursal,
+		showDetailsModal,
+		setArticuloSeleccionado,
+		onHideAlertBaja,
+		onHideAlertAlta,
+		onHideAlertAltaSucursal,
+		onShowDetailsModal,
+		onHideDetailsModal,
+		onDeleteClick,
+		onAltaClick,
+		onAltaSucursalClick,
+	} = useArticuloActions();
+
 	const [articulosManufacturados, setArticulosManufacturados] = useState<
 		IArticuloManufacturado[]
 	>([]);
-	const [totalRows, setTotalRows] = useState(0);
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(6);
-
 	const [nameFilter, setNameFilter] = useState<string | null>(null);
 	const [categoryFilter, setCategoryFilter] = useState<ICategoria | null>(null);
 	const categorias =
@@ -78,8 +108,6 @@ const ArticulosManufacturados = () => {
 		};
 
 		const filterInsumos = async () => {
-			console.log(categoryFilter);
-			console.log(nameFilter);
 			if (sucursal && !Array.isArray(sucursal)) {
 				setLoading(true);
 				const filteredArticulos =
@@ -102,33 +130,12 @@ const ArticulosManufacturados = () => {
 		setArticulosManufacturados(filtered);
 	}, [sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
 
-	const handleOpenAlert = () => setShowAlert(true);
-	const handleCloseAlert = () => setShowAlert(false);
-
-	const handleOpenAlertAlta = () => setShowAlertAlta(true);
-	const handleCloseAlertAlta = () => setShowAlertAlta(false);
-
-	const handleOpenAlertAltaSucursal = () => setShowAlertAltaSucursal(true);
-	const handleCloseAlertAltaSucursal = () => setShowAlertAltaSucursal(false);
-
-	const handleOpenDetailsModal = () => setShowDetailsModal(true);
-	const handleCloseDetailsModal = () => {
-		setArticulo(null);
-		setShowDetailsModal(false);
-	};
-
-	const handleOpenModal = () => setShowModal(true);
-	const handleCloseModal = () => {
-		setArticulo(null);
-		setShowModal(false);
-	};
-
 	const handleOpenEditModal = (articuloId: number) => {
 		const articuloEncontrado = articulosManufacturados?.find(
 			(a) => a.id == articuloId
 		);
-		setArticulo(articuloEncontrado!);
-		setShowModal(true);
+		setArticuloSeleccionado(articuloEncontrado!);
+		onOpenModal();
 	};
 
 	const handleFilterChange = (filtro: string | null) => {
@@ -143,13 +150,8 @@ const ArticulosManufacturados = () => {
 		const articuloEncontrado = articulosManufacturados?.find(
 			(a) => a.id == articuloId
 		);
-		setArticulo(articuloEncontrado!);
-		handleOpenDetailsModal();
-	};
-
-	const handleDeleteClick = (articuloId: number) => {
-		handleOpenAlert();
-		setIdArticulo(articuloId);
+		setArticuloSeleccionado(articuloEncontrado!);
+		onShowDetailsModal();
 	};
 
 	const handleDelete = async () => {
@@ -157,44 +159,32 @@ const ArticulosManufacturados = () => {
 			const productoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
-			await productoService.delete(idArticulo!);
-			const newArticulo = { ...articulo!, baja: true };
+			await productoService.delete(idArticuloSeleccionado!);
+			const articuloEncontrado = articulosManufacturados?.find(
+				(a) => a.id == idArticuloSeleccionado
+			);
+			const newArticulo = { ...articuloEncontrado!, baja: false };
 			dispatch(editArticuloManufacturadoSucursal(newArticulo));
-			handleCloseAlert();
-			handleShowSuccess("Artículo dado de baja con éxito");
+			onHideAlertBaja();
+			onShowSuccess("Artículo dado de baja con éxito");
 		} catch (e: any) {
-			handleShowError("Error al dar de baja artículo: " + e);
+			onShowError("Error al dar de baja artículo: " + e);
 		}
-	};
-
-	const handleAltaClick = (articuloId: number) => {
-		const articuloEncontrado = articulosManufacturados?.find(
-			(a) => a.id == articuloId
-		);
-		handleOpenAlertAlta();
-		setIdArticulo(articuloId);
-		setArticulo(articuloEncontrado!);
 	};
 
 	const handleAlta = async () => {
 		try {
-			await articuloManufacturadoService.alta(idArticulo!);
-			const newArticulo = { ...articulo!, baja: false };
+			await articuloManufacturadoService.alta(idArticuloSeleccionado!);
+			const articuloEncontrado = articulosManufacturados?.find(
+				(a) => a.id == idArticuloSeleccionado
+			);
+			const newArticulo = { ...articuloEncontrado!, baja: false };
 			dispatch(editArticuloManufacturadoSucursal(newArticulo));
-			handleCloseAlertAlta();
-			handleShowSuccess("Artículo dado de alta con éxito");
+			onHideAlertAlta();
+			onShowSuccess("Artículo dado de alta con éxito");
 		} catch (e: any) {
-			handleShowError("Error al dar de alta artículo: " + e);
+			onShowError("Error al dar de alta artículo: " + e);
 		}
-	};
-
-	const handleAltaSucursalClick = (articuloId: number) => {
-		const articuloEncontrado = articulosManufacturados?.find(
-			(a) => a.id == articuloId
-		);
-		handleOpenAlertAltaSucursal();
-		setIdArticulo(articuloId);
-		setArticulo(articuloEncontrado!);
 	};
 
 	const handleAltaSucursal = async (sucursales: ISucursalDTO[]) => {
@@ -204,32 +194,16 @@ const ArticulosManufacturados = () => {
 					(s) => s.id !== sucursal.id!
 				);
 				await articuloManufacturadoService.altaSucursales(
-					idArticulo!,
+					idArticuloSeleccionado!,
 					filteredSucursales
 				);
-				handleCloseAlertAltaSucursal();
-				handleShowSuccess("Artículo dado de alta con éxito.");
+				onHideAlertAltaSucursal();
+				onShowSuccess("Artículo dado de alta con éxito.");
 			}
 		} catch (e: any) {
-			handleShowError("Error al dar de alta artículo: " + e);
+			onShowError("Error al dar de alta artículo: " + e);
 		}
 	};
-
-	const handlePageChange = (newPage: number) => {
-		setPage(newPage);
-	};
-
-	const handleRowsPerPageChange = (newRowsPerPage: number) => {
-		setRowsPerPage(newRowsPerPage);
-	};
-
-	const [showSuccess, setShowSuccess] = useState("");
-	const handleShowSuccess = (message: string) => setShowSuccess(message);
-	const handleCloseSuccess = () => setShowSuccess("");
-
-	const [showError, setShowError] = useState("");
-	const handleShowError = (message: string) => setShowError(message);
-	const handleCloseError = () => setShowError("");
 
 	return (
 		<>
@@ -245,7 +219,7 @@ const ArticulosManufacturados = () => {
 					activeEntities={"Productos activos"}
 					buttonText={"Nuevo producto"}
 					disabledButton={user!.rol! === "CAJERO"}
-					onClick={handleOpenModal}
+					onClick={onOpenModal}
 				>
 					<FilterFields
 						nameFilter={nameFilter ?? ""}
@@ -267,7 +241,7 @@ const ArticulosManufacturados = () => {
 						sx={{ flex: 1, overflow: "auto" }}
 					>
 						{loading ? (
-							<CircularProgress sx={{ mt: 6 }} />
+							<LinearProgress sx={{ width: "100%" }} />
 						) : (
 							<GenericTable
 								data={articuloManufacturadoService.articulosManufacturadosToDTO(
@@ -287,11 +261,11 @@ const ArticulosManufacturados = () => {
 								rowsPerPage={rowsPerPage}
 								onEdit={handleOpenEditModal}
 								onSeeDetails={handleSeeDetails}
-								onAlta={handleAltaClick}
-								onAltaSucursal={handleAltaSucursalClick}
-								onDelete={handleDeleteClick}
-								onPageChange={handlePageChange}
-								onRowsPerPageChange={handleRowsPerPageChange}
+								onAlta={onAltaClick}
+								onAltaSucursal={onAltaSucursalClick}
+								onDelete={onDeleteClick}
+								onPageChange={onPageChange}
+								onRowsPerPageChange={onRowsPerPageChange}
 							/>
 						)}
 					</Stack>
@@ -299,21 +273,23 @@ const ArticulosManufacturados = () => {
 			</GenericDoubleStack>
 			<GenericModal
 				title={
-					articulo
+					articuloSeleccionado
 						? "Editar artículo manufacturado"
 						: "Crear artículo manufacturado"
 				}
 				icon={<LocalMallIcon fontSize="large" />}
-				open={showModal}
-				handleClose={handleCloseModal}
+				open={isModalOpen}
+				handleClose={onCloseModal}
 			>
 				<ArticuloManufacturadoForm
 					initialArticuloManufacturado={
-						articulo != null ? articulo : emptyArticuloManufacturado
+						articuloSeleccionado != null
+							? (articuloSeleccionado as IArticuloManufacturado)
+							: emptyArticuloManufacturado
 					}
-					onClose={handleCloseModal}
-					onShowSuccess={handleShowSuccess}
-					onShowError={handleShowError}
+					onClose={onCloseModal}
+					onShowSuccess={onShowSuccess}
+					onShowError={onShowError}
 				/>
 			</GenericModal>
 
@@ -321,19 +297,25 @@ const ArticulosManufacturados = () => {
 				title={"Dar de alta artículo manufacturado"}
 				icon={<LocalMallIcon fontSize="large" />}
 				open={showAlertAltaSucursal}
-				handleClose={handleCloseAlertAltaSucursal}
+				handleClose={onHideAlertAltaSucursal}
 			>
 				<SucursalesSelector
-					selected={articulo && articulo.sucursal ? [articulo.sucursal] : []}
+					selected={
+						articuloSeleccionado && articuloSeleccionado.sucursal
+							? [articuloSeleccionado.sucursal]
+							: []
+					}
 					handleSubmit={handleAltaSucursal}
 					buttonTitle={"Dar de alta en sucursales"}
 				/>
 			</GenericModal>
-			{articulo && (
+			{articuloSeleccionado && (
 				<ArticuloManufacturadoDetails
-					articuloManufacturado={articulo!}
+					articuloManufacturado={
+						articuloSeleccionado! as IArticuloManufacturado
+					}
 					open={showDetailsModal}
-					handleClose={handleCloseDetailsModal}
+					handleClose={onHideDetailsModal}
 				/>
 			)}
 			<AlertDialog
@@ -341,25 +323,25 @@ const ArticulosManufacturados = () => {
 				title={"¿Estás seguro de que querés dar de alta el artículo"}
 				content={""}
 				onAgreeClose={handleAlta}
-				onDisagreeClose={handleCloseAlertAlta}
+				onDisagreeClose={onHideAlertAlta}
 			/>
 			<AlertDialog
-				open={showAlert}
-				title={"¿Estás seguro de que querés dar de baja el artículo?s"}
+				open={showAlertBaja}
+				title={"¿Estás seguro de que querés dar de baja el artículo?"}
 				content={
 					"Luego podrás acceder al artículo para darlo de alta nuevamente"
 				}
 				onAgreeClose={handleDelete}
-				onDisagreeClose={handleCloseAlert}
+				onDisagreeClose={onHideAlertBaja}
 			/>
 			<SuccessMessage
 				open={!!showSuccess}
-				onClose={handleCloseSuccess}
+				onClose={onCloseSuccess}
 				message={showSuccess}
 			/>
 			<ErrorMessage
 				open={!!showError}
-				onClose={handleCloseError}
+				onClose={onCloseError}
 				message={showError}
 			/>
 		</>

@@ -48,11 +48,14 @@ export const SucursalDetails: FC<SucursalDetailstProps> = ({
 						}
 						alt="Logo"
 						width="340px"
+						height="340px"
 						style={{
 							borderRadius: "20px",
 							borderTopRightRadius: 0,
 							borderBottomRightRadius: 0,
 							minWidth: "340px",
+							maxHeight: "300px",
+							objectFit: "contain"
 						}}
 					/>
 					<Stack

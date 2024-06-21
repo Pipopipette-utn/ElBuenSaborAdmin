@@ -10,6 +10,7 @@ export const SucursalCard = styled(MuiCard)(({ theme }) => ({
 	width: 212,
 	backgroundColor: theme.palette.bg.main,
 	margin: "0px 18px 30px 18px",
+	justifyContent: "space-between",
 	"&:hover": {
 		backgroundColor: theme.palette.bg.dark,
 		cursor: "pointer",
@@ -20,7 +21,7 @@ export const SucursalCardHeader = styled(MuiCardHeader)(() => ({
 	paddingBottom: 0,
 	"& .MuiCardHeader-title": {
 		fontWeight: "bold",
-		fontSize: 18,
+		fontSize: 16,
 	},
 }));
 

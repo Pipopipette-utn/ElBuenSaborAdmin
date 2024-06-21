@@ -2,7 +2,6 @@ import * as Yup from "yup";
 import { FC, useState } from "react";
 
 import StoreIcon from "@mui/icons-material/Store";
-import FaceIcon from "@mui/icons-material/Face";
 import SignpostIcon from "@mui/icons-material/Signpost";
 import AddRoadIcon from "@mui/icons-material/AddRoad";
 import LocationCityIcon from "@mui/icons-material/LocationCity";

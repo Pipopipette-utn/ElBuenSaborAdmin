@@ -1,4 +1,4 @@
-import { CircularProgress, Stack, Typography, Pagination } from "@mui/material";
+import { LinearProgress, Stack, Typography, Pagination } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import LoyaltyIcon from "@mui/icons-material/Loyalty";
 import { GenericHeaderStack } from "../../ui/shared/GenericTitleStack";
@@ -98,7 +98,7 @@ const Promociones = () => {
 					</Typography>
 					<Stack direction="column" width="100%" sx={{ p: "12px" }} spacing={2}>
 						{loading ? (
-							<CircularProgress sx={{ alignSelf: "center" }} />
+							<LinearProgress sx={{ width: "100%" }} />
 						) : promociones && promociones.length == 0 ? (
 							<Typography>Ups! No hay ninguna promoción guardada.</Typography>
 						) : (

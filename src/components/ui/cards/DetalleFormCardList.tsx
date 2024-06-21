@@ -88,33 +88,30 @@ export const DetalleFormCardList: FC<DetalleFormCardListProps> = ({
 
 	return (
 		<Stack width="80%" spacing={3} alignItems="center">
-			{esPromocion ||
-				(precioVenta && (
-					<TextFieldStack spacing={1}>
-						<Typography>
-							{esPromocion ? "Precio promocional:" : "Ganancia"}
-							{esPromocion && <span style={{ color: "red" }}> *</span>}
-						</Typography>
-						<TextField
-							type="number"
-							name={esPromocion ? "precioPromocional" : "ganancia"}
-							fullWidth
-							placeholder={"Precio promocional"}
-							onChange={(event) =>
-								setPrecioPromocional(parseFloat(event.target.value))
-							}
-							disabled={!esPromocion}
-							value={esPromocion ? precioPromocional : ganancia}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">
-										<MonetizationOnIcon />
-									</InputAdornment>
-								),
-							}}
-						/>
-					</TextFieldStack>
-				))}
+			<TextFieldStack spacing={1}>
+				<Typography>
+					{esPromocion ? "Precio promocional:" : "Ganancia"}
+					{esPromocion && <span style={{ color: "red" }}> *</span>}
+				</Typography>
+				<TextField
+					type="number"
+					name={esPromocion ? "precioPromocional" : "ganancia"}
+					fullWidth
+					placeholder={"Precio promocional"}
+					onChange={(event) =>
+						setPrecioPromocional(parseFloat(event.target.value))
+					}
+					disabled={!esPromocion}
+					value={esPromocion ? precioPromocional : ganancia}
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<MonetizationOnIcon />
+							</InputAdornment>
+						),
+					}}
+				/>
+			</TextFieldStack>
 			<Stack spacing={2} width="100%">
 				{detalles.map((detalle, index) => (
 					<DetalleFormCard

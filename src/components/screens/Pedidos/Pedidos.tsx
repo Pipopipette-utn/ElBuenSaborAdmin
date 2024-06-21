@@ -1,5 +1,4 @@
 import {
-	CircularProgress,
 	Stack,
 	Typography,
 	Pagination,
@@ -9,6 +8,7 @@ import {
 	SelectChangeEvent,
 	FormControl,
 	InputLabel,
+	LinearProgress,
 } from "@mui/material";
 import { GenericDoubleStack } from "../../ui/shared/GenericDoubleStack";
 import AssignmentIcon from "@mui/icons-material/Assignment";
@@ -100,7 +100,7 @@ const Pedidos = () => {
 							sx={{ width: "40px", height: "40px" }}
 						/>
 					}
-					quantity={totalRows}
+					quantity={pedidos?.length ?? 0}
 					activeEntities={"Pedidos activos"}
 				>
 					<Stack direction="row" width="100%" alignItems="center">
@@ -140,7 +140,7 @@ const Pedidos = () => {
 					</Stack>
 					<Stack direction="column" width="100%" sx={{ p: "12px" }} spacing={2}>
 						{loading ? (
-							<CircularProgress sx={{ alignSelf: "center" }} />
+							<LinearProgress sx={{ width: "100%" }} />
 						) : pedidos && pedidos.length === 0 ? (
 							<Typography>Ups! No hay ningún pedido guardado.</Typography>
 						) : (

@@ -12,22 +12,17 @@ import { ArticuloElaborarForm } from "./ArticuloElaborarForm";
 import { ArticuloInsumoService } from "../../../services/ArticuloInsumoService";
 import ImageUpload from "./ImagenUpload";
 import { ImagenesService } from "../../../services/ImagenesService";
-import {
-	addArticuloInsumoSucursal,
-	editArticuloInsumoSucursal,
-} from "../../../redux/slices/SelectedData";
+import { editArticuloInsumoSucursal } from "../../../redux/slices/SelectedData";
 import { SucursalesSelector } from "./SucursalesSelector";
 import { ISucursalDTO } from "../../../types/dto";
-import {
-	addArticuloInsumo,
-	editArticuloInsumo,
-} from "../../../redux/slices/Business";
+import { editArticuloInsumo } from "../../../redux/slices/Business";
 
 interface InsumoFormProps {
 	initialArticuloInsumo: IArticuloInsumo;
 	onClose: Function;
 	onShowSuccess: (m: string) => void;
 	onShowError: (m: string) => void;
+	onReload: () => void;
 }
 
 export const InsumoForm: FC<InsumoFormProps> = ({
@@ -35,6 +30,7 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 	onClose,
 	onShowSuccess,
 	onShowError,
+	onReload,
 }) => {
 	const user = useAppSelector((state) => state.auth.user);
 	const dispatch = useAppDispatch();
@@ -202,16 +198,14 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					articuloInsumo.id,
 					newArticuloInsumo
 				);
-				dispatch(editArticuloInsumoSucursal(insumo));
-				dispatch(editArticuloInsumo(insumo));
+				onReload();
 				onShowSuccess("Artículo insumo modificado con éxito.");
 			} else {
 				insumos = await articuloInsumoService.createWithSucursal(
 					newArticuloInsumo
 				);
 				insumo = insumos.find((i) => i.sucursal!.id === sucursal!.id);
-				dispatch(addArticuloInsumoSucursal(insumo!));
-				dispatch(addArticuloInsumo(insumo!));
+				onReload();
 				onShowSuccess("Artículo insumo creado con éxito.");
 			}
 			if (files != null) {
@@ -220,13 +214,11 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					insumos ? insumos.map((i) => i.id!) : [insumo!.id!]
 				);
 				const newProducto = await articuloInsumoService.getById(insumo!.id!);
-				console.log(newProducto);
 				if (newProducto != null) {
 					dispatch(editArticuloInsumoSucursal(newProducto));
 					dispatch(editArticuloInsumo(newProducto));
 				}
 			}
-			console.log()
 			onClose();
 		} catch (error: any) {
 			console.log(error);

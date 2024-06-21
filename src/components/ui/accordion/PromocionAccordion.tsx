@@ -151,8 +151,8 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 					<Stack spacing={1.5}>
 						<Typography>{promocion.descripcionDescuento}</Typography>
 						<Stack spacing={2} direction="row">
-							<Typography variant="h6">Desde: {promocion.horaDesde}</Typography>
-							<Typography variant="h6">Hasta: {promocion.horaHasta}</Typography>
+							<Typography variant="h6">Desde: {promocion.horaDesde.substring(0,5)}</Typography>
+							<Typography variant="h6">Hasta: {promocion.horaHasta.substring(0,5)}</Typography>
 						</Stack>
 						<Stack spacing={2} direction="row">
 							{promocion.promocionDetalles &&

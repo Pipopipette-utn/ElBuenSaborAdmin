@@ -6,18 +6,6 @@ interface GananciasBarChartValues {
 }
 
 const GananciasBarChart: FC<GananciasBarChartValues> = ({ chartData }) => {
-	const colors = [
-		"#3035c9",
-		"#eb2f05",
-		"#5d19e6",
-		"#9987ff",
-		"#9f59f0",
-		"#FF5733",
-		"#ff7e70",
-		"#ffc2b3",
-		"#eb2f05",
-		"#3035c9",
-	];
 
 	let labels: string[] = [];
 	let data: number[] = [];

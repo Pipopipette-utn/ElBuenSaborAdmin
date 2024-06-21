@@ -122,8 +122,9 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({
 				</Stack>
 				<SucursalCardHeader title={sucursal.nombre} />
 				<CardContent sx={{ pb: 0, height: "80px" }}>
-					<Typography>
-						{sucursal.horarioApertura}-{sucursal.horarioCierre}
+					<Typography fontSize="14px">
+						{sucursal.horarioApertura.substring(0, 5)} -{" "}
+						{sucursal.horarioCierre.substring(0, 5)}
 					</Typography>
 					<Typography fontSize="14px">
 						{sucursal.domicilio?.calle} {sucursal.domicilio?.numero},{" "}
