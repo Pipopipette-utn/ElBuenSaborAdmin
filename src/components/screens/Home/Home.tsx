@@ -60,7 +60,13 @@ const Home = () => {
 				setRecaudadoDia(0);
 			}
 			if (recaudadoSemana.length > 1) {
-				setRecaudadoSemana(recaudadoSemana[1][1] as number);
+				const sumaTotalRecaudado = recaudadoSemana
+					.slice(1)
+					.reduce((acumulado, elemento) => {
+						const totalRecaudado = elemento[1] as number;
+						return acumulado as number + totalRecaudado;
+					}, 0);
+				setRecaudadoSemana(sumaTotalRecaudado);
 			} else {
 				setRecaudadoSemana(0);
 			}
