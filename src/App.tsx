@@ -119,6 +119,8 @@ export const App: FC = () => {
 					dispatch(setSucursalesEmpresa(sucursalesFiltradas.filter(s => !s.baja)));
 					if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
 						dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
+					else
+						dispatch(setSelectedSucursal(null));
 				} catch (e) {
 					dispatch(setUnidadMedidas(null));
 					dispatch(setSelectedSucursal(null));
