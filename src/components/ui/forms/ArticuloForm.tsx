@@ -75,7 +75,6 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 				newArticulo = {
 					...articulo,
 					denominacion: values.denominacion,
-					imagenes: [],
 					unidadMedida,
 				};
 			}
