@@ -219,7 +219,10 @@ const ArticulosManufacturados = () => {
 					activeEntities={"Productos activos"}
 					buttonText={"Nuevo producto"}
 					disabledButton={user!.rol! === "CAJERO"}
-					onClick={onOpenModal}
+					onClick={() => {
+						setArticuloSeleccionado(null);
+						onOpenModal();
+					}}
 				>
 					<FilterFields
 						nameFilter={nameFilter ?? ""}
