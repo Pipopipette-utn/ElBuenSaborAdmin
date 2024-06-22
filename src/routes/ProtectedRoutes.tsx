@@ -20,11 +20,14 @@ import { useEffect } from "react";
 const ProtectedRoutes = () => {
 	const user = useAppSelector((state) => state.auth.user);
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
+	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!empresa) {
 			navigate("/");
+		}else if (!sucursal){
+			navigate("/empresas/sucursales");
 		}
 	}, []);
 
