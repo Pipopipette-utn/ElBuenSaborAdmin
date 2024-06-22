@@ -204,7 +204,7 @@ export const CategoriaFormAccordion: FC<CategoriaFormAccordionProps> = ({
 									onChange={handleChangeEsParaVender}
 								/>
 							}
-							label="Es para vender"
+							label="Mostrar en el menú"
 						/>
 					</Stack>
 					<Button
