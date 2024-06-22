@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { FC, useState } from "react";
-import { IPromocion, IDetalle, ISucursal } from "../../../types/empresa";
+import { IPromocion, IDetalle } from "../../../types/empresa";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import dayjs from "dayjs";
 import { IStep } from "../../../types/business";
