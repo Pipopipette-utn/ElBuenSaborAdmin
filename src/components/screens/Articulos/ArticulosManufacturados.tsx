@@ -227,7 +227,11 @@ const ArticulosManufacturados = () => {
 					<FilterFields
 						nameFilter={nameFilter ?? ""}
 						onNameFilterChange={handleFilterChange}
-						categorias={categorias !== "loading" ? categorias : []}
+						categorias={
+							categorias !== "loading"
+								? categorias.filter((c) => !c.baja)
+								: []
+						}
 						categoryFilter={categoryFilter}
 						onCategoryFilterChange={handleCategoryFilterChange}
 					/>

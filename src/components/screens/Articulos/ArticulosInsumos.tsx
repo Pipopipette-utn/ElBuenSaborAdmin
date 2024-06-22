@@ -225,7 +225,7 @@ const ArticulosInsumos = () => {
 						onNameFilterChange={handleNameFilterChange}
 						categorias={
 							categorias !== "loading"
-								? categorias.filter((c) => c.esInsumo)
+								? categorias.filter((c) => c.esInsumo && !c.baja)
 								: []
 						}
 						categoryFilter={categoryFilter}

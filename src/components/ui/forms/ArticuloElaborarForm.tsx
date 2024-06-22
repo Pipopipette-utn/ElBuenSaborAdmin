@@ -20,13 +20,13 @@ export const ArticuloElaborarForm: FC = () => {
 		(state) => state.selectedData.categoriasSucursal
 	);
 	let mappedCategorias =
-		categorias && categorias !== "loading" ? categorias : [];
+		categorias && categorias !== "loading"
+			? categorias.filter((c) => !c.baja)
+			: [];
 	if (categorias !== "loading")
 		if (values.esParaElaborar)
 			mappedCategorias = mapCategories(categorias, true, false);
-		else
-			mappedCategorias = mapCategories(categorias, true, true);
-		
+		else mappedCategorias = mapCategories(categorias, true, true);
 
 	let articuloSchema = Yup.object().shape({
 		esParaElaborar: Yup.boolean().required("Este campo es requerido."),
@@ -68,7 +68,9 @@ export const ArticuloElaborarForm: FC = () => {
 								setFieldValue("categoria", newValue)
 							}
 							getOptionLabel={(option) => option.denominacion}
-							renderInput={(params) => <TextField {...params} variant="outlined" />}
+							renderInput={(params) => (
+								<TextField {...params} variant="outlined" />
+							)}
 						/>
 						{touched["categoria"] && errors["categoria"] && (
 							<ErrorTypography>{String(errors["categoria"])}</ErrorTypography>

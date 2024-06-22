@@ -26,7 +26,6 @@ import { login, setEmpleado, setUser } from "./redux/slices/Auth";
 import { callApi } from "./components/auth0/callApi";
 import { UsuarioService } from "./services/UsuarioService";
 import { EmpleadoService } from "./services/EmpleadoService";
-import ArticulosManufacturados from "./components/screens/Articulos/ArticulosManufacturados";
 //INICIAR: json-server --watch public/db.json
 //http://localhost:3000/
 
