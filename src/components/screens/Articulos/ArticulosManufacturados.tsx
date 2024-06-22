@@ -157,6 +157,7 @@ const ArticulosManufacturados = () => {
 
 	const handleDelete = async () => {
 		try {
+			console.log(idArticuloSeleccionado);
 			const productoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
@@ -164,7 +165,7 @@ const ArticulosManufacturados = () => {
 			const articuloEncontrado = articulosManufacturados?.find(
 				(a) => a.id == idArticuloSeleccionado
 			);
-			const newArticulo = { ...articuloEncontrado!, baja: false };
+			const newArticulo = { ...articuloEncontrado!, baja: true };
 			dispatch(editArticuloManufacturadoSucursal(newArticulo));
 			onHideAlertBaja();
 			onShowSuccess("Artículo dado de baja con éxito");
