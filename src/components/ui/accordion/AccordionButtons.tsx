@@ -27,15 +27,16 @@ export const ActionButtons = ({
 	const disabled = user!.rol! === "CAJERO" || user!.rol! === "COCINERO";
 	return (
 		<Stack direction="row" sx={{ mr: "6px" }} spacing={-1}>
-			<Tooltip title="Editar">
-				<IconButton
-					disabled={onAlta || disabled  ? true : false}
-					onClick={(event) => onEdit(event, entity)}
-				>
-					<EditIcon fontSize="small" sx={{ color: color }} />
-				</IconButton>
-			</Tooltip>
-
+			{onBaja && (
+				<Tooltip title="Editar">
+					<IconButton
+						disabled={onAlta || disabled ? true : false}
+						onClick={(event) => onEdit(event, entity)}
+					>
+						<EditIcon fontSize="small" sx={{ color: color }} />
+					</IconButton>
+				</Tooltip>
+			)}
 			{onBaja && (
 				<Tooltip title="Dar de baja en esta sucursal">
 					<IconButton

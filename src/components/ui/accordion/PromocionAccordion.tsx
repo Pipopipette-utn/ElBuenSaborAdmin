@@ -100,7 +100,14 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 
 	return (
 		<>
-			<Accordion sx={{ width: "100%" }}>
+			<Accordion
+				sx={{
+					width: "100%",
+					backgroundColor: promocion.baja
+						? theme.palette.info.light
+						: theme.palette.bg.light,
+				}}
+			>
 				<AccordionSummary expandIcon={<ExpandMoreIcon />}>
 					<Stack direction="row" spacing={3} alignItems="center" padding={1}>
 						<Typography sx={{ fontSize: "18px" }}>
@@ -121,6 +128,8 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 						color={
 							user!.rol! === "CAJERO" || user!.rol! === "COCINERO"
 								? theme.palette.info.light
+								: promocion.baja
+								? theme.palette.info.main
 								: theme.palette.primary.main
 						}
 						onBaja={promocion.baja ? undefined : handleOpenBajaAlert}
@@ -151,8 +160,12 @@ export const PromocionAccordion: FC<PromocionAccordionProps> = ({
 					<Stack spacing={1.5}>
 						<Typography>{promocion.descripcionDescuento}</Typography>
 						<Stack spacing={2} direction="row">
-							<Typography variant="h6">Desde: {promocion.horaDesde.substring(0,5)}</Typography>
-							<Typography variant="h6">Hasta: {promocion.horaHasta.substring(0,5)}</Typography>
+							<Typography variant="h6">
+								Desde: {promocion.horaDesde.substring(0, 5)}
+							</Typography>
+							<Typography variant="h6">
+								Hasta: {promocion.horaHasta.substring(0, 5)}
+							</Typography>
 						</Stack>
 						<Stack spacing={2} direction="row">
 							{promocion.promocionDetalles &&
