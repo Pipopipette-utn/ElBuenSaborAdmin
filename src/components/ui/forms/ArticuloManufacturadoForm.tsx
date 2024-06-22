@@ -21,7 +21,6 @@ import { DetalleFormCardList } from "../cards/DetalleFormCardList";
 import ImagenUpload from "./ImagenUpload";
 import { ImagenesService } from "../../../services/ImagenesService";
 import {
-	addArticuloManufacturadoSucursal,
 	editArticuloManufacturadoSucursal,
 } from "../../../redux/slices/SelectedData";
 import { SucursalesSelector } from "./SucursalesSelector";
