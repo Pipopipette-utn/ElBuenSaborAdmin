@@ -132,7 +132,7 @@ const SucursalCardDetails: FC<SucursalCardProps> = ({
 					</Typography>
 				</CardContent>
 				<CardActions disableSpacing>
-					<Tooltip title="Seleccionar categoría">
+					<Tooltip title="Seleccionar sucursal">
 						<SucursalIconButton onClick={onSelectSucursal}>
 							<AdsClickIcon />
 						</SucursalIconButton>
