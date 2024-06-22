@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import {
@@ -25,6 +25,7 @@ import {
 } from "../../../redux/slices/Location";
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
+import { theme } from "../../../styles/theme";
 
 const ListaSucursales = () => {
 	const navigate = useNavigate();
@@ -109,6 +110,13 @@ const ListaSucursales = () => {
 				</AddCard>
 				{sucursales === "loading" && <Loader />}
 			</Stack>
+			<Button
+				variant="text"
+				sx={{ color: theme.palette.primary.main, fontWeight: "bold" }}
+				onClick={() => navigate("/empresas")}
+			>
+				Volver a las empresas
+			</Button>
 			<GenericModal
 				title={`Crear sucursal para ${empresa?.nombre}`}
 				icon={<StoreIcon fontSize="large" />}
