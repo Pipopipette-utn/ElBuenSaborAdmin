@@ -89,6 +89,7 @@ export interface IPromocion extends BaseEntity {
 	imagenes: IImagen[];
 	archivos?: FileList | null;
 	sucursal?: ISucursalDTO;
+	sucursales?: ISucursalDTO[];
 	promocionDetalles: IDetalle[];
 }
 

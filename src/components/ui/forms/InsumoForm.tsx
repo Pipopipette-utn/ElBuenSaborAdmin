@@ -44,6 +44,10 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			: []
 	);
 
+	console.log(previews);
+	console.log({ initialArticuloInsumo });
+	console.log({ articuloInsumo });
+
 	const handleBack = () => setActiveStep((prev) => prev - 1);
 	const handleNext = () => setActiveStep((prev) => prev + 1);
 

@@ -150,25 +150,44 @@ export const PromocionForm: FC<PromocionFormProps> = ({
 				precioPromocional: precio ?? 0,
 			};
 			setPromocion(newPromocion);
-			handleNext();
+			if (promocion.id) handleSubmitForm(undefined, newPromocion);
+			else handleNext();
 		} catch (error: any) {
 			throw new Error(error);
 		}
 	};
 
-	const handleSubmitForm = async (sucursales: ISucursalDTO[] | ISucursal[]) => {
+	const handleSubmitForm = async (
+		sucursales?: ISucursalDTO[],
+		promocionRecibida?: IPromocion
+	) => {
 		try {
-			console.log(sucursales);
-			const mappedSucursales = sucursales.map((s) => {
-				return { id: s.id, baja: s.baja, nombre: s.nombre };
-			});
 			const promocionService = new PromocionService("/promociones");
 			const imagenService = new ImagenesService("/imagenesPromocion/uploads");
 
-			const newPromocion = {
-				...promocion,
-				sucursales: mappedSucursales,
-			};
+			let mappedSucursales = undefined;
+			if (sucursales) {
+				mappedSucursales = sucursales.map((s) => {
+					return { id: s.id, baja: s.baja, nombre: s.nombre };
+				});
+			} else {
+				mappedSucursales = [
+					{ id: sucursal!.id, baja: false, nombre: sucursal!.nombre },
+				];
+			}
+
+			let newPromocion;
+			if (promocionRecibida) {
+				newPromocion = {
+					...promocionRecibida,
+					sucursales: mappedSucursales,
+				};
+			} else {
+				newPromocion = {
+					...promocion,
+					sucursales: mappedSucursales,
+				};
+			}
 
 			let promocionNueva;
 			let promocionesNuevas;
