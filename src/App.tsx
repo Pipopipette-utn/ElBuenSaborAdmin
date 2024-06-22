@@ -49,12 +49,6 @@ export const App: FC = () => {
 	const user = useAppSelector((state) => state.auth.user);
 	const empresa = useAppSelector((state) => state.selectedData.empresa);
 	const sucursal = useAppSelector((state) => state.selectedData.sucursal);
-	const articulosInsumosSucursal = useAppSelector(
-		(state) => state.selectedData.articulosInsumosSucursal
-	);
-	const articulosManufacturadosSucursal = useAppSelector(
-		(state) => state.selectedData.articulosManufacturadosSucursal
-	);
 
 	const getToken = async () => {
 		const token = await callApi(getAccessTokenSilently);
@@ -178,45 +172,6 @@ export const App: FC = () => {
 		};
 		if (user) traerDatosSucursal();
 	}, [sucursal, user]);
-
-	useEffect(() => {
-		const traerDatosSucursal = async () => {
-			if (
-				empresa &&
-				sucursal &&
-				["SUPERADMIN", "ADMIN", "COCINERO", "CAJERO"].includes(user!.rol!)
-			) {
-				try {
-					const articulosInsumos =
-						(await insumoService.getAllActiveBySucursal(sucursal.id!)) ?? [];
-					dispatch(setArticulosInsumos(articulosInsumos));
-				} catch (e) {
-					dispatch(setArticulosInsumos(null));
-				}
-			}
-		};
-		if (user) traerDatosSucursal();
-	}, [articulosInsumosSucursal]);
-
-	useEffect(() => {
-		const traerDatosSucursal = async () => {
-			if (
-				empresa &&
-				sucursal &&
-				["SUPERADMIN", "ADMIN", "COCINERO", "CAJERO"].includes(user!.rol!)
-			) {
-				try {
-					const articulosManufacturados =
-						(await manufacturadoService.getAllActiveBySucursal(sucursal.id!)) ??
-						[];
-					dispatch(setArticulosManufacturados(articulosManufacturados));
-				} catch (e) {
-					dispatch(setArticulosManufacturados(null));
-				}
-			}
-		};
-		if (user) traerDatosSucursal();
-	}, [articulosManufacturadosSucursal]);
 
 	return (
 		<Box

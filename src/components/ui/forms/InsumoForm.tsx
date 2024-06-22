@@ -15,7 +15,7 @@ import { ImagenesService } from "../../../services/ImagenesService";
 import { editArticuloInsumoSucursal } from "../../../redux/slices/SelectedData";
 import { SucursalesSelector } from "./SucursalesSelector";
 import { ISucursalDTO } from "../../../types/dto";
-import { editArticuloInsumo } from "../../../redux/slices/Business";
+import { addArticuloInsumo, editArticuloInsumo } from "../../../redux/slices/Business";
 
 interface InsumoFormProps {
 	initialArticuloInsumo: IArticuloInsumo;
@@ -43,10 +43,6 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 			? articuloInsumo.imagenes.map((i) => i.url)
 			: []
 	);
-
-	console.log(previews);
-	console.log({ initialArticuloInsumo });
-	console.log({ articuloInsumo });
 
 	const handleBack = () => setActiveStep((prev) => prev - 1);
 	const handleNext = () => setActiveStep((prev) => prev + 1);
@@ -203,12 +199,14 @@ export const InsumoForm: FC<InsumoFormProps> = ({
 					newArticuloInsumo
 				);
 				onReload();
+				dispatch(editArticuloInsumo(insumo!));
 				onShowSuccess("Artículo insumo modificado con éxito.");
 			} else {
 				insumos = await articuloInsumoService.createWithSucursal(
 					newArticuloInsumo
 				);
 				insumo = insumos.find((i) => i.sucursal!.id === sucursal!.id);
+				dispatch(addArticuloInsumo(insumo!));
 				onReload();
 				onShowSuccess("Artículo insumo creado con éxito.");
 			}

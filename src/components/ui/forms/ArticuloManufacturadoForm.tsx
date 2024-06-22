@@ -36,6 +36,7 @@ interface InsumoFormProps {
 	onClose: Function;
 	onShowSuccess: (m: string) => void;
 	onShowError: (m: string) => void;
+	onReload: () => void;
 }
 
 export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
@@ -43,6 +44,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 	onClose,
 	onShowSuccess,
 	onShowError,
+	onReload
 }) => {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector((state) => state.auth.user);
@@ -167,7 +169,6 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 					? detalles
 					: articuloManufacturado.articuloManufacturadoDetalles,
 			};
-			console.log(newArticuloManufacturado);
 
 			let producto;
 			let productos;
@@ -176,16 +177,16 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 					articuloManufacturado.id,
 					newArticuloManufacturado
 				);
-				dispatch(editArticuloManufacturadoSucursal(producto));
 				dispatch(editArticuloManufacturado(producto));
+				onReload();
 				onShowSuccess("Artículo manufacturado modificado con éxito.");
 			} else {
 				productos = await articuloManufacturadoService.createWithSucursal(
 					newArticuloManufacturado
 				);
 				producto = productos.find((i) => i.sucursal!.id === sucursal!.id);
-				dispatch(addArticuloManufacturadoSucursal(producto!));
 				dispatch(addArticuloManufacturado(producto!));
+				onReload();
 				onShowSuccess("Artículo manufacturado creado con éxito.");
 			}
 
@@ -199,6 +200,7 @@ export const ArticuloManufacturadoForm: FC<InsumoFormProps> = ({
 				);
 				if (newProducto != null) {
 					dispatch(editArticuloManufacturadoSucursal(newProducto));
+					dispatch(editArticuloManufacturado(newProducto));
 				}
 			}
 

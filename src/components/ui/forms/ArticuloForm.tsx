@@ -37,7 +37,9 @@ export const ArticuloForm: FC<ArticuloFormProps> = ({
 	const [errorCategoria, setErrorCategoria] = useState<null | string>(null);
 
 	let mappedCategorias =
-		categorias && categorias !== "loading" ? categorias : [];
+		categorias && categorias !== "loading"
+			? categorias.filter((c) => !c.baja)
+			: [];
 	if (categorias !== "loading")
 		mappedCategorias = mapCategories(categorias, false, true);
 

@@ -76,6 +76,7 @@ const ArticulosManufacturados = () => {
 	const [articulosManufacturados, setArticulosManufacturados] = useState<
 		IArticuloManufacturado[]
 	>([]);
+	const [reload, setReload] = useState(false);
 	const [nameFilter, setNameFilter] = useState<string | null>(null);
 	const [categoryFilter, setCategoryFilter] = useState<ICategoria | null>(null);
 	const categorias =
@@ -128,7 +129,7 @@ const ArticulosManufacturados = () => {
 		else filterInsumos();
 
 		setArticulosManufacturados(filtered);
-	}, [sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
+	}, [reload, sucursal, page, rowsPerPage, nameFilter, categoryFilter]);
 
 	const handleOpenEditModal = (articuloId: number) => {
 		const articuloEncontrado = articulosManufacturados?.find(
@@ -297,6 +298,7 @@ const ArticulosManufacturados = () => {
 					onClose={onCloseModal}
 					onShowSuccess={onShowSuccess}
 					onShowError={onShowError}
+					onReload={() => setReload(!reload)}
 				/>
 			</GenericModal>
 
