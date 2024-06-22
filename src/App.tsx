@@ -116,7 +116,7 @@ export const App: FC = () => {
 					const sucursalesFiltradas = await sucursalService.getAllByEmpresa(
 						empresa.id!
 					);
-					dispatch(setSucursalesEmpresa(sucursalesFiltradas));
+					dispatch(setSucursalesEmpresa(sucursalesFiltradas.filter(s => !s.baja)));
 					if (sucursalesFiltradas && sucursalesFiltradas.length > 0)
 						dispatch(setSelectedSucursal(sucursalesFiltradas[0]));
 				} catch (e) {
