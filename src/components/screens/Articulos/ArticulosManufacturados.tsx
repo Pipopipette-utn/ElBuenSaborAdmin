@@ -157,7 +157,6 @@ const ArticulosManufacturados = () => {
 
 	const handleDelete = async () => {
 		try {
-			console.log(idArticuloSeleccionado);
 			const productoService = new ArticuloManufacturadoService(
 				"/articulosManufacturados"
 			);
