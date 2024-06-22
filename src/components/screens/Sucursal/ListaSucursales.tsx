@@ -110,13 +110,15 @@ const ListaSucursales = () => {
 				</AddCard>
 				{sucursales === "loading" && <Loader />}
 			</Stack>
-			<Button
-				variant="text"
-				sx={{ color: theme.palette.primary.main, fontWeight: "bold" }}
-				onClick={() => navigate("/empresas")}
-			>
-				Volver a las empresas
-			</Button>
+			{user!.rol === "SUPERADMIN" && (
+				<Button
+					variant="text"
+					sx={{ color: theme.palette.primary.main, fontWeight: "bold" }}
+					onClick={() => navigate("/empresas")}
+				>
+					Volver a las empresas
+				</Button>
+			)}
 			<GenericModal
 				title={`Crear sucursal para ${empresa?.nombre}`}
 				icon={<StoreIcon fontSize="large" />}
