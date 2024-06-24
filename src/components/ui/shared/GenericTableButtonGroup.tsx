@@ -99,7 +99,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 					</IconButton>
 				</Tooltip>
 			)}
-			{onAltaSucursal && (
+			{onAltaSucursal && (user!.rol === "SUPERADMIN" || user!.rol === "ADMIN") && (
 				<Tooltip title="Dar de alta en otra sucursal">
 					<IconButton
 						disabled={
