@@ -55,7 +55,14 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 		fechaNacimiento: dayjs(empleado.fechaNacimiento),
 		email: empleado.usuario.email,
 		username: empleado.usuario.username,
-		rol: empleado.usuario.rol,
+		rol:
+			empleado.usuario.rol === "ADMIN"
+				? "Administrador"
+				: empleado.usuario.rol === "COCINERO"
+				? "Cocinero"
+				: empleado.usuario.rol === "DELIVERY"
+				? "Delivery"
+				: "Cajero",
 	};
 
 	let empleadoSchema = Yup.object().shape({
@@ -118,7 +125,7 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 			let rolName = empleado.usuario.rol;
 			let rol = Rol[rolName as keyof typeof Rol];
 
-			if (typeof rol !== 'number') {
+			if (typeof rol !== "number") {
 				throw new Error(`Invalid role name: ${rolName}`);
 			}
 
@@ -126,13 +133,13 @@ export const EmpleadoForm: FC<EmpleadoFormProps> = ({
 				...empleado,
 				usuario: {
 					...empleado.usuario,
-					rol
+					rol,
 				},
 				sucursal: {
 					id: sucursal!.id!,
 					baja: sucursal!.baja,
 					nombre: sucursal!.nombre,
-				}
+				},
 			};
 
 			let createdEmpleado;
