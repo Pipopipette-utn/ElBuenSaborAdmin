@@ -29,7 +29,7 @@ const ProtectedRoutes = () => {
 		}else if (!sucursal){
 			navigate("/empresas/sucursales");
 		}
-	}, []);
+	}, [navigate]);
 
 	return (
 		<>
