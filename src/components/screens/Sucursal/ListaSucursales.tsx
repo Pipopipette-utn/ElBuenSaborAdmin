@@ -26,6 +26,7 @@ import {
 import { SuccessMessage } from "../../ui/shared/SuccessMessage";
 import { ErrorMessage } from "../../ui/shared/ErrorMessage";
 import { theme } from "../../../styles/theme";
+import { setEmpresa } from "../../../redux/slices/SelectedData";
 
 const ListaSucursales = () => {
 	const navigate = useNavigate();
@@ -114,7 +115,10 @@ const ListaSucursales = () => {
 				<Button
 					variant="text"
 					sx={{ color: theme.palette.primary.main, fontWeight: "bold" }}
-					onClick={() => navigate("/empresas")}
+					onClick={() => {
+						dispatch(setEmpresa(null));
+						navigate("/empresas");
+					}}
 				>
 					Volver a las empresas
 				</Button>
