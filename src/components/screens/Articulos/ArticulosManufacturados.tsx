@@ -329,7 +329,7 @@ const ArticulosManufacturados = () => {
 			)}
 			<AlertDialog
 				open={showAlertAlta}
-				title={"¿Estás seguro de que querés dar de alta el artículo"}
+				title={"¿Estás seguro de que querés dar de alta el artículo?"}
 				content={""}
 				onAgreeClose={handleAlta}
 				onDisagreeClose={onHideAlertAlta}

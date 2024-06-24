@@ -309,7 +309,7 @@ export const SucursalForm: FC<SucursalFormProps> = ({
 			</Stack>
 			<AlertDialog
 				open={openMatrizDialog}
-				title={"Error. Ya existe una casa matriz en esta sucursal."}
+				title={"Error. Ya existe una casa matriz en esta empresa."}
 				content={""}
 				agreeButtonText={"Ok"}
 				onAgreeClose={() => {
