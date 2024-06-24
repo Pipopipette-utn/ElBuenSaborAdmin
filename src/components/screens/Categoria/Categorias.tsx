@@ -140,7 +140,7 @@ const Categorias = () => {
 					}
 					activeEntities={"Categorias activas"}
 					buttonText={"Nueva categoria"}
-					disabledButton={user!.rol! === "CAJERO"}
+					disabledButton={user!.rol! === "CAJERO" || user!.rol! === "COCINERO"}
 					onClick={handleClick}
 				>
 					<Stack direction="row">
