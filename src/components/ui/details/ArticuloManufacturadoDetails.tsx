@@ -226,7 +226,7 @@ export const ArticuloManufacturadoDetails: FC<
 								direction="row"
 								spacing={1}
 								width="100%"
-								sx={{ overflow: "wrap" }}
+								sx={{ overflow: "wrap", flexWrap: "wrap" }}
 							>
 								{articuloManufacturado.articuloManufacturadoDetalles &&
 									articuloManufacturado.articuloManufacturadoDetalles.map(
