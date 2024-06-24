@@ -47,7 +47,12 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 					>
 						<EditIcon
 							fontSize="small"
-							color={disabled ? "action" : "primary"}
+							color={
+								disabled ||
+								(user!.rol === "COCINERO" && path === "/articulos/insumos")
+									? "action"
+									: "primary"
+							}
 						/>
 					</IconButton>
 				</Tooltip>
@@ -62,17 +67,34 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 			</Tooltip>
 			{onDelete && (
 				<Tooltip title="Dar de baja">
-					<IconButton disabled={disabled} onClick={() => onDelete(idEntity)}>
+					<IconButton
+						disabled={
+							disabled ||
+							(user!.rol === "COCINERO" && path === "/articulos/insumos")
+						}
+						onClick={() => onDelete(idEntity)}
+					>
 						<DeleteOutlineIcon
 							fontSize="small"
-							color={disabled ? "action" : "primary"}
+							color={
+								disabled ||
+								(user!.rol === "COCINERO" && path === "/articulos/insumos")
+									? "action"
+									: "primary"
+							}
 						/>
 					</IconButton>
 				</Tooltip>
 			)}
 			{onAlta && (
 				<Tooltip title="Dar de alta">
-					<IconButton disabled={disabled} onClick={() => onAlta(idEntity)}>
+					<IconButton
+						disabled={
+							disabled ||
+							(user!.rol === "COCINERO" && path === "/articulos/insumos")
+						}
+						onClick={() => onAlta(idEntity)}
+					>
 						<UpgradeIcon fontSize="small" color={"action"} />
 					</IconButton>
 				</Tooltip>
@@ -80,12 +102,20 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 			{onAltaSucursal && (
 				<Tooltip title="Dar de alta en otra sucursal">
 					<IconButton
-						disabled={disabled}
+						disabled={
+							disabled ||
+							(user!.rol === "COCINERO" && path === "/articulos/insumos")
+						}
 						onClick={() => onAltaSucursal(idEntity)}
 					>
 						<UpgradeIcon
 							fontSize="small"
-							color={disabled ? "action" : "primary"}
+							color={
+								disabled ||
+								(user!.rol === "COCINERO" && path === "/articulos/insumos")
+									? "action"
+									: "primary"
+							}
 						/>
 					</IconButton>
 				</Tooltip>
