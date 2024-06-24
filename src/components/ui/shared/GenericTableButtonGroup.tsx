@@ -27,9 +27,7 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 }) => {
 	const user = useAppSelector((state) => state.auth.user);
 	const path = useLocation().pathname;
-	const disabled =
-		user!.rol === "CAJERO" ||
-		(user!.rol === "COCINERO" && path === "/articulosInsumos");
+	const disabled = user!.rol === "CAJERO";
 
 	return (
 		<Stack
@@ -40,7 +38,13 @@ const ButtonGroup: FC<ButtonGroupProps> = ({
 		>
 			{onEdit && (
 				<Tooltip title="Editar">
-					<IconButton disabled={disabled} onClick={() => onEdit(idEntity)}>
+					<IconButton
+						disabled={
+							disabled ||
+							(user!.rol === "COCINERO" && path === "/articulos/insumos")
+						}
+						onClick={() => onEdit(idEntity)}
+					>
 						<EditIcon
 							fontSize="small"
 							color={disabled ? "action" : "primary"}
