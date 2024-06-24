@@ -112,6 +112,7 @@ export const ArticuloInsumoDetails: FC<ArticuloInsumoDetailsProps> = ({
 								sx={{
 									display: "block",
 									maxWidth: 400,
+									maxHeight: 300,
 									overflow: "hidden",
 									borderTopLeftRadius: "20px",
 									borderBottomRightRadius: 0,
@@ -161,7 +162,9 @@ export const ArticuloInsumoDetails: FC<ArticuloInsumoDetailsProps> = ({
 						justifyContent="center"
 						alignItems="center"
 					>
-						<Typography variant="h4" sx={{fontSize: 18}}>Detalles del insumo</Typography>
+						<Typography variant="h4" sx={{ fontSize: 18 }}>
+							Detalles del insumo
+						</Typography>
 						<DetailsGroup
 							labels={["Nombre", "Categoria"]}
 							content={[

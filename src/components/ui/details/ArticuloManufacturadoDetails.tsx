@@ -106,7 +106,9 @@ export const ArticuloManufacturadoDetails: FC<
 									sx={{
 										display: "block",
 										maxWidth: 400,
+										maxHeight: 300,
 										overflow: "hidden",
+										objectFit: "contain",
 										width: "100%",
 									}}
 									src={articuloManufacturado.imagenes[activeStep].url}
@@ -232,6 +234,7 @@ export const ArticuloManufacturadoDetails: FC<
 									articuloManufacturado.articuloManufacturadoDetalles.map(
 										(detalle, index) => (
 											<Chip
+												style={{ margin: "0px 6px 6px 0px" }}
 												key={index}
 												label={`${detalle.cantidad} ${
 													detalle.articulo?.unidadMedida!.denominacion ?? ""
