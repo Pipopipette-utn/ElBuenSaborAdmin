@@ -16,17 +16,17 @@ import { mapCategories } from "../../../utils/mapCategorias";
 export const ArticuloElaborarForm: FC = () => {
 	const { values, setFieldValue, errors } = useFormikContext<FormikValues>();
 
-	const categorias = useAppSelector(
+	let categorias = useAppSelector(
 		(state) => state.selectedData.categoriasSucursal
 	);
-	let mappedCategorias =
+	categorias =
 		categorias && categorias !== "loading"
 			? categorias.filter((c) => !c.baja)
-			: [];
-	if (categorias !== "loading")
-		if (values.esParaElaborar)
-			mappedCategorias = mapCategories(categorias, true, false);
-		else mappedCategorias = mapCategories(categorias, true, true);
+			: null;
+	let mappedCategorias = categorias ? categorias : [];
+	if (values.esParaElaborar)
+		mappedCategorias = mapCategories(categorias, true, false);
+	else mappedCategorias = mapCategories(categorias, true, true);
 
 	let articuloSchema = Yup.object().shape({
 		esParaElaborar: Yup.boolean().required("Este campo es requerido."),

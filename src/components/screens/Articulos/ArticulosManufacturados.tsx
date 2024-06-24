@@ -230,7 +230,7 @@ const ArticulosManufacturados = () => {
 						onNameFilterChange={handleFilterChange}
 						categorias={
 							categorias !== "loading"
-								? categorias.filter((c) => !c.baja)
+								? categorias.filter((c) => !c.esInsumo && !c.baja)
 								: []
 						}
 						categoryFilter={categoryFilter}
